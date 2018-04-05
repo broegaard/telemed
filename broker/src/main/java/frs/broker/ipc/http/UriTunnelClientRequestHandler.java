@@ -1,0 +1,90 @@
+package frs.broker.ipc.http;
+
+import com.google.gson.Gson;
+import com.mashape.unirest.http.*;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
+import frs.broker.*;
+
+/**
+ * ClientRequestHandler implementation using HTTP as pure IPC
+ * also known as URI Tunneling. Based upon the Unirest framework.
+ 
+   This source code is from the book 
+     "Flexible, Reliable Software:
+       Using Patterns and Agile Development"
+     published by CRC Press.
+   Author: 
+     Henrik B Christensen 
+     Department of Computer Science
+     Aarhus University
+   
+   Please visit http://www.baerbak.com/ for further information.
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+ 
+       http://www.apache.org/licenses/LICENSE-2.0
+ 
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+ */
+public class UriTunnelClientRequestHandler
+        implements ClientRequestHandler {
+
+  private final Gson gson;
+  private final String baseURL;
+  private final String path;
+
+  /** Construct a URI Tunnel based CRH. Will communicate
+   * using POST messages over http://(hostname):(port)/(pathForPost)
+   *
+   * @param hostname name of the machine that hosts the HTTP server
+   * @param port port number of the HTTP server
+   * @param pathForPost the path for the POST messages
+   */
+  public UriTunnelClientRequestHandler(String hostname, int port, String pathForPost) {
+    baseURL = "http://" + hostname + ":" + port + "/";
+    path = pathForPost;
+    gson = new Gson();
+  }
+
+  @Override
+  public ReplyObject sendToServer(RequestObject requestObject) {
+    HttpResponse<JsonNode> jsonResponse = null;
+    ReplyObject reply = null;
+
+    // The request object's payload does NOT include operationName
+    // and as we use HTTP as a pure transport protocol, we need
+    // to create a more complete request object which includes
+    // the full set of data required
+    String requestAsJson = gson.toJson(requestObject);
+    
+    // All calls are URI tunneled through a POST message
+    try {
+      jsonResponse = Unirest.post(baseURL + path)
+          .header("Accept", MimeMediaType.APPLICATION_JSON)
+          .header("Content-Type", MimeMediaType.APPLICATION_JSON)
+          .body(requestAsJson).asJson();
+    } catch (UnirestException e) {
+      throw new IPCException("UniRest POST request failed on objId="
+          + requestObject.getObjectId() + ", operationName="
+              + requestObject.getOperationName(), e);
+    }
+    
+    String body = jsonResponse.getBody().toString();
+    reply = gson.fromJson(body, ReplyObject.class);
+    return reply;
+  }
+
+  @Override
+  public void close() {
+    // Not applicable for a HTTP connection.
+  }
+
+}

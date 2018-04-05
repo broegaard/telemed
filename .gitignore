@@ -1,0 +1,10 @@
+build/
+.idea/
+gradle/
+.gradle/
+out/
+*.iml
+classes/
+
+*~
+*.log

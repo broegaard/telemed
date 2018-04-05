@@ -1,0 +1,24 @@
+/*
+ * Build file for Broker Demo applications, by Henrik Baerbak Christensen.
+ */
+
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+  compile project(':broker')
+}
+
+// === Manual execution of server and client
+
+task serverSocket(type: JavaExec) {
+  group 'demo'
+  description 'Run socke based TeleMed server'
+
+  classpath sourceSets.test.runtimeClasspath
+  main = 'telemed.main.ServerMainSocket'
+  args "memory"
+}
