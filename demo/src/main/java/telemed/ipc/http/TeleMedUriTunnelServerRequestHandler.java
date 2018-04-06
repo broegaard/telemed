@@ -48,11 +48,11 @@ public class TeleMedUriTunnelServerRequestHandler
     this.xds = xds;
   }
 
-  public void registerRoutes() {
-    // Register the superclass' Broker behavior
-    super.registerRoutes();
+  public void start() {
+    // Register and start the superclass' Broker behavior
+    super.start();
 
-    // And add web browser fetching of raw HL7 possibl
+    // And add web browser fetching of raw HL7 possible
 
     // GET is used to access all observations for a given patient
     String getRoute = "/" + Constants.BLOODPRESSURE_PATH

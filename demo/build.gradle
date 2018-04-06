@@ -12,13 +12,24 @@ dependencies {
   compile project(':broker')
 }
 
-// === Manual execution of server and client
+
+// === Demo of Socket based TeleMed system
 
 task serverSocket(type: JavaExec) {
   group 'demo'
-  description 'Run socke based TeleMed server'
+  description 'Run socket based TeleMed server'
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainSocket'
   args "memory"
 }
+
+task homeSocket(type: JavaExec) {
+  group 'demo'
+  description 'Run a single TeleMed client operation'
+
+  classpath sourceSets.test.runtimeClasspath
+  main = 'telemed.main.HomeClientSocket'
+  args op, id, sys, dia, host
+}
+

@@ -50,7 +50,7 @@ public class ServerMainHTTP {
 
     UriTunnelServerRequestHandler srh =
         new TeleMedUriTunnelServerRequestHandler(invoker, port, xds);
-    srh.registerRoutes();
+    srh.start();
 
     // Welcome
     System.out.println("=== TeleMed Spark based Server Request Handler (port:"
