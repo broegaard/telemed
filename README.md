@@ -1,7 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to
-get your application up and running.
+*Author: Henrik Baerbak Christensen / Aarhus University / www.baerbak.com*
 
 ### What is this repository for? ###
 
@@ -11,59 +10,26 @@ get your application up and running.
 
 ### How do I run it? ###
 
-  Targets :
- 
-    test:      Run JUnit unit- and integration tests
-       Find the output in folder 'TEST-RESULTS'
-    	
-  === Execution (Socket) ===
-    	
-    serverSocket:
-      Start the TeleMed socket based server 
+You first start the TeleMed server, next you invoke the client
+multiple times to upload or fetch blood pressure measurements.
+
+To start the TeleMed server, open a shell and issue
+
+    gradle serverSocket
+
+To upload blood pressure (123,99) for patient with id=241248 to the
+server located at IP localhost, open another shell and issue
+
+    gradle -q homeSocket -Pid=241248 -Psys=123 -Pdia=99 -Phost=localhost
+
+To fetch the last week's data for patient with id=87, issue
+
+    gradle -q homeSocket -Pop=fetch -Pid=87
     
-    homeSocket:
-      Execute a single operation of the home client
-      Defaults to: 'store' bloodpressure (120,70) for Nancy (pid01)
-      
-      Set parameters to change it to:
-      -Dop=fetch  : fetch last week's blood pressure measurements
-      -Did=(id)   : do operation on patient with given id
-      -Dsys=(s)   : store systolic pressure 's'
-      -Ddia=(f)   : store diastolic pressure 'd'
-      -Dhost=(h)  : hostname or IP of server (default: localhost)
-      
-      Examples:
-
-       ant homeSocket -Did=pid02 -Dsys=156 -Ddia=87
-            = store blood pressure (156,87) for patient 'pid02'
-
-       ant homeSocket -Dop=fetch -Did=pid02
-           = fetch last week's measurements for patient 'pid02'
-
-    ***
-
-    Start the 'server' in one shell, and run 'home' multiple times
-      in another to send observations to the server.
-
-  === Execution (HTTP / URI Tunneling) ===
-
-    serverHttp:
-      Start the HTTP/URI Tunnel based server, hit ctrl-c to stop it again 
-
-    homeHttp: 
-      Execute a 'measurement' and upload from the home
-      Defaults to: 'store' bloodpressure (120,70) for 'pid01' on localhost
-
-      The same set of parameters can be applied as for the socket based.
- 
-    To review uploaded tele observations, browse to
-      (host):4567/bp/{patientid}
-
-  === Householding ===
-
-    clean:     Removes all bytecode, clean the project
-    javadoc:   Generate JavaDoc (output in doc/index.html)
-
+If you want to use a HTTP URI Tunnel protocol instead, just replace
+`serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
+HTTP based version can also be viewed from the web page [http://localhost:4567/bp/pid=87]
+    
 
   Author: Henrik Baerbak Christensen / Aarhus University
     	  www.baerbak.com"""
