@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.w3c.dom.Document;
 
-import frs.broker.Servant;
+import frds.broker.Servant;
 import telemed.domain.*;
 import telemed.storage.*;
 

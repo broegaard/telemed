@@ -18,12 +18,14 @@
 
 package telemed.client;
 
+import frds.broker.Requestor;
+
 import java.lang.reflect.Type;
 
 /** This is a Test Spy - it merely notes down what parameters
  * are called for later verification by JUnit test code.
  */
-public class SpyRequestor implements frs.broker.Requestor {
+public class SpyRequestor implements Requestor {
   // I leave these package visible, to allow test code
   // to inspect their values!
   String lastObjectId;

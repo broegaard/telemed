@@ -18,7 +18,7 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 /**
  * The Client Request Handler role in the Broker pattern.

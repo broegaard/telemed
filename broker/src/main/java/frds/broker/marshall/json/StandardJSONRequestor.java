@@ -16,11 +16,12 @@
  *
  */
 
-package frs.broker.marshall.json;
+package frds.broker.marshall.json;
 
 import java.lang.reflect.Type;
 import com.google.gson.Gson;
-import frs.broker.*;
+import frds.broker.*;
+import frds.broker.*;
 
 /** Implementation of the Requestor role that uses JSON
  * (and the Gson library) for marshaling.

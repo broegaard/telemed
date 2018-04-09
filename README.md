@@ -92,6 +92,7 @@ ToDo
 [] Review library code to include more appropriate logging.
 [] Change the header to be to FRDS, not FRS
 [] Run JaCoCo and verify coverage
+[] homeHttp fails for empty record of measurements
 
 6-4-2018
 ---

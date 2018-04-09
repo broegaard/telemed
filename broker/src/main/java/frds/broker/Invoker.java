@@ -16,7 +16,7 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 /**
  * The Invoker role in the Broker Pattern.

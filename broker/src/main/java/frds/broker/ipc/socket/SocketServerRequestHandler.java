@@ -16,14 +16,17 @@
  *
  */
 
-package frs.broker.ipc.socket;
+package frds.broker.ipc.socket;
 
 import java.io.*;
 import java.net.*;
 
 import com.google.gson.Gson;
 
-import frs.broker.*;
+import frds.broker.Invoker;
+import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
+import frds.broker.ServerRequestHandler;
 
 /**
  * Implementation of the Server Request Handler using

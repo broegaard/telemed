@@ -16,14 +16,16 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 /**
- * The ClientProxy role in the Broker pattern. This is just a marker interface
- * as the set of methods is defined by which ever interface the proxy
- * implements.
- * <p>
- * Responsibility: To translate any method calls into RequestObjects that are
- * forwarded to a Requestor instance.
+ * Various constants used in for Marshalling.
+ *
  */
-public interface ClientProxy {}
+public class Constants {
+  // To allow request handlers to spot version updates of
+  // the marshalling format we add version number on
+  // it. Thereby code may scan the received raw message
+  // from the network to see if the format is proper.
+  public static final int MARSHALLING_VERSION = 1;
+}

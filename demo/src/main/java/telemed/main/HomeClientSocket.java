@@ -20,8 +20,8 @@ package telemed.main;
 
 import java.io.*;
 
-import frs.broker.*;
-import frs.broker.ipc.socket.SocketClientRequestHandler;
+import frds.broker.ClientRequestHandler;
+import frds.broker.ipc.socket.SocketClientRequestHandler;
 
 /**
  * A shell based home client prototype. Configured for the

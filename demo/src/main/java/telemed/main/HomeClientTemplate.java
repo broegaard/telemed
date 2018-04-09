@@ -18,9 +18,9 @@
 
 package telemed.main;
 
-import frs.broker.ClientRequestHandler;
-import frs.broker.Requestor;
-import frs.broker.marshall.json.StandardJSONRequestor;
+import frds.broker.ClientRequestHandler;
+import frds.broker.Requestor;
+import frds.broker.marshall.json.StandardJSONRequestor;
 import telemed.client.TeleMedProxy;
 import telemed.domain.TeleMed;
 import telemed.domain.TeleObservation;

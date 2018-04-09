@@ -20,11 +20,11 @@ package telemed.scenario;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-
-import frs.broker.marshall.json.StandardJSONRequestor;
 import org.junit.*;
 
-import frs.broker.*;
+import frds.broker.*;
+import frds.broker.marshall.json.StandardJSONRequestor;
+
 import telemed.server.*;
 import telemed.client.*;
 import telemed.domain.*;

@@ -16,7 +16,7 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 /**
  * The ServerRequestHandler role in the Broker pattern. This is solely a

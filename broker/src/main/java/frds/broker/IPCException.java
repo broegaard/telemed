@@ -16,13 +16,21 @@
  *
  */
 
-package frs.broker.ipc.http;
+package frds.broker;
 
-/**
- * (Incomplete) Set of mime media types used by HTTP
- * oriented brokers.
+/** The superclass of any exceptions occurring during IPC between
+ * client and server.
  */
+public class IPCException extends RuntimeException {
 
-public class MimeMediaType {
-  public static final String APPLICATION_JSON = "application/json";
+  public IPCException(String message, Throwable exception) {
+    super(message, exception);
+  }
+
+  public IPCException(String message) {
+    super(message);
+  }
+
+  private static final long serialVersionUID = 7220436156585793897L;
+
 }

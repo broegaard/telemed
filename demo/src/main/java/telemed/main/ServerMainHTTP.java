@@ -18,8 +18,9 @@
 
 package telemed.main;
 
-import frs.broker.*;
-import frs.broker.ipc.http.UriTunnelServerRequestHandler;
+import frds.broker.Invoker;
+import frds.broker.ipc.http.UriTunnelServerRequestHandler;
+
 import telemed.server.*;
 import telemed.domain.TeleMed;
 import telemed.doubles.*;

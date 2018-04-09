@@ -16,10 +16,15 @@
  *
  */
 
-/** This package contains HTTP based delegate implementations of the client and
-    server request handler roles, using URI tunneling.  URI tunneling
-    means HTTP is used as a pure network transport protocol, all
-    method information is hidden in the POST body, and all requests are
-    forwarded to the same path on the web server.
-*/
-package frs.broker.ipc.http;
+package frds.broker;
+
+/**
+ * The Servant role in the Broker pattern. This is solely a marker
+ * interface as the set of methods is defined by which ever interface the
+ * server side domain object implements.
+ * <p>
+ * Responsibility: To define the domain implementation on the server side
+ * of a role which may be invoked from a remote client. It is called
+ * from the Invoker.
+ */
+public interface Servant {}

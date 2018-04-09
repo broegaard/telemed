@@ -16,7 +16,7 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 import java.lang.reflect.Type;
 

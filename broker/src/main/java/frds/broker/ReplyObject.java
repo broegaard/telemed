@@ -16,7 +16,7 @@
  *
  */
 
-package frs.broker;
+package frds.broker;
 
 /**
  * Reply object encapsulates the reply from the server - a status code (we reuse

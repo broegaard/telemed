@@ -18,6 +18,8 @@
 
 package telemed.domain;
 
+import frds.broker.IPCException;
+
 import java.util.List;
 
 /**
@@ -43,7 +45,7 @@ public interface TeleMed {
    * @param teleObs
    *          the tele observation to process and store
    * @return the id of the stored observation
-   * @throws frs.broker.IPCException in case of any IPC problems
+   * @throws IPCException in case of any IPC problems
    */
   String processAndStore(TeleObservation teleObs);
 
@@ -57,7 +59,7 @@ public interface TeleMed {
    *          define the time interval that measurements are 
    *          wanted for
    * @return list of all observations
-   * @throws frs.broker.IPCException in case of any IPC problems
+   * @throws IPCException in case of any IPC problems
    */
   List<TeleObservation> getObservationsFor(String patientId, 
 	  TimeInterval interval);
@@ -69,7 +71,7 @@ public interface TeleMed {
    * @param uniqueId
    *          the unique id of the tele observation
    * @return the tele observation or null in case it is not present
-   * @throws frs.broker.IPCException in case of any IPC problems
+   * @throws IPCException in case of any IPC problems
    */
   TeleObservation getObservation(String uniqueId);
 
@@ -82,7 +84,7 @@ public interface TeleMed {
    * @param to
    *          the new values to overwrite with
    * @return true in case the correction was successful
-   * @throws frs.broker.IPCException in case of any IPC problems
+   * @throws IPCException in case of any IPC problems
    */
   boolean correct(String uniqueId, TeleObservation to);
 
@@ -92,7 +94,7 @@ public interface TeleMed {
    * @param uniqueId
    *          the id of the tele observation to delete
    * @return true if the observation was found and deleted
-   * @throws frs.broker.IPCException in case of any IPC problems
+   * @throws IPCException in case of any IPC problems
    */
   boolean delete(String uniqueId);
 }

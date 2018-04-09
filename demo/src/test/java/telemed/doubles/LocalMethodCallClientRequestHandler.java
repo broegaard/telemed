@@ -18,7 +18,10 @@
 
 package telemed.doubles;
 
-import frs.broker.*;
+import frds.broker.ClientRequestHandler;
+import frds.broker.Invoker;
+import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
 
 /**
  * A test double implementation of the ClientRequestHandler which simply

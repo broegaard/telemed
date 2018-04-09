@@ -20,8 +20,8 @@ package telemed.main;
 
 import java.io.*;
 
-import frs.broker.*;
-import frs.broker.ipc.http.UriTunnelClientRequestHandler;
+import frds.broker.ClientRequestHandler;
+import frds.broker.ipc.http.UriTunnelClientRequestHandler;
 import telemed.ipc.http.Constants;
 
 /**

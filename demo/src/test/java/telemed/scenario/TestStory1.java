@@ -23,11 +23,14 @@ import static org.junit.Assert.assertThat;
 
 import java.util.*;
 
-import frs.broker.marshall.json.StandardJSONRequestor;
+import frds.broker.ClientRequestHandler;
+import frds.broker.Invoker;
+import frds.broker.Requestor;
+import frds.broker.marshall.json.StandardJSONRequestor;
+
 import org.junit.*;
 import org.w3c.dom.Document;
 
-import frs.broker.*;
 import telemed.server.*;
 import telemed.client.*;
 import telemed.domain.*;
@@ -62,9 +65,9 @@ public class TestStory1 {
     
     // Create client side broker implementations, using the local 
     // method client request handler to avoid any real IPC layer.
-    ClientRequestHandler clientRequestHandler = 
+    ClientRequestHandler clientRequestHandler =
         new LocalMethodCallClientRequestHandler(invoker);
-    Requestor requestor = 
+    Requestor requestor =
         new StandardJSONRequestor(clientRequestHandler);
     
     // Finally, create the client proxy for the TeleMed

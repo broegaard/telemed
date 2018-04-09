@@ -18,8 +18,8 @@
 
 package telemed.http;
 
-import frs.broker.ClientRequestHandler;
-import frs.broker.Requestor;
+import frds.broker.ClientRequestHandler;
+import frds.broker.Requestor;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
@@ -28,9 +28,9 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import frs.broker.marshall.json.StandardJSONRequestor;
-import frs.broker.ipc.http.UriTunnelClientRequestHandler;
-import frs.broker.ipc.http.UriTunnelServerRequestHandler;
+import frds.broker.marshall.json.StandardJSONRequestor;
+import frds.broker.ipc.http.UriTunnelClientRequestHandler;
+import frds.broker.ipc.http.UriTunnelServerRequestHandler;
 
 import telemed.server.*;
 import telemed.client.*;

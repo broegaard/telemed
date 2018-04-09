@@ -18,9 +18,9 @@
 
 package telemed.ipc.http;
 
-import frs.broker.Invoker;
-import frs.broker.ServerRequestHandler;
-import frs.broker.ipc.http.UriTunnelServerRequestHandler;
+import frds.broker.Invoker;
+import frds.broker.ServerRequestHandler;
+import frds.broker.ipc.http.UriTunnelServerRequestHandler;
 import org.w3c.dom.Document;
 import telemed.server.XMLUtility;
 import telemed.storage.XDSBackend;

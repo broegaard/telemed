@@ -16,13 +16,16 @@
  *
  */
 
-package frs.broker.ipc.http;
+package frds.broker.ipc.http;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.*;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
-import frs.broker.*;
+import frds.broker.ClientRequestHandler;
+import frds.broker.IPCException;
+import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
 
 /**
  * ClientRequestHandler implementation using HTTP as pure IPC
