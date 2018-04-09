@@ -1,10 +1,17 @@
 /*
  * Broker library implementation for teaching purposes.
+ * This gradle file contains the necessary tasks to publish
+ * to BinTray.
  *
  * By Henrik Bærbak Christensen, Aarhus University and www.baerbak.com
  */
 
-apply plugin: 'java'
+plugins {
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
+apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 
 repositories {
     jcenter()
@@ -15,4 +22,93 @@ dependencies {
   compile group: 'com.google.code.gson', name: 'gson', version: '2.8.2'
   compile group: 'com.sparkjava', name: 'spark-core', version: '2.7.1'
   compile group: 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'
+}
+
+// === Generate jar of code, source, and javadoc
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+// === Define the POM requirements by Maven
+
+// Create the pom configuration:
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id "henrikbaerbak"
+            name "Henrik Bærbak Christensen"
+            email "info@baerbak.com"
+            organization "Imhotep"
+            organizationUrl "http://www.baerbak.com"
+        }
+    }
+    
+    scm {
+       url "https://henrikbaerbak@bitbucket.org/henrikbaerbak/broker.git"
+       connection "scm:git:git://bitbucket.org/henrikbaerbak/broker.git"
+       developerConnection "scm:git:git://bitbucket.org/henrikbaerbak/broker.git"
+    }
+}
+
+// === Define Maven Repository details
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            groupId 'com.baerbak.maven'
+            artifactId 'broker'
+            version '1.0'
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description',
+                'Broker - A Teaching oriented implementation of Broker pattern.')
+                root.appendNode('name', 'Broker')
+                root.appendNode('url', 'http://www.baerbak.com')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+// === Specification of upload to BinTray
+bintray {
+  user = 'henrikbaerbak'
+  key =   System.getenv('BINTRAY_KEY')
+  publications = ['MyPublication']
+  pkg {
+        repo = 'maven'
+        name = 'broker'
+        websiteUrl = 'http://www.baerbak.com'
+        licenses = ['Apache-2.0']
+        publicDownloadNumbers = true
+        labels = ['broker', 'distribution',
+               'flexible-reliable-distributed-software', 'teaching']
+        vcsUrl =
+          'https://henrikbaerbak@bitbucket.org/henrikbaerbak/broker.git'
+        version {
+          name = '1.0'
+        }
+    }
 }
