@@ -5,7 +5,7 @@ import telemed.server.*;
 import telemed.domain.TeleMed;
 import telemed.doubles.*;
 import frs.broker.ipc.socket.SocketServerRequestHandler;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.storage.XDSBackend;
 
 /** App server, using socket based implementations of broker roles.
@@ -36,7 +36,7 @@ public class ServerMainSocket {
     }
 
     TeleMed tsServant = new TeleMedServant(xds);
-    Invoker invoker = new StandardJSONInvoker(tsServant);
+    Invoker invoker = new TeleMedJSONInvoker(tsServant);
 
     // Configure a socket based server request handler
     SocketServerRequestHandler ssrh =

@@ -16,7 +16,7 @@ import telemed.domain.TeleObservation;
 import telemed.doubles.FakeObjectXDSDatabase;
 import telemed.doubles.LocalMethodCallClientRequestHandler;
 import telemed.helper.HelperMethods;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.server.TeleMedServant;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +40,7 @@ public class TestMarshalling {
     TeleMed teleMedServant = new TeleMedServant(xds);
 
     // Server side broker implementations
-    Invoker invoker = new StandardJSONInvoker(teleMedServant);
+    Invoker invoker = new TeleMedJSONInvoker(teleMedServant);
 
     // Create client side broker implementations, using the local
     // method client request handler to avoid any real IPC layer.

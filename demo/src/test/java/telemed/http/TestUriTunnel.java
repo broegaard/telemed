@@ -20,7 +20,7 @@ import telemed.domain.*;
 import telemed.doubles.FakeObjectXDSDatabase;
 import telemed.helper.HelperMethods;
 import telemed.ipc.http.*;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 
 /** Test that a simple upload and fetch scenario is working
  * using the HTTP URI Tunneling variants of the Client- and
@@ -48,7 +48,7 @@ public class TestUriTunnel {
     // Server side roles
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
     TeleMed tsServant = new TeleMedServant(xds);
-    StandardJSONInvoker invoker = new StandardJSONInvoker(tsServant);
+    TeleMedJSONInvoker invoker = new TeleMedJSONInvoker(tsServant);
 
     serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER, xds);
     serverRequestHandler.start();

@@ -15,7 +15,7 @@ import telemed.client.*;
 import telemed.domain.*;
 import telemed.doubles.*;
 import telemed.helper.HelperMethods;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 
 /**
  * The central TeleMed story 1: Nancy uploads a blood pressure measurement to the
@@ -40,7 +40,7 @@ public class TestStory1 {
     TeleMed teleMedServant = new TeleMedServant(xds);
 
     // Server side broker implementations
-    Invoker invoker = new StandardJSONInvoker(teleMedServant);
+    Invoker invoker = new TeleMedJSONInvoker(teleMedServant);
     
     // Create client side broker implementations, using the local 
     // method client request handler to avoid any real IPC layer.

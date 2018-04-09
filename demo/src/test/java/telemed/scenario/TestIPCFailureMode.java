@@ -12,7 +12,7 @@ import telemed.client.*;
 import telemed.domain.*;
 import telemed.doubles.*;
 import telemed.helper.HelperMethods;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 
 /** Test failure situations in the IPC layer.
  * Here we use a Saboteur to introduce simulated
@@ -33,7 +33,7 @@ public class TestIPCFailureMode {
     TeleMed tsServant = new TeleMedServant(xds);
 
     // Server side broker implementations
-    Invoker invoker = new StandardJSONInvoker(tsServant);
+    Invoker invoker = new TeleMedJSONInvoker(tsServant);
     
     // Create client side broker implementations
     ClientRequestHandler clientRequestHandler = new LocalMethodCallClientRequestHandler(invoker);

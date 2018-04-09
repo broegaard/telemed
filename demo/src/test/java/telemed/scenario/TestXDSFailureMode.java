@@ -16,7 +16,7 @@ import telemed.client.*;
 import telemed.domain.*;
 import telemed.doubles.*;
 import telemed.helper.HelperMethods;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.storage.*;
 
 /** 
@@ -34,7 +34,7 @@ public class TestXDSFailureMode {
     // And wrap it in a saboteur (Meszaros)
     SaboteurXDS xds = new SaboteurXDS(xdsf);
     TeleMed tsServant = new TeleMedServant(xds);
-    Invoker invoker = new StandardJSONInvoker(tsServant);
+    Invoker invoker = new TeleMedJSONInvoker(tsServant);
     
     LocalMethodCallClientRequestHandler clientRequestHandler = 
         new LocalMethodCallClientRequestHandler(invoker);

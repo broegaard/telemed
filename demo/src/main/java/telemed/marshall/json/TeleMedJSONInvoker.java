@@ -19,12 +19,12 @@ import telemed.storage.XDSException;
 <#include "/data/author.txt">
 </#if>
  */
-public class StandardJSONInvoker implements Invoker {
+public class TeleMedJSONInvoker implements Invoker {
 
   private final TeleMed teleMed;
   private final Gson gson;
 
-  public StandardJSONInvoker(TeleMed teleMedServant) {
+  public TeleMedJSONInvoker(TeleMed teleMedServant) {
     teleMed = teleMedServant;
     gson = new Gson();
   }

@@ -6,7 +6,7 @@ import telemed.server.*;
 import telemed.domain.TeleMed;
 import telemed.doubles.*;
 import telemed.ipc.http.TeleMedUriTunnelServerRequestHandler;
-import telemed.marshall.json.StandardJSONInvoker;
+import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.storage.XDSBackend;
 
 /** Jetty/Spark-java based server responding to URI Tunneled POST
@@ -46,7 +46,7 @@ public class ServerMainHTTP {
     }
     // Create server side implementation of Broker roles
     TeleMed tsServant = new TeleMedServant(xds);
-    Invoker invoker = new StandardJSONInvoker(tsServant);
+    Invoker invoker = new TeleMedJSONInvoker(tsServant);
 
     UriTunnelServerRequestHandler srh =
         new TeleMedUriTunnelServerRequestHandler(invoker, port, xds);
