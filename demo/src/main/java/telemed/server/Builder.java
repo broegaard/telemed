@@ -5,10 +5,6 @@ import telemed.domain.*;
 /**
  * The builder role of the Builder pattern, interface for building
  * representations of a tele medical observation.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 
 public interface Builder {

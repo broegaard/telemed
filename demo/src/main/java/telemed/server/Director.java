@@ -4,10 +4,6 @@ import telemed.domain.TeleObservation;
 
 /** The Director role of the Builder pattern, allowing
  * representations of tele observations to be built.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 
 public class Director {

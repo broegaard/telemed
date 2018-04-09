@@ -2,10 +2,6 @@ package telemed.storage;
 
 /**
  * Metadata for a tele observation. Used by the XDS to index observations.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 
 public class MetaData {

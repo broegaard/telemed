@@ -11,10 +11,6 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 
 /** A set of utility methods for converting to and from our simplified HL7.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 public class XMLUtility {
   

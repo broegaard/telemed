@@ -20,10 +20,6 @@ import telemed.storage.*;
  * other implementations that uses a real database server.
  * <p>
  * See http://en.wikipedia.org/wiki/Test_double
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public class FakeObjectXDSDatabase implements XDSBackend {
   

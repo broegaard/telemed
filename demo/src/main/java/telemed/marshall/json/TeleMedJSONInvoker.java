@@ -14,10 +14,6 @@ import telemed.storage.XDSException;
  * Implementation of the Invoker role that uses JSON (and the Gson
  * library) for marshalling and demarshalling and is bound to a
  * single instance of a TeleMed servant.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public class TeleMedJSONInvoker implements Invoker {
 

@@ -3,10 +3,6 @@ package telemed.domain;
 import java.time.*;
 
 /** Various utility functions and constants.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 
 public class Utility {

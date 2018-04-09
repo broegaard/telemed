@@ -13,10 +13,6 @@ import telemed.storage.*;
  * The implementation of the TeleMed interface which provides the business
  * behaviour required. As it resides on the server side, it is the 'servant'
  * object.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 public class TeleMedServant implements TeleMed, Servant {
 

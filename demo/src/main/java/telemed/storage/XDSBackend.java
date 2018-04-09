@@ -22,10 +22,6 @@ import org.w3c.dom.Document;
  * interface, especially on the query side. Several minor modification has also
  * been made to suit the case study better. One notable change is that a real
  * XDS does not support changing documents, it is an immutable database.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 public interface XDSBackend {
   

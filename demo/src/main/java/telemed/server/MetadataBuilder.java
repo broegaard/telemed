@@ -7,10 +7,6 @@ import telemed.storage.MetaData;
 
 /**
  * A builder to build metadata for a tele observation.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 public class MetadataBuilder implements Builder {
   private MetaData metadata;

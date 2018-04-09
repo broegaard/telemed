@@ -23,10 +23,6 @@ import static spark.Spark.*;
  * raw data is most efficiently fetched.
  * <p>
  * Implementation based on the Spark-Java framework.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public class TeleMedUriTunnelServerRequestHandler
   extends UriTunnelServerRequestHandler

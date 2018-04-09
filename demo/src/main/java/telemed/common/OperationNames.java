@@ -2,10 +2,6 @@ package telemed.common;
 
 /**
  * The names of the valid operations (i.e. method calls) in the TeleMed system.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public class OperationNames {
   // Method names are prefixed with the type of the method receiver ('telemed') which

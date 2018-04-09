@@ -15,10 +15,6 @@ import java.util.List;
  *   Note that all methods in this interface may throw the unchecked
  *   exception 'IPCException' to signal communication problems on the
  *   network, a server side failure, etc.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public interface TeleMed {
 

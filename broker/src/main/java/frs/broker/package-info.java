@@ -7,6 +7,6 @@
     true for any design pattern) that implementation may vary
     from one case to the next.
   <p>
-    Please refer to "Flexible Reliable Software, 2nd Edition".
+    Please refer to "Flexible Reliable Distributed Software".
 */
 package frs.broker;

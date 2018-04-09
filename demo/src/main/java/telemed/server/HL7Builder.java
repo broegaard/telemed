@@ -13,10 +13,6 @@ import telemed.domain.*;
  * Implementation of the builder interface to build a HL7 version 3 document. In
  * this teaching context it is not valid HL7 but shortened format that vaguely
  * resemble the (much more complex) HL7 format.
- <#if type == "code">
-
- <#include "/data/author.txt">
- </#if>
  */
 public class HL7Builder implements Builder {
 

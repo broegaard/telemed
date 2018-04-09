@@ -13,10 +13,6 @@ package telemed.domain;
  * has been measured, for instance LOINC (loinc.org).
  * <p>
  * Based upon the implementation of PQ from HL7/CDA standard.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public final class ClinicalQuantity {
   private final double value;

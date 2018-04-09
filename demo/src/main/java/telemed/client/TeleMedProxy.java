@@ -14,10 +14,6 @@ import telemed.domain.*;
  * resides on the client side and acts as a TeleMed instance, but all method
  * calls are marshaled and sent to the server, and the replies are interpreted
  * before returning to the callers.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 public class TeleMedProxy implements TeleMed, ClientProxy {
 

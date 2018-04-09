@@ -8,10 +8,6 @@ import java.time.temporal.ChronoUnit;
  * a persons identity (which person does this measurements belong to), the time
  * of the observation (in Central European Time), and of course the systolic and
  * diastolic measurements.
-<#if type == "code">
-
-<#include "/data/author.txt">
-</#if>
  */
 
 public class TeleObservation {
