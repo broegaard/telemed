@@ -54,8 +54,17 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
 
   @Override
   public TeleObservation getObservation(String uniqueId) {
-    return requestor.sendRequestAndAwaitReply(uniqueId, 
-        OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class);
+    TeleObservation to;
+
+    try {
+      to = requestor.sendRequestAndAwaitReply(uniqueId,
+              OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class);
+    } catch (IPCException e) {
+      // TODO: introduce status code in IPCException and use it
+      // If e.getStatusCode != SC_NOT_FOUND throw ipc exception again
+      to = null;
+    }
+    return to;
   }
 
   @Override

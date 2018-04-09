@@ -94,10 +94,15 @@ public class StandardJSONInvoker implements Invoker {
         // Parameter: none
 
         TeleObservation to = teleMed.getObservation(objectId);
-        int statusCode = (to == null) ?
-                HttpServletResponse.SC_NOT_FOUND :
-                HttpServletResponse.SC_OK;
-        reply = new ReplyObject(statusCode, gson.toJson(to));
+        // If there are no teleobservation to get, make
+        // the proper error code
+        if (to == null) {
+          reply = new ReplyObject(HttpServletResponse.SC_NOT_FOUND,
+                  "No teleobservation is stored for object with id: "
+                          + objectId);
+        } else {
+          reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(to));
+        }
 
       } else if (operationName.equals(OperationNames.
               DELETE_OPERATION)) {
@@ -119,7 +124,7 @@ public class StandardJSONInvoker implements Invoker {
       }
 
     } catch( XDSException e ) {
-      reply = 
+      reply =
           new ReplyObject(
               HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
               e.getMessage());
