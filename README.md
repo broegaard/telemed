@@ -88,11 +88,23 @@ Diary
 ToDo
 ----
 
+[] Review the use of the 'start()' method in SRH; it is not 'doing the
+same thing' in the HTTP and in the socket based version
+
+[] Socket main and HTTP main are different in their treatment of 'type'
+   parameter; which is bad anyway, call it 'database' or similar
+   
 [] Include status code in IPCException so it can be used at app level
+
 [] Review library code to include more appropriate logging.
+
 [] Change the header to be to FRDS, not FRS
+
 [] Run JaCoCo and verify coverage
+
 [] homeHttp fails for empty record of measurements
+
+[] Run CodeAnalyze on it.
 
 6-4-2018
 ---
