@@ -21,6 +21,7 @@
  */
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 repositories {
     jcenter()
@@ -41,7 +42,7 @@ task serverSocket(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainSocket'
-  args "memory"
+  args db
 }
 
 task homeSocket(type: JavaExec) {
@@ -61,7 +62,7 @@ task serverHttp(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainHTTP'
-  args "memory"
+  args db
 }
 
 task homeHttp(type: JavaExec) {

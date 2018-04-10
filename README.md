@@ -1,14 +1,15 @@
 Broker Library
 ==============
 
-From the book *Flexible, Reliable Distributed Software*, by *Henrik
-Bærbak Christensen / Aarhus University / www.baerbak.com*
+From the book *Flexible, Reliable, Distributed Software*, by *Henrik
+Bærbak Christensen / Aarhus University / www.baerbak.com*, available
+at LeanPub.com.
 
 What is this repository for?
 -----------
 
 Version 1.0 of the Broker library used in teaching context based on
-the book *Flexible, Reliable Distributed Software*.
+the book *Flexible, Reliable, Distributed Software*.
 
 This repository serves two purposes.
 
@@ -18,7 +19,8 @@ This repository serves two purposes.
        contains the delivery code for publishing the library on the
        JCenter repository.
     2. It has the source code of the TeleMed system, which is used in
-       the FRDS book to show the Broker pattern in action.
+       the FRDS book to show the Broker pattern in action, and contains
+       tests of both the Broker and TeleMed implementation.
 
 The TeleMed system is a small distributed system in which patients
 may upload blood pressure measurements to a central medical server.
@@ -56,6 +58,8 @@ If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
 HTTP based version can also be viewed from the web page [http://localhost:4567/bp/pid=87]
     
+Review `gradle.properties` for default values for the arguments to the
+server and the client.
 
   Author: Henrik Baerbak Christensen / Aarhus University
     	  www.baerbak.com"""
@@ -80,7 +84,8 @@ HTTP based version can also be viewed from the web page [http://localhost:4567/b
 
 ### Internal - publishing ###
 
-* `./gradlew :broker:bintrayUpload` and hit the publish button.
+* `./gradlew :broker:bintrayUpload` and hit the publish
+  button. BinTray API key must be provided as a environment variable.
 
 Diary
 ===
@@ -91,14 +96,14 @@ ToDo
 [] Review the use of the 'start()' method in SRH; it is not 'doing the
 same thing' in the HTTP and in the socket based version
 
-[] Socket main and HTTP main are different in their treatment of 'type'
+[OK] Socket main and HTTP main are different in their treatment of 'type'
    parameter; which is bad anyway, call it 'database' or similar
    
 [] Include status code in IPCException so it can be used at app level
 
 [] Review library code to include more appropriate logging.
 
-[] Change the header to be to FRDS, not FRS
+[OK] Change the header to be to FRDS, not FRS
 
 [] Run JaCoCo and verify coverage
 

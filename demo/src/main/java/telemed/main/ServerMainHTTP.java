@@ -45,8 +45,8 @@ public class ServerMainHTTP {
   }
   
   private static void explainAndDie() {
-    System.out.println("Usage: ServerMainHTTP {type}");
-    System.out.println("       type = 'memory' is the only type DB allowed");
+    System.out.println("Usage: ServerMainHTTP {db}");
+    System.out.println("       db = 'memory' is the only type DB allowed");
     System.exit(-1);
   }
 

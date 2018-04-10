@@ -38,9 +38,20 @@ public class ServerMainSocket {
   private static Thread daemon; 
   
   public static void main(String[] args) throws Exception {
+    // Command line argument parsing and validation
+    if (args.length < 1) {
+      explainAndDie();
+    }
     new ServerMainSocket(args[0]); // No error handling!
   }
-  
+
+  private static void explainAndDie() {
+    System.out.println("Usage: ServerMainSocket {db}");
+    System.out.println("       db = 'memory' is the only type DB allowed");
+    System.exit(-1);
+  }
+
+
   public ServerMainSocket(String type) throws Exception {
     int port = 37321;
     // Define the server side delegates
