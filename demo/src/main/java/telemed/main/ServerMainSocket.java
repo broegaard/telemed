@@ -77,12 +77,7 @@ public class ServerMainSocket {
     System.out.println("=== TeleMed Socket based Server Request Handler (port:"
             + port + ") ===");
     System.out.println(" Use ctrl-c to terminate!");
-    
-    // and start the daemon...
-    daemon = new Thread(ssrh); 
-    daemon.start(); 
-    
-    // Ensure that its lifetime follows that of the main process
-    daemon.join(); 
+    ssrh.start();
+
   }
 }

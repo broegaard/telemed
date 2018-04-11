@@ -50,13 +50,14 @@ public class SocketServerRequestHandler
     gson = new Gson();
   }
 
+  private boolean isStopped;
   @Override
   public void run() {
     openServerSocket();
 
     System.out.println("*** Server socket established ***");
     
-    boolean isStopped = false;
+    isStopped = false;
     while (!isStopped) {
 
       System.out.println("--> Accepting...");
@@ -125,13 +126,15 @@ public class SocketServerRequestHandler
     } 
   }
 
+  private Thread daemon;
   @Override
   public void start() {
-    // None
+    daemon = new Thread(this);
+    daemon.start();
   }
 
   @Override
   public void stop() {
-    // None
+    isStopped = true; // Will only stop after next message...
   }
 }
