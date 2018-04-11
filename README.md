@@ -1,9 +1,9 @@
 Broker Library
 ==============
 
-From the book *Flexible, Reliable, Distributed Software*, by *Henrik
-Bærbak Christensen / Aarhus University / www.baerbak.com*, available
-at LeanPub.com.
+From the book *Flexible, Reliable, Distributed Software* (FRDS), by
+*Henrik Bærbak Christensen / Aarhus University / www.baerbak.com*,
+available at LeanPub.com.
 
 What is this repository for?
 -----------
@@ -13,21 +13,29 @@ the book *Flexible, Reliable, Distributed Software*.
 
 This repository serves two purposes.
 
-    1. It has the source code of the `frds.broker` library that
-       contains central roles for the **Broker** pattern, as well as
-       some default implementations for some of these. It also
-       contains the delivery code for publishing the library on the
-       JCenter repository.
-    2. It has the source code of the TeleMed system, which is used in
-       the FRDS book to show the Broker pattern in action, and contains
-       tests of both the Broker and TeleMed implementation.
+  1. It has the source code of the `frds.broker` library that contains
+       central roles for the **Broker** pattern, as well as some
+       default implementations for some of these. 
+       
+  2. It has the source code of the TeleMed system, which is used in
+       the FRDS book to show the Broker pattern in action, and
+       contains tests of both the Broker and TeleMed implementation.
 
 The TeleMed system is a small distributed system in which patients
 may upload blood pressure measurements to a central medical server.
 
-Its primary goal is to show how the **Broker** pattern is implemented.
+Its primary goal is to show how the **Broker** pattern is
+implemented. Note, it is not a full Broker as in Java RMI as it has
+two limitations (more detail in FRDS):
+  
+  * No *Name Service* is used, so object id must be defined by the
+     code base and/or from interaction with the server.
+  * It is *pure client/server* relation, so server objects can never
+     invoke methods on client side objects (no Observer pattern
+     possible).
+     
 
-Three variants of the Broker is provided
+Two variants of the Broker is provided
 
   * Socket: Socket based Client- and ServerRequestHandler implementations.
 
@@ -36,7 +44,8 @@ Three variants of the Broker is provided
     produce.
 
 
-### How do I run it? ###
+How do I run it?
+---
 
 You first start the TeleMed server, next you invoke the client
 multiple times to upload or fetch blood pressure measurements.
@@ -64,23 +73,13 @@ server and the client.
   Author: Henrik Baerbak Christensen / Aarhus University
     	  www.baerbak.com"""
 
-### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
 
 ### Contribution guidelines ###
 
 * Contact Henrik if you want to contribute and he will set things up...
 
-### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
 
 ### Internal - publishing ###
 
