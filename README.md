@@ -1,4 +1,4 @@
-Broker Library
+FRDS.Broker Library
 ==============
 
 From the book *Flexible, Reliable, Distributed Software* (FRDS), by
@@ -33,7 +33,6 @@ two limitations (more detail in FRDS):
   * It is *pure client/server* relation, so server objects can never
      invoke methods on client side objects (no Observer pattern
      possible).
-     
 
 Two variants of the Broker is provided
 
@@ -65,90 +64,19 @@ To fetch the last week's data for patient with id=87, issue
     
 If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
-HTTP based version can also be viewed from the web page [http://localhost:4567/bp/pid=87]
+HTTP based version can also be viewed from the web page
+[http://localhost:4567/bp/pid=87]
     
 Review `gradle.properties` for default values for the arguments to the
 server and the client.
 
-  Author: Henrik Baerbak Christensen / Aarhus University
+  Author: *Henrik Baerbak Christensen* / Aarhus University
     	  www.baerbak.com"""
-
 
 
 ### Contribution guidelines ###
 
 * Contact Henrik if you want to contribute and he will set things up...
-
-
-
-### Internal - publishing ###
-
-* `./gradlew :broker:bintrayUpload` and hit the publish
-  button. BinTray API key must be provided as a environment variable.
-
-Diary
-===
-
-ToDo
-----
-
-[] Review the use of the 'start()' method in SRH; it is not 'doing the
-same thing' in the HTTP and in the socket based version
-
-[OK] Socket main and HTTP main are different in their treatment of 'type'
-   parameter; which is bad anyway, call it 'database' or similar
-   
-[] Include status code in IPCException so it can be used at app level
-
-[] Review library code to include more appropriate logging.
-
-[OK] Change the header to be to FRDS, not FRS
-
-[] Run JaCoCo and verify coverage
-
-[] homeHttp fails for empty record of measurements
-
-[] Run CodeAnalyze on it.
-
-6-4-2018
----
-
-Initiated repo with the frs.broker library from RSA/TS17D; next added
-demo code from frsproject/broker.
-
-Cloned the repo with the broken test. Imported into IntelliJ.
-
-Removed all REST oriented code as E17 experience is that REST does not
-architecturally match the Broker well.
-
-Renamed 'registerRoutes' in demo to 'start' which was the name adopted
-in RSA broker code.
-
-9-04-2018
----
-
-Made all test cases run.
-
-Next action: Do a Diff with all previous variant.
-
-Did 'frsproject/broker'. All changes are OK, nothing missing.
-
-Did 'frsproject/breakthrough'. Our new broker has logging and has LICENS
-which the breakthrough has not. OK.
-
-Did 'book/src/broker'. Some comment stuff (missing year in copyright),
-but no essential stuff is missing!
-
-THUS - removing the stuff from the aforementioned repos.
-
-    Book chapter/broker: REMOVED.
-    frsproject/broker: REMOVED.
-    
-Regarding the 'frsproject' code base I
-
-    gradle :broker:jar
-    
-and copy the jar file to the respective projects one by one.
 
 
 
