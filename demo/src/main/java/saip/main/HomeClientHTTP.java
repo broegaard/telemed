@@ -16,7 +16,7 @@
  *
  */
 
-package telemed.main;
+package saip.main;
 
 import java.io.*;
 
@@ -40,7 +40,8 @@ public class HomeClientHTTP extends HomeClientTemplate {
 
   @Override
   public ClientRequestHandler createClientRequestHandler(String hostname, int port) {
-    return new UriTunnelClientRequestHandler(hostname, port, Constants.BLOODPRESSURE_PATH);
+    return new UriTunnelClientRequestHandler(hostname, port,
+                                             Constants.BLOODPRESSURE_PATH);
   }
 
   public static void main(String[] args) throws IOException {

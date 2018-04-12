@@ -29,29 +29,10 @@ repositories {
 
 dependencies {
   compile project(':broker')
+  compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.6.3'
+  
   testCompile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-library:1.3'
-}
-
-
-// === Demo of Socket based TeleMed system
-
-task serverSocket(type: JavaExec) {
-  group 'demo'
-  description 'Run socket based TeleMed server'
-
-  classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.ServerMainSocket'
-  args db
-}
-
-task homeSocket(type: JavaExec) {
-  group 'demo'
-  description 'Run a single TeleMed client operation (Socket)'
-
-  classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.HomeClientSocket'
-  args op, id, sys, dia, host
 }
 
 // === Demo of HTTP/URI Tunnel based TeleMed system
@@ -61,7 +42,7 @@ task serverHttp(type: JavaExec) {
   description 'Run Http/URI Tunnel based TeleMed server'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.ServerMainHTTP'
+  main = 'saip.main.ServerMainHTTP'
   args db
 }
 
@@ -70,6 +51,6 @@ task homeHttp(type: JavaExec) {
   description 'Run a single TeleMed client operation (Http)'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.HomeClientHTTP'
+  main = 'saip.main.HomeClientHTTP'
   args op, id, sys, dia, host
 }

@@ -16,7 +16,7 @@
  *
  */
 
-package telemed.main;
+package saip.main;
 
 import frds.broker.Invoker;
 import frds.broker.ipc.http.UriTunnelServerRequestHandler;
@@ -30,6 +30,8 @@ import telemed.storage.XDSBackend;
 
 /** Jetty/Spark-java based server responding to URI Tunneled POST
  * uploads and GET requests. The server is hardwired to port 4567.
+ *
+ * This variant is made for SAiP courses.
  *
  * @author Henrik Baerbak Christensen, Aarhus University
  *

@@ -16,7 +16,7 @@
  *
  */
 
-package telemed.main;
+package saip.main;
 
 import frds.broker.ClientRequestHandler;
 import frds.broker.Requestor;
