@@ -28,6 +28,8 @@ import telemed.ipc.http.TeleMedUriTunnelServerRequestHandler;
 import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.storage.XDSBackend;
 
+import saip.storage.mongo.MongoXDSAdapter;
+
 /** Jetty/Spark-java based server responding to URI Tunneled POST
  * uploads and GET requests. The server is hardwired to port 4567.
  *
@@ -48,7 +50,8 @@ public class ServerMainHTTP {
   
   private static void explainAndDie() {
     System.out.println("Usage: ServerMainHTTP {db}");
-    System.out.println("       db = 'memory' is the only type DB allowed");
+    System.out.println("       db = 'memory' is the in-memory db");
+    System.out.println("       db = {host} is MongoDB on 'host:27017'");
     System.exit(-1);
   }
 
@@ -59,11 +62,7 @@ public class ServerMainHTTP {
     if (type.equals("memory")) {
       xds = new FakeObjectXDSDatabase();
     } else {
-      // Open for other implementations, connecting to real
-      // databases. Contact Henrik Baerbak if you want to
-      // try other DBs.
-      System.out.println("Sorry - only memory based DB supported.");
-      System.exit(0);
+      xds = new MongoXDSAdapter(type, 27017);
     }
     // Create server side implementation of Broker roles
     TeleMed tsServant = new TeleMedServant(xds);
