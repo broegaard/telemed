@@ -29,6 +29,9 @@ repositories {
 
 dependencies {
   compile project(':broker')
+  // Bind SLF4J it to the Log4J logging framework
+  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
   testCompile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
