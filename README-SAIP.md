@@ -58,7 +58,21 @@ Ensure you have docker installed and then start a mongodb container
 Next start the server with a connection to it
 
     gradle serverHttp -Pdb=localhost
-    
+
+
+Performance Testing
+===
+
+First, you need to ensure the 'hack' is enabled in the TeleMedServant
+class in package `telemed.server`, that is, the `teleObs.setTime()`
+statement is NOT a comment
+
+    // Performance testing hack: Overwrite client side
+    // time stamp with present time
+    teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+
+Next, you can find a JMeter sample test plan in
+'TeleMed-Test-Plan.jmx'. Start JMeter and open it.
 
 Context
 ===

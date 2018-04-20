@@ -20,6 +20,7 @@ package telemed.server;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.time.temporal.ChronoUnit;
 
 import org.w3c.dom.Document;
 
@@ -42,6 +43,11 @@ public class TeleMedServant implements TeleMed, Servant {
 
   @Override
   public String processAndStore(TeleObservation teleObs) {
+
+    // Performance testing hack: Overwrite client side
+    // time stamp with present time
+    teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+
     // Generate the XML document representing the
     // observation in HL7 (HealthLevel7) format.
     HL7Builder builder = new HL7Builder();   
