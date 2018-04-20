@@ -30,7 +30,10 @@ repositories {
 dependencies {
   compile project(':broker')
   compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.6.3'
-  
+
+  // Bind SLF4J it to the Log4J logging framework
+  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
+
   testCompile 'junit:junit:4.12'
   testCompile 'org.hamcrest:hamcrest-library:1.3'
 }

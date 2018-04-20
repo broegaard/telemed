@@ -33,7 +33,11 @@ import org.slf4j.LoggerFactory;
 /** ServerRequestHandler implementation using HTTP and URI Tunneling.
  * <p>
  * Implementation based on the Spark-Java framework.
+ *
  */
+
+// Note - the logging level for incoming/outgoing messages is set to INFO
+// which is too talkative; but set so for teaching purposes
 public class UriTunnelServerRequestHandler
         implements ServerRequestHandler {
 
@@ -68,7 +72,7 @@ public class UriTunnelServerRequestHandler
       // The incoming body is a full request
       // object to be demarshalled
       RequestObject p = gson.fromJson(body, RequestObject.class);
-      logger.trace("--> Received request: " + p);
+      logger.info("--> Received request: " + p);
 
       ReplyObject reply = invoker.handleRequest(p.getObjectId(),
               p.getOperationName(), p.getPayload());
@@ -80,7 +84,7 @@ public class UriTunnelServerRequestHandler
       res.status(reply.getStatusCode());
       res.type(MimeMediaType.APPLICATION_JSON);
 
-      logger.trace("--< Reply: " + reply);
+      logger.info("--< Reply: " + reply);
 
       return gson.toJson(reply);
     });
