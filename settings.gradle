@@ -18,3 +18,4 @@
 
 include 'broker'
 include 'demo'
+include 'demo2'
