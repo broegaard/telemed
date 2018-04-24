@@ -18,6 +18,7 @@
 
 package gamelobby.server;
 
+import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
 
 import org.junit.Test;
@@ -39,5 +40,29 @@ public class TestScenario {
     // Get the game lobby singleton
     GameLobby lobby = GameLobbyServant.getInstance();
     assertThat(lobby, is(not(nullValue())));
+
+    // Ask lobby to create a game for a beginner (playerLevel = 0).
+    // A Future is returned, that is a placeholder for a future
+    // game that will eventually be able to return a live game.
+
+    FutureGame player1Future = lobby.createGame(0);
+
+    // Get the token for my fellow players to enter when wanting
+    // to join my game
+    String joinToken = player1Future.getJoinToken();
+    assertThat(joinToken, is(not(nullValue())));
+
+    // As a second player has not yet joined, the game
+    // is not yet created
+    assertThat(player1Future.isAvailable(), is(false));
+
+    // Second player - wants to join the game using the token
+    FutureGame player2Future = lobby.joinGame(joinToken);
+
+    // Now, as it is a two player game, both players see
+    // that the game has become available.
+
+    assertThat(player1Future.isAvailable(), is(true));
+    assertThat(player2Future.isAvailable(), is(true));
   }
 }

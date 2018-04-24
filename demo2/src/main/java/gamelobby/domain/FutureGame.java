@@ -16,33 +16,15 @@
  *
  */
 
-package gamelobby.server;
+package gamelobby.domain;
 
-import frds.broker.Servant;
-import gamelobby.domain.FutureGame;
-import gamelobby.domain.GameLobby;
-
-/**
- * At 24 Apr 2018
+/** A 'Future' that represents a Game instance
+ * that will eventually be created.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameLobbyServant implements Servant, GameLobby {
+public interface FutureGame {
+  String getJoinToken();
 
-  private static GameLobby singleton;
-  public static GameLobby getInstance() {
-    if (singleton == null)
-      singleton = new GameLobbyServant();
-    return singleton;
-  }
-
-  @Override
-  public FutureGame createGame(int playerLevel) {
-    return new StandardFutureGame(playerLevel);
-  }
-
-  @Override
-  public FutureGame joinGame(String joinToken) {
-    return null;
-  }
+  boolean isAvailable();
 }

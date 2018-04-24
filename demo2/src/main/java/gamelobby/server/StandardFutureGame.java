@@ -18,31 +18,28 @@
 
 package gamelobby.server;
 
-import frds.broker.Servant;
 import gamelobby.domain.FutureGame;
-import gamelobby.domain.GameLobby;
 
 /**
  * At 24 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameLobbyServant implements Servant, GameLobby {
+public class StandardFutureGame implements FutureGame {
+  private final String joinToken;
 
-  private static GameLobby singleton;
-  public static GameLobby getInstance() {
-    if (singleton == null)
-      singleton = new GameLobbyServant();
-    return singleton;
+  public StandardFutureGame(int playerLevel) {
+    // ignore the player level for now
+    joinToken = "42";
   }
 
   @Override
-  public FutureGame createGame(int playerLevel) {
-    return new StandardFutureGame(playerLevel);
+  public String getJoinToken() {
+    return joinToken;
   }
 
   @Override
-  public FutureGame joinGame(String joinToken) {
-    return null;
+  public boolean isAvailable() {
+    return false;
   }
 }
