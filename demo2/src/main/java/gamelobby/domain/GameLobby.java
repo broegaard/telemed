@@ -1,7 +1,9 @@
 package gamelobby.domain;
 
-public interface GameLobby {
-  FutureGame createGame(int playerLevel);
+import frds.broker.Servant;
 
-  FutureGame joinGame(String joinToken);
+public interface GameLobby extends Servant {
+  FutureGame createGame(String playerName, int playerLevel);
+
+  FutureGame joinGame(String playerName, String joinToken);
 }

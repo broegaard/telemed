@@ -19,18 +19,33 @@
 package gamelobby.server;
 
 import gamelobby.domain.FutureGame;
+import gamelobby.domain.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * At 24 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class StandardFutureGame implements FutureGame {
+public class FutureGameServant implements FutureGame {
   private final String joinToken;
 
-  public StandardFutureGame(int playerLevel) {
+  private Game theGame;
+  private String firstPlayer;
+
+  public FutureGameServant(String playerName, int playerLevel) {
     // ignore the player level for now
+
+    // Add the player's name
+    firstPlayer = playerName;
+
+    // TODO: Make random UUIDs
     joinToken = "42";
+
+    // No actual game has been created yet.
+    theGame = null;
   }
 
   @Override
@@ -40,6 +55,19 @@ public class StandardFutureGame implements FutureGame {
 
   @Override
   public boolean isAvailable() {
-    return false;
+    return theGame != null;
+  }
+
+  @Override
+  public Game getGame() {
+    return theGame;
+  }
+
+  public void setGame(Game theActualGame) {
+    theGame = theActualGame;
+  }
+
+  public String getFirstPlayerName() {
+    return firstPlayer;
   }
 }

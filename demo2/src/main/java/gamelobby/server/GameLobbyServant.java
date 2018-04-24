@@ -20,7 +20,11 @@ package gamelobby.server;
 
 import frds.broker.Servant;
 import gamelobby.domain.FutureGame;
+import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * At 24 Apr 2018
@@ -30,19 +34,39 @@ import gamelobby.domain.GameLobby;
 public class GameLobbyServant implements Servant, GameLobby {
 
   private static GameLobby singleton;
+
   public static GameLobby getInstance() {
     if (singleton == null)
       singleton = new GameLobbyServant();
     return singleton;
   }
 
-  @Override
-  public FutureGame createGame(int playerLevel) {
-    return new StandardFutureGame(playerLevel);
+  /** The collection of games waiting in the lobby to
+   * be joined by players.
+   */
+  private Map<String, FutureGameServant> gamesInLobby;
+
+  public GameLobbyServant() {
+    gamesInLobby = new HashMap<>();
   }
 
   @Override
-  public FutureGame joinGame(String joinToken) {
-    return null;
+  public FutureGame createGame(String playerName, int playerLevel) {
+    FutureGameServant future = new FutureGameServant(playerName, playerLevel);
+    gamesInLobby.put(future.getJoinToken(), future);
+    return future;
+  }
+
+  @Override
+  public FutureGame joinGame(String playerName, String joinToken) {
+    FutureGameServant future = gamesInLobby.get(joinToken);
+    // TODO: Handle lookup of non-existing game
+
+    // Transform the future so it represents a valid
+    // game
+    Game theActualGame = new GameServant(future.getFirstPlayerName(), playerName);
+    future.setGame(theActualGame);
+
+    return future;
   }
 }

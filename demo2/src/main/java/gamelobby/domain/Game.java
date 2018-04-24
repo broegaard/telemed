@@ -20,15 +20,15 @@ package gamelobby.domain;
 
 import frds.broker.Servant;
 
-/** A 'Future' that represents a Game instance
- * that will eventually be created.
+/** The actual Game object that represents some
+ * game. Here we just have a game with two players,
+ * and the only responsibility is to know the names
+ * of player 0 and player 1.
+ *
+ * At 24 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface FutureGame extends Servant {
-  String getJoinToken();
-
-  boolean isAvailable();
-
-  Game getGame();
+public interface Game extends Servant {
+  String getPlayerName(int index);
 }

@@ -19,6 +19,7 @@
 package gamelobby.server;
 
 import gamelobby.domain.FutureGame;
+import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
 
 import org.junit.Test;
@@ -45,7 +46,8 @@ public class TestScenario {
     // A Future is returned, that is a placeholder for a future
     // game that will eventually be able to return a live game.
 
-    FutureGame player1Future = lobby.createGame(0);
+    FutureGame player1Future = lobby.createGame("Pedersen", 0);
+    assertThat(player1Future, is(not(nullValue())));
 
     // Get the token for my fellow players to enter when wanting
     // to join my game
@@ -57,12 +59,23 @@ public class TestScenario {
     assertThat(player1Future.isAvailable(), is(false));
 
     // Second player - wants to join the game using the token
-    FutureGame player2Future = lobby.joinGame(joinToken);
+    FutureGame player2Future = lobby.joinGame("Findus", joinToken);
+    assertThat(player2Future, is(not(nullValue())));
 
     // Now, as it is a two player game, both players see
     // that the game has become available.
-
     assertThat(player1Future.isAvailable(), is(true));
     assertThat(player2Future.isAvailable(), is(true));
+
+    // And they can manipulate it; not really interesting as
+    // our focus it just the multiple objects exchanged.
+    Game gameForPlayer1 = player1Future.getGame();
+    assertThat(gameForPlayer1.getPlayerName(0), is("Pedersen"));
+    assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
+
+    // Our second player sees the same game state
+    Game gameForPlayer2= player1Future.getGame();
+    assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
+    assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
   }
 }

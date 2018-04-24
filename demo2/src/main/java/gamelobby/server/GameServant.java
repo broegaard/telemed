@@ -16,19 +16,26 @@
  *
  */
 
-package gamelobby.domain;
+package gamelobby.server;
 
-import frds.broker.Servant;
+import gamelobby.domain.Game;
 
-/** A 'Future' that represents a Game instance
- * that will eventually be created.
+/** Servant implementation of Game.
+ *
+ * At 24 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface FutureGame extends Servant {
-  String getJoinToken();
+public class GameServant implements Game {
+  private String[] playerList = new String[2];
 
-  boolean isAvailable();
+  public GameServant(String firstPlayerName, String secondPlayerName) {
+    playerList[0] = firstPlayerName;
+    playerList[1] = secondPlayerName;
+  }
 
-  Game getGame();
+  @Override
+  public String getPlayerName(int index) {
+    return playerList[index];
+  }
 }
