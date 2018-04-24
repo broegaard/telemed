@@ -16,21 +16,10 @@
  *
  */
 
-package gamelobby.domain;
-
-import frds.broker.Servant;
-
 /**
- * The GameLobby is responsible for allowing players to
- * create and join games. One player must create a game,
- * while another may join it.
- * <p>
- *   The lobby returns FutureGame instances that provides
- *   the actual Game instance once both players are active.
- * </p>
+ * The Servant implementation of the three domain roles:
+ * GameLobby, FutureGame, Game.
+ *
+ * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface GameLobby extends Servant {
-  FutureGame createGame(String playerName, int playerLevel);
-
-  FutureGame joinGame(String playerName, String joinToken);
-}
+package gamelobby.server;

@@ -50,7 +50,10 @@ public class TestScenario {
     assertThat(player1Future, is(not(nullValue())));
 
     // Get the token for my fellow players to enter when wanting
-    // to join my game
+    // to join my game. The token may appear on a web site
+    // next to player 1's name so player 2 can see it; or
+    // some other mechanism must be employed by the two players
+    // for player 2 to get hold of the token.
     String joinToken = player1Future.getJoinToken();
     assertThat(joinToken, is(not(nullValue())));
 

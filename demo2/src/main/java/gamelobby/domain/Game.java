@@ -25,8 +25,6 @@ import frds.broker.Servant;
  * and the only responsibility is to know the names
  * of player 0 and player 1.
  *
- * At 24 Apr 2018
- *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public interface Game extends Servant {
