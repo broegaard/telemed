@@ -162,10 +162,10 @@ which for the test case prints
     --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen"}, errorDescription=null, responseCode=201]
 
 So everything is fine, except the StandardJSONRequestor in the Broker
-library part (project 'Broker') cannot deserialize the replyobject. We
-need a stronger Requestor implementation.
+library part (project 'Broker') cannot deserialize the replyobject. 
 
-The first thing is to provide an Object ID of the servant object.
+The first thing is to provide an Object ID of the servant object as we
+need an id that can bind the Servant and the ClientProxy object together.
 
 I need a *Child Test*, so I add test case in the server test cases:
 
@@ -200,42 +200,66 @@ reply object correctly contains the unique ID:
 
 Commit: 6bf4e1e.
 
-Next step contains an important insight that it not always possible in
-practice but applies here: The FutureGameServant is actually a Record
-type object! Thus we can simply demarshall it on the client side as
-such, and use it to populate a client proxy using only the id.
+Next step contains an important insight: The **only** information
+relevant for the client proxy is the **objectID** of the server
+object! Why? Because all the Requester needs to do is to create a
+ClientProxy for the FutureGame which knows the ID of the servant
+object: all methods will just send messages to this object and get the
+replies. 
+
+Thus - we need not return a FutureGame as payload in the reply object,
+only a unique string which is the ID.
 
 First step is 'visual': In GameLobbyProxy I code
 
+
     @Override
     public FutureGame createGame(String playerName, int playerLevel) {
-      FutureGameServant game =
+      String id =
         requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
-                FutureGameServant.class, playerName, playerLevel);
+                String.class, playerName, playerLevel);
 
-      System.out.println("---> got the servant object: "+ game);
-      return game;
+      System.out.println("---> got the servant object ID: "+ id);
+      return null;
+    }
+
+which of course fails, as the Invoker has to be recoded to return
+strings. So I code:
+
+    @Override
+    public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+      ReplyObject reply = null;
+
+      FutureGame game = lobby.createGame("Pedersen", 0);
+      String id = game.getId();
+
+      reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+              gson.toJson(id));
+
+      return reply;
     }
 
 which makes the test case pass (no error from GSon demarshalling!) and
-prints a valid servant object.
+prints the returned string; but of course fails due to the 'return
+null;' in the createGame method.
+
 
     --> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
-    --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen","id":"422399c3-9a5a-491d-8adf-2971845556b1"}, errorDescription=null, responseCode=201]
-    ---> got the servant object: gamelobby.server.FutureGameServant@546a03af
+    --< ReplyObject [payload="2a10a3b7-f593-4b72-a7da-cfa05c64b5d5", errorDescription=null, responseCode=201]
+    ---> got the servant object ID: 2a10a3b7-f593-4b72-a7da-cfa05c64b5d5
+
 
 Now we create the ClientProxy for the FutureGame, and TDD it into
 place:
 
     @Override
     public FutureGame createGame(String playerName, int playerLevel) {
-      FutureGameServant game =
+      String id =
         requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
-                FutureGameServant.class, playerName, playerLevel);
+                String.class, playerName, playerLevel);
 
-      System.out.println("---> got the servant object: "+ game);
-      // Create the ClientProxy with the correct objectId
-      FutureGameProxy proxy = new FutureGameProxy(game.getId());
+      System.out.println("---> got the servant object ID: "+ id);
+      FutureGame proxy = new FutureGameProxy(id);
       return proxy;
     }
 
@@ -245,4 +269,30 @@ and the proxy is declared as
       public FutureGameProxy(String objectId) {
 
       }
+      // temporary stub methods for the other FutureGame methods
     }
+
+Now the test case actually succeeds because of our test is just
+presence of an object.
+
+    FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
+    assertThat(player1Future, is(not(nullValue())));
+
+Still - the design is in place, notably the central insight:
+
+> ## Transfering Server Created Objects
+>
+> To transfer a reference to an object created on the server side,
+> you must follow this template
+>
+>  * Make the Servant object generate an unique ID, and provide an
+>    accessor method, like `getId()`.
+>  * In the Invoker implementation use a String as marshalling format,
+>    and just transfer the unique object id.
+>  * On the client side, in the ClientProxy, create a ClientProxy
+>    object that stores this unique id.
+>
+> From then on, all ClientProxy method calls just use the stored id as
+> the objectId.
+
+

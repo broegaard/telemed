@@ -45,9 +45,10 @@ public class GameLobbyJSONInvoker implements Invoker {
     ReplyObject reply = null;
 
     FutureGame game = lobby.createGame("Pedersen", 0);
+    String id = game.getId();
 
     reply = new ReplyObject(HttpServletResponse.SC_CREATED,
-            gson.toJson(game));
+            gson.toJson(id));
 
     return reply;
   }

@@ -38,13 +38,12 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
 
   @Override
   public FutureGame createGame(String playerName, int playerLevel) {
-    FutureGameServant game =
+    String id =
       requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
-              FutureGameServant.class, playerName, playerLevel);
+              String.class, playerName, playerLevel);
 
-    System.out.println("---> got the servant object: "+ game);
-    // Create the ClientProxy with the correct objectId
-    FutureGameProxy proxy = new FutureGameProxy(game.getId());
+    System.out.println("---> got the servant object ID: "+ id);
+    FutureGame proxy = new FutureGameProxy(id);
     return proxy;
   }
 

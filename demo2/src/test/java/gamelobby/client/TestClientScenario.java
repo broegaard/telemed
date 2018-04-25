@@ -63,6 +63,5 @@ public class TestClientScenario {
 
     FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
     assertThat(player1Future, is(not(nullValue())));
-
   }
 }
