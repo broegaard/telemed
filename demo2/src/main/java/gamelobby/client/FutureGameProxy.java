@@ -59,7 +59,7 @@ public class FutureGameProxy implements FutureGame, ClientProxy {
             MarshallingConstant.FUTUREGAME_GET_GAME_METHOD,
             String.class);
     Game game = new GameProxy(id);
-    return null;
+    return game;
   }
 
   @Override

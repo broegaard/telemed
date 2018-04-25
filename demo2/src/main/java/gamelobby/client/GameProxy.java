@@ -35,6 +35,12 @@ public class GameProxy implements Game, ClientProxy {
 
   @Override
   public String getPlayerName(int index) {
+    
     return null;
+  }
+
+  @Override
+  public String getId() {
+    return objectId;
   }
 }

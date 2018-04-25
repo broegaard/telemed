@@ -20,6 +20,8 @@ package gamelobby.server;
 
 import gamelobby.domain.Game;
 
+import java.util.UUID;
+
 /** Servant implementation of Game.
  *
  * At 24 Apr 2018
@@ -28,14 +30,23 @@ import gamelobby.domain.Game;
  */
 public class GameServant implements Game {
   private String[] playerList = new String[2];
+  private String objectId;
 
   public GameServant(String firstPlayerName, String secondPlayerName) {
     playerList[0] = firstPlayerName;
     playerList[1] = secondPlayerName;
+
+    // Assign unique id
+    objectId = UUID.randomUUID().toString();
   }
 
   @Override
   public String getPlayerName(int index) {
     return playerList[index];
+  }
+
+  @Override
+  public String getId() {
+    return objectId;
   }
 }

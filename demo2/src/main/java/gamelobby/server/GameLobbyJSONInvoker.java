@@ -95,7 +95,7 @@ public class GameLobbyJSONInvoker implements Invoker {
       FutureGame future = futureGameMap.get(objectId);
       Game game = future.getGame();
       String id = game.getId();
-      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
+      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
     }
     return reply;
   }

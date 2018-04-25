@@ -29,4 +29,6 @@ import frds.broker.Servant;
  */
 public interface Game extends Servant {
   String getPlayerName(int index);
+
+  String getId();
 }

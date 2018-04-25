@@ -91,4 +91,11 @@ public class TestScenario {
     String uniqueObjectId2 = player2Future.getId();
     assertThat(uniqueObjectId1, is(not(uniqueObjectId2)));
   }
+
+   @Test
+  public void shouldCreateIDForGame() {
+    Game game = new GameServant("Hans", "Peter");
+    assertThat(game.getId(), is(not(nullValue())));
+
+   }
 }
