@@ -72,10 +72,12 @@ simply print tracing information on stdout. This way my first step is
 just to set up the proxy+invoker, and ensure the call chain is
 correct.
 
-Iteration 1: So, the first step entails creating GameLobbyJSONInvoker
+### Iteration 1 
+
+So, the first step entails creating GameLobbyJSONInvoker
 and GameLobbyProxy as just temporary test stubs. commit: e62519c.
 
-Iteration 2: 
+### Iteration 2
 
 Added first remote call
 
@@ -309,4 +311,42 @@ refactor the method string to be in a MarshallingConstants class.
       FutureGame proxy = new FutureGameProxy(id);
       return proxy;
     }
+
+### Iteration 3
+
+Let us add some of the asserts from the servant test case to our
+client test case.
+
+    FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
+    assertThat(player1Future, is(not(nullValue())));
+
+    String joinToken = player1Future.getJoinToken();
+    assertThat(joinToken, is(not(nullValue())));
+
+which fails on the last assert; the getJoinToken is not implemented.
+
+TDD of the FutureGameProxy's getJoinToken follows the standard Broker
+implementation schema: call the requestor in the proxy:
+
+    @Override
+    public String getJoinToken() {
+      String token = requestor.sendRequestAndAwaitReply(getId(),
+              MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD, 
+              String.class);
+      return token;
+    }
+
+which gives the 'visual' test output
+
+--> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
+--< ReplyObject [payload="8f2ebb1d-8921-486e-b029-188169913a93", errorDescription=null, responseCode=201]
+--> RequestObject{operationName='futuregame_get_join_token_method', payload='[]', objectId='8f2ebb1d-8921-486e-b029-188169913a93', versionIdentity=1}
+--< ReplyObject [payload="464266c3-0b04-4ebb-999d-803a2c678af7", errorDescription=null, responseCode=201]
+
+and actually the test case pass but for the wrong reason; the assert
+is just that the joinToken is not null, but the returned join token is
+not from the FutureGameServant, but because our invoker code is still
+incomplete and happen to return a string! We need to extend the
+invoker code and begin to switch on the `methodName` attribute.
+
 

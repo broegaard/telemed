@@ -19,6 +19,8 @@
 package gamelobby.client;
 
 import frds.broker.ClientProxy;
+import frds.broker.Requestor;
+import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 
@@ -28,13 +30,20 @@ import gamelobby.domain.Game;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class FutureGameProxy implements FutureGame, ClientProxy {
-  public FutureGameProxy(String objectId) {
 
+  private final String objectId;
+  private final Requestor requestor;
+
+  public FutureGameProxy(String objectId, Requestor requestor) {
+    this.objectId = objectId;
+    this.requestor = requestor;
   }
 
   @Override
   public String getJoinToken() {
-    return null;
+    String token = requestor.sendRequestAndAwaitReply(getId(),
+            MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD, String.class);
+    return token;
   }
 
   @Override
@@ -49,6 +58,6 @@ public class FutureGameProxy implements FutureGame, ClientProxy {
 
   @Override
   public String getId() {
-    return null;
+    return objectId;
   }
 }

@@ -23,7 +23,6 @@ import frds.broker.Requestor;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
-import gamelobby.server.FutureGameServant;
 
 /**
  * At 25 Apr 2018
@@ -43,7 +42,7 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
       requestor.sendRequestAndAwaitReply("none",
               MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD,
               String.class, playerName, playerLevel);
-    FutureGame proxy = new FutureGameProxy(id);
+    FutureGame proxy = new FutureGameProxy(id, requestor);
     return proxy;
   }
 
