@@ -32,4 +32,6 @@ public class MarshallingConstant {
   public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = "futuregame_get_join_token_method";
   public static final String FUTUREGAME_IS_AVAILABLE_METHOD = "futuregame_is_available_method";
   public static final String FUTUREGAME_GET_GAME_METHOD = "futuregame_get_game_method";
+
+  public static final String GAME_GET_PLAYER_NAME = "game_get_player_name_method";
 }

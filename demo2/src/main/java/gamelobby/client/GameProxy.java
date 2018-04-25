@@ -19,6 +19,8 @@
 package gamelobby.client;
 
 import frds.broker.ClientProxy;
+import frds.broker.Requestor;
+import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 
 /**
@@ -28,15 +30,18 @@ import gamelobby.domain.Game;
  */
 public class GameProxy implements Game, ClientProxy {
   private final String objectId;
+  private final Requestor requestor;
 
-  public GameProxy(String objectId) {
+  public GameProxy(String objectId, Requestor requestor) {
     this.objectId = objectId;
+    this.requestor = requestor;
   }
 
   @Override
   public String getPlayerName(int index) {
-    
-    return null;
+    String name = requestor.sendRequestAndAwaitReply(objectId,
+            MarshallingConstant.GAME_GET_PLAYER_NAME, String.class, index);
+    return name;
   }
 
   @Override

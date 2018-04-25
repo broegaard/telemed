@@ -504,7 +504,18 @@ Game instance, so we need to apply the template.
     
 As the last time, we add TDD code to the SERVER side test cases.
 
-Before: commit: 
+Before: commit: 9fead3f
+
+After: commit: 8df508e
+
+The last piece of the puzzle is the Game.getPlayerName
+method. Business as usual: Make the proxy code; make the invoker
+code - or *not so fast*. We need to store the game under the game id
+of course, so a bit of tweaking in the joinGame invoker code.
+
+And some issues. Stopping now; 'break' pattern.
+
+
 
 
 

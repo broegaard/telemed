@@ -42,12 +42,14 @@ public class GameLobbyJSONInvoker implements Invoker {
   private final GameLobby lobby;
   private Gson gson;
   private Map<String, FutureGame> futureGameMap;
+  private Map<String, Game> gameMap;
 
   public GameLobbyJSONInvoker(GameLobby lobby) {
     this.lobby = lobby;
     gson = new Gson();
 
     futureGameMap = new HashMap<>();
+    gameMap = new HashMap<>();
   }
 
   @Override
@@ -62,9 +64,9 @@ public class GameLobbyJSONInvoker implements Invoker {
     if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
       String playerName = gson.fromJson(array.get(0), String.class);
       int level = gson.fromJson(array.get(1), Integer.class);
-      FutureGame game = lobby.createGame(playerName, level);
-      String id = game.getId();
-      futureGameMap.put(id, game);
+      FutureGame futureGame = lobby.createGame(playerName, level);
+      String id = futureGame.getId();
+      futureGameMap.put(id, futureGame);
 
       reply = new ReplyObject(HttpServletResponse.SC_CREATED,
               gson.toJson(id));
@@ -73,40 +75,42 @@ public class GameLobbyJSONInvoker implements Invoker {
       String playerName = gson.fromJson(array.get(0), String.class);
       String joinToken = gson.fromJson(array.get(1), String.class);
 
-      FutureGame game = lobby.joinGame(playerName,joinToken);
+      FutureGame futureGame = lobby.joinGame(playerName,joinToken);
 
       // TODO: Handle non existing game
-      String id = game.getId();
+      String id = futureGame.getId();
+
+      // Store game for future reference
+      System.out.println("--> storing " + id);
+      gameMap.put(id, futureGame.getGame());
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
               gson.toJson(id));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
-      FutureGame game = futureGameMap.get(objectId);
-      String token = game.getJoinToken();
+      FutureGame futureGame = futureGameMap.get(objectId);
+      String token = futureGame.getJoinToken();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
-      FutureGame game = futureGameMap.get(objectId);
-      boolean isAvailable = game.isAvailable();
+      FutureGame futureGame = futureGameMap.get(objectId);
+      boolean isAvailable = futureGame.isAvailable();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
-      FutureGame future = futureGameMap.get(objectId);
-      Game game = future.getGame();
+      FutureGame futureGame = futureGameMap.get(objectId);
+      Game game = futureGame.getGame();
       String id = game.getId();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
+
+    } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
+      Game game = gameMap.get(objectId);
+      // TODO handle non existing game
+      int index = gson.fromJson(array.get(0), Integer.class);
+      String name = game.getPlayerName(index);
+      reply = new ReplyObject(HttpServletResponse.SC_OK, name);
+
     }
     return reply;
-  }
-
-  private FutureGame findGameWithJoinToken(String joinToken) {
-    Optional<FutureGame> entry =
-      futureGameMap.entrySet()
-              .stream()
-              .filter( e -> e.getValue().getJoinToken().equals(joinToken))
-              .map(Map.Entry::getValue)
-              .findFirst();
-    return entry.orElse(null);
   }
 }
