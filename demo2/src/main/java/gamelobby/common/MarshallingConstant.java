@@ -27,6 +27,8 @@ public class MarshallingConstant {
 
   // Method ids for marshalling
   public static final String GAMELOBBY_CREATE_GAME_METHOD = "gamelobby_create_game_method";
+  public static final String GAMELOBBY_JOIN_GAME_METHOD = "gamelobby_join_game_method";;
+
   public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = "futuregame_get_join_token_method";
   public static final String FUTUREGAME_IS_AVAILABLE_METHOD = "futuregame_is_available_method";
 }

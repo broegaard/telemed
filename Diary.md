@@ -437,6 +437,48 @@ Now the schema should be clear
     reply object.
     
 
+isAvailable: commit 8e86b70.
+
+### Iteration 5
+
+joinGame. Ok, this is the fun part because this is requesting the
+server for the SAME object id as an earlier person created, so the
+structure becomes more or less the same on the proxy side:
+
+    @Override
+    public FutureGame joinGame(String playerName, String joinToken) {
+      String id =
+              requestor.sendRequestAndAwaitReply("none",
+                      MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
+                      String.class, playerName, joinToken);
+      FutureGame proxy = new FutureGameProxy(id, requestor);
+      return proxy;
+    }
+
+Ups, as I begin implementing the invoker code I notice some fake it
+code hanging around. I did not do this using pair programming :(. I
+fix some hard coded values in the invoker and use the demarshalled
+values instead.
+
+I make test cases pass, but note that the servant game is not
+completely populated - the name of the new player is not set
+yet. But, I know later tests will drive it, so no worries. Resulting
+invoker code (with omissions still).
+
+    } else if (operationName.equals(MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD)) {
+      String playerName = gson.fromJson(array.get(0), String.class);
+      String joinToken = gson.fromJson(array.get(1), String.class);
+
+      FutureGame game = findGameWithJoinToken(joinToken);
+      // TODO: Handle non existing
+      String id = game.getId();
+
+      reply = new ReplyObject(HttpServletResponse.SC_OK,
+              gson.toJson(id));
+      
+
+
+Commit: 
 
 
 

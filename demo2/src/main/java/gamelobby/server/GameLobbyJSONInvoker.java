@@ -19,6 +19,8 @@
 package gamelobby.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
@@ -28,6 +30,7 @@ import gamelobby.domain.GameLobby;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * At 25 Apr 2018
@@ -50,12 +53,30 @@ public class GameLobbyJSONInvoker implements Invoker {
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
 
+    // Demarshall parameters into a JsonArray
+    JsonParser parser = new JsonParser();
+    JsonArray array =
+            parser.parse(payload).getAsJsonArray();
+
     if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
-      FutureGame game = lobby.createGame("Pedersen", 0);
+      String playerName = gson.fromJson(array.get(0), String.class);
+      int level = gson.fromJson(array.get(1), Integer.class);
+      FutureGame game = lobby.createGame(playerName, level);
       String id = game.getId();
-      futureGameMap.put(id,game);
+      futureGameMap.put(id, game);
 
       reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+              gson.toJson(id));
+
+    } else if (operationName.equals(MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD)) {
+      String playerName = gson.fromJson(array.get(0), String.class);
+      String joinToken = gson.fromJson(array.get(1), String.class);
+
+      FutureGame game = findGameWithJoinToken(joinToken);
+      // TODO: Handle non existing
+      String id = game.getId();
+
+      reply = new ReplyObject(HttpServletResponse.SC_OK,
               gson.toJson(id));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
@@ -70,5 +91,15 @@ public class GameLobbyJSONInvoker implements Invoker {
 
     }
     return reply;
+  }
+
+  private FutureGame findGameWithJoinToken(String joinToken) {
+    Optional<FutureGame> entry =
+      futureGameMap.entrySet()
+              .stream()
+              .filter( e -> e.getValue().getJoinToken().equals(joinToken))
+              .map(Map.Entry::getValue)
+              .findFirst();
+    return entry.orElse(null);
   }
 }

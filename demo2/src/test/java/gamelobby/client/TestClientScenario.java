@@ -69,5 +69,13 @@ public class TestClientScenario {
 
     assertThat(player1Future.isAvailable(), is(false));
 
+    // Second player - wants to join the game using the token
+    FutureGame player2Future = lobbyProxy.joinGame("Findus", joinToken);
+    assertThat(player2Future, is(not(nullValue())));
+
+    // Assure both talk to same game
+    assertThat(player1Future.getId(), is(player2Future.getId()));
+
+
   }
 }

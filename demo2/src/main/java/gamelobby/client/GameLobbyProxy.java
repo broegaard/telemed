@@ -48,6 +48,11 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
 
   @Override
   public FutureGame joinGame(String playerName, String joinToken) {
-    return null;
+    String id =
+            requestor.sendRequestAndAwaitReply("none",
+                    MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
+                    String.class, playerName, joinToken);
+    FutureGame proxy = new FutureGameProxy(id, requestor);
+    return proxy;
   }
 }
