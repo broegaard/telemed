@@ -19,37 +19,36 @@
 package gamelobby.client;
 
 import frds.broker.ClientProxy;
-import frds.broker.Requestor;
 import gamelobby.domain.FutureGame;
-import gamelobby.domain.GameLobby;
-import gamelobby.server.FutureGameServant;
+import gamelobby.domain.Game;
 
 /**
  * At 25 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameLobbyProxy implements GameLobby, ClientProxy {
-  private final Requestor requestor;
+public class FutureGameProxy implements FutureGame, ClientProxy {
+  public FutureGameProxy(String objectId) {
 
-  public GameLobbyProxy(Requestor requestor) {
-    this.requestor = requestor;
   }
 
   @Override
-  public FutureGame createGame(String playerName, int playerLevel) {
-    FutureGameServant game =
-      requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
-              FutureGameServant.class, playerName, playerLevel);
-
-    System.out.println("---> got the servant object: "+ game);
-    // Create the ClientProxy with the correct objectId
-    FutureGameProxy proxy = new FutureGameProxy(game.getId());
-    return proxy;
+  public String getJoinToken() {
+    return null;
   }
 
   @Override
-  public FutureGame joinGame(String playerName, String joinToken) {
+  public boolean isAvailable() {
+    return false;
+  }
+
+  @Override
+  public Game getGame() {
+    return null;
+  }
+
+  @Override
+  public String getId() {
     return null;
   }
 }

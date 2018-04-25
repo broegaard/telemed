@@ -198,4 +198,51 @@ reply object correctly contains the unique ID:
     --> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
     --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen","id":"d87b05d0-fa2c-428a-a99d-2e559b42b369"}, errorDescription=null, responseCode=201]
 
-Commit: 
+Commit: 6bf4e1e.
+
+Next step contains an important insight that it not always possible in
+practice but applies here: The FutureGameServant is actually a Record
+type object! Thus we can simply demarshall it on the client side as
+such, and use it to populate a client proxy using only the id.
+
+First step is 'visual': In GameLobbyProxy I code
+
+    @Override
+    public FutureGame createGame(String playerName, int playerLevel) {
+      FutureGameServant game =
+        requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
+                FutureGameServant.class, playerName, playerLevel);
+
+      System.out.println("---> got the servant object: "+ game);
+      return game;
+    }
+
+which makes the test case pass (no error from GSon demarshalling!) and
+prints a valid servant object.
+
+    --> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
+    --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen","id":"422399c3-9a5a-491d-8adf-2971845556b1"}, errorDescription=null, responseCode=201]
+    ---> got the servant object: gamelobby.server.FutureGameServant@546a03af
+
+Now we create the ClientProxy for the FutureGame, and TDD it into
+place:
+
+    @Override
+    public FutureGame createGame(String playerName, int playerLevel) {
+      FutureGameServant game =
+        requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
+                FutureGameServant.class, playerName, playerLevel);
+
+      System.out.println("---> got the servant object: "+ game);
+      // Create the ClientProxy with the correct objectId
+      FutureGameProxy proxy = new FutureGameProxy(game.getId());
+      return proxy;
+    }
+
+and the proxy is declared as
+
+    public class FutureGameProxy implements FutureGame, ClientProxy {
+      public FutureGameProxy(String objectId) {
+
+      }
+    }
