@@ -349,4 +349,62 @@ not from the FutureGameServant, but because our invoker code is still
 incomplete and happen to return a string! We need to extend the
 invoker code and begin to switch on the `methodName` attribute.
 
+Commit : 0925e82
+
+I begin the proper Invoker structure:
+
+    @Override
+    public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+      ReplyObject reply = null;
+
+      if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
+
+        FutureGame game = lobby.createGame("Pedersen", 0);
+        String id = game.getId();
+
+        reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+                gson.toJson(id));
+      } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
+
+      }
+      return reply;
+    }
+
+which highlight a central issue: The server side have to store all
+server side objects and be able to look them up based upon their
+objectId. In web architectures it is often called session id and there
+are several methods to keep this kind of server state. I will return
+to this issue later; but for now we just keep an internal
+hashmap. This will suffice for our learning purposes but does not work
+in real production servers.
+
+So - two things - make a HashMap, and implement the servant upcall
+code:
+
+    @Override
+    public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+      ReplyObject reply = null;
+
+      if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
+        FutureGame game = lobby.createGame("Pedersen", 0);
+        String id = game.getId();
+        futureGameMap.put(id,game);
+
+        reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+                gson.toJson(id));
+
+      } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
+        FutureGame game = futureGameMap.get(objectId);
+        String token = game.getJoinToken();
+        reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
+
+      }
+      return reply;
+    }
+
+Test pass!
+
+Commit: 
+
+
 

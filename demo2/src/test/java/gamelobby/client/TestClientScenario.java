@@ -66,6 +66,7 @@ public class TestClientScenario {
 
     String joinToken = player1Future.getJoinToken();
     assertThat(joinToken, is(not(nullValue())));
+    System.out.println("--: The token is: " + joinToken);
 
   }
 }
