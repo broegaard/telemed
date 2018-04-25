@@ -295,4 +295,18 @@ Still - the design is in place, notably the central insight:
 > From then on, all ClientProxy method calls just use the stored id as
 > the objectId.
 
+Commit: ad66e06.
+
+Step 5: Clean up and refactoring. I remove some stdout output; and I
+refactor the method string to be in a MarshallingConstants class.
+
+    @Override
+    public FutureGame createGame(String playerName, int playerLevel) {
+      String id =
+        requestor.sendRequestAndAwaitReply("none",
+                MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD,
+                String.class, playerName, playerLevel);
+      FutureGame proxy = new FutureGameProxy(id);
+      return proxy;
+    }
 

@@ -20,6 +20,7 @@ package gamelobby.client;
 
 import frds.broker.ClientProxy;
 import frds.broker.Requestor;
+import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
 import gamelobby.server.FutureGameServant;
@@ -39,10 +40,9 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
   @Override
   public FutureGame createGame(String playerName, int playerLevel) {
     String id =
-      requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
+      requestor.sendRequestAndAwaitReply("none",
+              MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD,
               String.class, playerName, playerLevel);
-
-    System.out.println("---> got the servant object ID: "+ id);
     FutureGame proxy = new FutureGameProxy(id);
     return proxy;
   }
