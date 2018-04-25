@@ -55,6 +55,10 @@ public class FutureGameProxy implements FutureGame, ClientProxy {
 
   @Override
   public Game getGame() {
+    String id = requestor.sendRequestAndAwaitReply(getId(),
+            MarshallingConstant.FUTUREGAME_GET_GAME_METHOD,
+            String.class);
+    Game game = new GameProxy(id);
     return null;
   }
 

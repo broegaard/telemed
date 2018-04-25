@@ -19,6 +19,7 @@
 package gamelobby.client;
 
 import gamelobby.domain.FutureGame;
+import gamelobby.domain.Game;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -80,6 +81,18 @@ public class TestClientScenario {
     // that the game has become available.
     assertThat(player1Future.isAvailable(), is(true));
     assertThat(player2Future.isAvailable(), is(true));
+
+    // And they can manipulate it; not really interesting as
+    // our focus it just the multiple objects exchanged.
+    Game gameForPlayer1 = player1Future.getGame();
+    assertThat(gameForPlayer1.getPlayerName(0), is("Pedersen"));
+    assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
+
+    // Our second player sees the same game state
+    Game gameForPlayer2= player1Future.getGame();
+    assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
+    assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
+
 
   }
 }

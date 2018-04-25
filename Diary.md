@@ -460,25 +460,21 @@ code hanging around. I did not do this using pair programming :(. I
 fix some hard coded values in the invoker and use the demarshalled
 values instead.
 
-I make test cases pass, but note that the servant game is not
-completely populated - the name of the new player is not set
-yet. But, I know later tests will drive it, so no worries. Resulting
-invoker code (with omissions still).
+I make test cases pass. Resulting invoker code 
 
     } else if (operationName.equals(MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD)) {
       String playerName = gson.fromJson(array.get(0), String.class);
       String joinToken = gson.fromJson(array.get(1), String.class);
 
-      FutureGame game = findGameWithJoinToken(joinToken);
-      // TODO: Handle non existing
+      FutureGame game = lobby.joinGame(playerName,joinToken);
+
+      // TODO: Handle non existing game
       String id = game.getId();
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
               gson.toJson(id));
-      
 
-
-Commit: 387d6a6.
+Commit: 69ad7cc.
 
 ### Iteration 6
 
@@ -489,8 +485,26 @@ Continue to add tests to the test case
     assertThat(player1Future.isAvailable(), is(true));
     assertThat(player2Future.isAvailable(), is(true));
 
-which fails. Why? Well because the 'joinGame' method was not called in
-the above invoker code!
+which succeeds, as no new code required.
+
+Adding the last test cases
+
+    Game gameForPlayer1 = player1Future.getGame();
+    assertThat(gameForPlayer1.getPlayerName(0), is("Pedersen"));
+    assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
+
+This is again a case of 'transfer object created by server', here the
+Game instance, so we need to apply the template.
+
+  * FutureGameProxy's getGame() method must call requestor and expect
+    an String ID back. Create a GameProxy from it.
+  * Code the new branch in the invoker switch. Here we run into the
+    issue that Game has no 'getId()' method, so we break off into a
+    child test to get that in place.
+    
+As the last time, we add TDD code to the SERVER side test cases.
+
+Before: commit: 
 
 
 

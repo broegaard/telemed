@@ -25,6 +25,7 @@ import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
+import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
 
 import javax.servlet.http.HttpServletResponse;
@@ -90,6 +91,11 @@ public class GameLobbyJSONInvoker implements Invoker {
       boolean isAvailable = game.isAvailable();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
 
+    } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
+      FutureGame future = futureGameMap.get(objectId);
+      Game game = future.getGame();
+      String id = game.getId();
+      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
     }
     return reply;
   }

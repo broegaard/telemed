@@ -16,20 +16,25 @@
  *
  */
 
-package gamelobby.common;
+package gamelobby.client;
+
+import frds.broker.ClientProxy;
+import gamelobby.domain.Game;
 
 /**
  * At 25 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class MarshallingConstant {
+public class GameProxy implements Game, ClientProxy {
+  private final String objectId;
 
-  // Method ids for marshalling
-  public static final String GAMELOBBY_CREATE_GAME_METHOD = "gamelobby_create_game_method";
-  public static final String GAMELOBBY_JOIN_GAME_METHOD = "gamelobby_join_game_method";;
+  public GameProxy(String objectId) {
+    this.objectId = objectId;
+  }
 
-  public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = "futuregame_get_join_token_method";
-  public static final String FUTUREGAME_IS_AVAILABLE_METHOD = "futuregame_is_available_method";
-  public static final String FUTUREGAME_GET_GAME_METHOD = "futuregame_get_game_method";
+  @Override
+  public String getPlayerName(int index) {
+    return null;
+  }
 }
