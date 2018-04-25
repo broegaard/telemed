@@ -18,9 +18,13 @@
 
 package gamelobby.server;
 
+import com.google.gson.Gson;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
+import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * At 25 Apr 2018
@@ -28,11 +32,25 @@ import gamelobby.domain.GameLobby;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class GameLobbyJSONInvoker implements Invoker {
+  private final GameLobby lobby;
+  private Gson gson;
+
   public GameLobbyJSONInvoker(GameLobby lobby) {
+    this.lobby = lobby;
+    gson = new Gson();
   }
 
   @Override
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {
-    return null;
+    ReplyObject reply = null;
+
+    FutureGame game = lobby.createGame("Pedersen", 0);
+    // Have to cast to real type to convince GSon on marshalling it
+    FutureGameServant castGame = (FutureGameServant) game;
+
+    reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+            gson.toJson(castGame));
+
+    return reply;
   }
 }

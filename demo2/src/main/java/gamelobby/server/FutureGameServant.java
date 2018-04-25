@@ -48,6 +48,13 @@ public class FutureGameServant implements FutureGame {
     theGame = null;
   }
 
+  // Required by Marshalling
+  public FutureGameServant() {
+    joinToken = null; firstPlayer = null;
+    theGame = null;
+  }
+
+
   @Override
   public String getJoinToken() {
     return joinToken;

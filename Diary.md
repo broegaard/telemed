@@ -109,3 +109,32 @@ Run test. Null pointer exception in StandardJSONRequestor.
         at gamelobby.client.TestClientScenario.shouldHandleStory1OnClient(TestClientScenario.java:64)
 
 
+Commit 10837fd.
+
+Why? The invoker returns null, of course.
+
+So, drive code into the invoker. Getting inspiration from the TeleMed
+invoker code I end up with a first draft:
+
+    @Override
+    public ReplyObject handleRequest(String objectId, String operationName, 
+                                     String payload) {
+      ReplyObject reply = null;
+
+      FutureGame game = lobby.createGame("Pedersen", 0);
+
+      reply = new ReplyObject(HttpServletResponse.SC_CREATED,
+              gson.toJson(game));
+
+      return reply;
+    }
+
+Run test - now GSON complains that FutureGame has no default
+constructor. This happens often - the marshalling and Broker code has
+some requirements over and above single process OO programming.  So, I
+have to make that - of course it is the FutureGameServant that needs
+one.
+
+BOOM. I return object references, right? We cannot do that; we need to
+return record types, and make the requestor convert it!
+
