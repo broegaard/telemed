@@ -81,4 +81,14 @@ public class TestScenario {
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
   }
+
+  @Test
+  public void shouldCreateUniqueObjectIdForFutureGame() {
+    GameLobby lobby = GameLobbyServant.getInstance();
+    FutureGame player1Future = lobby.createGame("Pedersen", 0);
+    String uniqueObjectId1 = player1Future.getId();
+    FutureGame player2Future = lobby.createGame("Hansen", 0);
+    String uniqueObjectId2 = player2Future.getId();
+    assertThat(uniqueObjectId1, is(not(uniqueObjectId2)));
+  }
 }

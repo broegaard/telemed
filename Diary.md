@@ -136,5 +136,66 @@ have to make that - of course it is the FutureGameServant that needs
 one.
 
 BOOM. I return object references, right? We cannot do that; we need to
-return record types, and make the requestor convert it!
+return record types with a unique ID (identifying the object on the
+server side), and make the requestor create a corresponding client
+proxy that communicate on that particular object id.
 
+So how to proceed? First, review the returned reply object;
+
+In LocalMethodCallClientRequestHandler
+
+    @Override
+    public ReplyObject sendToServer(RequestObject requestObject) {
+      lastRequest = requestObject;
+      System.out.println("--> "+ requestObject);
+      // The send to the server can be mimicked by a direct method call
+      lastReply = invoker.handleRequest(requestObject.getObjectId(), 
+          requestObject.getOperationName(), 
+          requestObject.getPayload());
+      System.out.println("--< "+ lastReply);
+      return lastReply;
+    }
+
+which for the test case prints
+
+    --> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
+    --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen"}, errorDescription=null, responseCode=201]
+
+So everything is fine, except the StandardJSONRequestor in the Broker
+library part (project 'Broker') cannot deserialize the replyobject. We
+need a stronger Requestor implementation.
+
+The first thing is to provide an Object ID of the servant object.
+
+I need a *Child Test*, so I add test case in the server test cases:
+
+    @Test
+    public void shouldCreateUniqueObjectIdForFutureGame() {
+      GameLobby lobby = GameLobbyServant.getInstance();
+      FutureGame player1Future = lobby.createGame("Pedersen", 0);
+      String uniqueObjectId1 = player1Future.getId();
+      System.out.println("A: "+ uniqueObjectId1);
+    }
+
+and TDD the getId() into place, using the java UUID
+generator. Working.
+
+Extend the test case and remove the visual output.
+
+    @Test
+    public void shouldCreateUniqueObjectIdForFutureGame() {
+      GameLobby lobby = GameLobbyServant.getInstance();
+      FutureGame player1Future = lobby.createGame("Pedersen", 0);
+      String uniqueObjectId1 = player1Future.getId();
+      FutureGame player2Future = lobby.createGame("Hansen", 0);
+      String uniqueObjectId2 = player2Future.getId();
+      assertThat(uniqueObjectId1, is(not(uniqueObjectId2)));
+    }
+
+Ok, Child test passes, so I return to the Requestor issue. Now the
+reply object correctly contains the unique ID:
+
+    --> RequestObject{operationName='gamelobby_create_game_method', payload='["Pedersen",0]', objectId='none', versionIdentity=1}
+    --< ReplyObject [payload={"joinToken":"42","firstPlayer":"Pedersen","id":"d87b05d0-fa2c-428a-a99d-2e559b42b369"}, errorDescription=null, responseCode=201]
+
+Commit: 

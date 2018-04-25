@@ -31,4 +31,6 @@ public interface FutureGame extends Servant {
   boolean isAvailable();
 
   Game getGame();
+
+  String getId();
 }

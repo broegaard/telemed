@@ -45,11 +45,9 @@ public class GameLobbyJSONInvoker implements Invoker {
     ReplyObject reply = null;
 
     FutureGame game = lobby.createGame("Pedersen", 0);
-    // Have to cast to real type to convince GSon on marshalling it
-    FutureGameServant castGame = (FutureGameServant) game;
 
     reply = new ReplyObject(HttpServletResponse.SC_CREATED,
-            gson.toJson(castGame));
+            gson.toJson(game));
 
     return reply;
   }

@@ -23,6 +23,7 @@ import gamelobby.domain.Game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * At 24 Apr 2018
@@ -34,6 +35,7 @@ public class FutureGameServant implements FutureGame {
 
   private Game theGame;
   private String firstPlayer;
+  private String id;
 
   public FutureGameServant(String playerName, int playerLevel) {
     // ignore the player level for now
@@ -41,8 +43,13 @@ public class FutureGameServant implements FutureGame {
     // Add the player's name
     firstPlayer = playerName;
 
+    // Create the object ID to bind server and client side
+    // Servant-ClientProxy objects together
+    id = UUID.randomUUID().toString();
+
     // TODO: Make random UUIDs
     joinToken = "42";
+
 
     // No actual game has been created yet.
     theGame = null;
@@ -68,6 +75,11 @@ public class FutureGameServant implements FutureGame {
   @Override
   public Game getGame() {
     return theGame;
+  }
+
+  @Override
+  public String getId() {
+    return id;
   }
 
   public void setGame(Game theActualGame) {
