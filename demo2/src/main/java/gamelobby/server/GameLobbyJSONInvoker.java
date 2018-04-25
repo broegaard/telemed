@@ -63,6 +63,11 @@ public class GameLobbyJSONInvoker implements Invoker {
       String token = game.getJoinToken();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
 
+    } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
+      FutureGame game = futureGameMap.get(objectId);
+      boolean isAvailable = game.isAvailable();
+      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
+
     }
     return reply;
   }

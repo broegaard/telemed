@@ -402,9 +402,41 @@ code:
       return reply;
     }
 
-Test pass!
+Test pass! But we must update our schema somewhat
 
-Commit: 
+> ## Transfering Server Created Objects
+>
+> To transfer a reference to an object created on the server side,
+> you must follow this template
+>
+>  * Make the Servant object generate an unique ID, and provide an
+>    accessor method, like `getId()`.
+>  * Once a servant object is created, it must be stored in some
+>    server accessible storage under the unique id as key.
+>  * In the Invoker implementation use a String as marshalling format,
+>    and just transfer the unique object id back to the client.
+>  * On the client side, in the ClientProxy, create a ClientProxy
+>    object that stores this unique id.
+>  * When the server invoker gets a method call on some created
+>    object, it must use the provided `objectId` to fetch the servant
+>    object from the storage, and call the methods on it.
+
+Commit: d635b17
+
+### Iteration 4
+
+Now the schema should be clear
+
+  * Introduce one client method at a time in a test case
+  * Implement the ClientProxy method code, defining a new marshalling
+    method name. Object creation methods is
+    handled by the schema mentioned above.
+  * Add another path to the Invoker switch, dealing with the introduce
+    marshalling method name. Look up the servant object using the
+    provided objectId, and make the upcall on it, and create a proper
+    reply object.
+    
+
 
 
 

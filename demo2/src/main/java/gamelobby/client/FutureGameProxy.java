@@ -48,7 +48,9 @@ public class FutureGameProxy implements FutureGame, ClientProxy {
 
   @Override
   public boolean isAvailable() {
-    return false;
+    boolean token = requestor.sendRequestAndAwaitReply(getId(),
+            MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD, boolean.class);
+    return token;
   }
 
   @Override
