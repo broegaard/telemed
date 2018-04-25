@@ -478,7 +478,19 @@ invoker code (with omissions still).
       
 
 
-Commit: 
+Commit: 387d6a6.
+
+### Iteration 6
+
+Continue to add tests to the test case
+
+    // Now, as it is a two player game, both players see
+    // that the game has become available.
+    assertThat(player1Future.isAvailable(), is(true));
+    assertThat(player2Future.isAvailable(), is(true));
+
+which fails. Why? Well because the 'joinGame' method was not called in
+the above invoker code!
 
 
 

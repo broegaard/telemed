@@ -76,6 +76,10 @@ public class TestClientScenario {
     // Assure both talk to same game
     assertThat(player1Future.getId(), is(player2Future.getId()));
 
+    // Now, as it is a two player game, both players see
+    // that the game has become available.
+    assertThat(player1Future.isAvailable(), is(true));
+    assertThat(player2Future.isAvailable(), is(true));
 
   }
 }

@@ -72,8 +72,9 @@ public class GameLobbyJSONInvoker implements Invoker {
       String playerName = gson.fromJson(array.get(0), String.class);
       String joinToken = gson.fromJson(array.get(1), String.class);
 
-      FutureGame game = findGameWithJoinToken(joinToken);
-      // TODO: Handle non existing
+      FutureGame game = lobby.joinGame(playerName,joinToken);
+
+      // TODO: Handle non existing game
       String id = game.getId();
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
