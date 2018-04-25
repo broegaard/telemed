@@ -72,6 +72,40 @@ simply print tracing information on stdout. This way my first step is
 just to set up the proxy+invoker, and ensure the call chain is
 correct.
 
-So, the first step entails creating GameLobbyJSONInvoker and
-GameLobbyProxy as just temporary test stubs.
+Iteration 1: So, the first step entails creating GameLobbyJSONInvoker
+and GameLobbyProxy as just temporary test stubs. commit: e62519c.
+
+Iteration 2: 
+
+Added first remote call
+
+    FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
+    assertThat(player1Future, is(not(nullValue())));
+
+which of course fails.
+
+So I code the first part of the broker chain methods using 'obvious
+implementation':
+
+    @Override
+    public FutureGame createGame(String playerName, int playerLevel) {
+      FutureGame game =
+        requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
+                FutureGame.class, playerName, playerLevel);
+      return game;
+    }
+
+Obvious? Well, yes, as the requestor only has one method and the
+parameters are dictated. The only weird one is perhaps the objectId =
+"none" but this is because there only IS one lobby object on the
+server side, and thus no object id is needed - it will simply be
+ignored by the Invoker.
+
+Run test. Null pointer exception in StandardJSONRequestor.
+
+    java.lang.NullPointerException
+        at frds.broker.marshall.json.StandardJSONRequestor.sendRequestAndAwaitReply(StandardJSONRequestor.java:56)
+        at gamelobby.client.GameLobbyProxy.createGame(GameLobbyProxy.java:41)
+        at gamelobby.client.TestClientScenario.shouldHandleStory1OnClient(TestClientScenario.java:64)
+
 

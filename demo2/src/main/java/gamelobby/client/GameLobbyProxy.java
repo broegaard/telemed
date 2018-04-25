@@ -29,12 +29,18 @@ import gamelobby.domain.GameLobby;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class GameLobbyProxy implements GameLobby, ClientProxy {
+  private final Requestor requestor;
+
   public GameLobbyProxy(Requestor requestor) {
+    this.requestor = requestor;
   }
 
   @Override
   public FutureGame createGame(String playerName, int playerLevel) {
-    return null;
+    FutureGame game =
+      requestor.sendRequestAndAwaitReply("none", "gamelobby_create_game_method",
+              FutureGame.class, playerName, playerLevel);
+    return game;
   }
 
   @Override

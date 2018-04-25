@@ -18,6 +18,7 @@
 
 package gamelobby.client;
 
+import gamelobby.domain.FutureGame;
 import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -59,5 +60,9 @@ public class TestClientScenario {
 
     // Finally, create the client proxy for the lobby
     GameLobby lobbyProxy = new GameLobbyProxy(requestor);
+
+    FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
+    assertThat(player1Future, is(not(nullValue())));
+
   }
 }
