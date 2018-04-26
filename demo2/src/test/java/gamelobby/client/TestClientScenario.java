@@ -20,7 +20,12 @@ package gamelobby.client;
 
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
+import gamelobby.domain.UnknownServantException;
+import org.junit.Before;
 import org.junit.Test;
+
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -37,15 +42,16 @@ import gamelobby.server.GameLobbyJSONInvoker;
 import gamelobby.server.GameLobbyServant;
 
 
-/**
- * At 25 Apr 2018
+/** TDD from the client side of the proxies and the invoker.
+ * All done using the fake-object CRH and SRH pair.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class TestClientScenario {
+  private GameLobby lobbyProxy;
 
-  @Test
-  public void shouldHandleStory1OnClient() {
+  @Before
+  public void setup() {
     // Create the server side facade to the lobby
     GameLobby lobby = GameLobbyServant.getInstance();
 
@@ -60,8 +66,12 @@ public class TestClientScenario {
             new StandardJSONRequestor(clientRequestHandler);
 
     // Finally, create the client proxy for the lobby
-    GameLobby lobbyProxy = new GameLobbyProxy(requestor);
+    lobbyProxy = new GameLobbyProxy(requestor);
+  }
 
+
+  @Test
+  public void shouldHandleStory1OnClient() {
     FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
     assertThat(player1Future, is(not(nullValue())));
 
@@ -92,5 +102,20 @@ public class TestClientScenario {
     Game gameForPlayer2= player2Future.getGame();
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
+  }
+
+  @Test
+  public void shouldFailIfNonExistingObjects() {
+     FutureGame player2Future;
+    // Try to join unknown game
+    try {
+      player2Future = lobbyProxy.joinGame("Findus", "unknown-token");
+      fail("Lobby should throw an UnknownServantException due to the unknown join token.");
+    } catch (UnknownServantException exc) {
+      // Correct response
+      assertThat(exc.getMessage(), containsString("unknown-token"));
+      assertThat(exc.getMessage(), containsString("Findus"));
+    }
+
   }
 }

@@ -19,10 +19,12 @@
 package gamelobby.client;
 
 import frds.broker.ClientProxy;
+import frds.broker.IPCException;
 import frds.broker.Requestor;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
+import gamelobby.domain.UnknownServantException;
 
 /**
  * At 25 Apr 2018
@@ -48,11 +50,17 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
 
   @Override
   public FutureGame joinGame(String playerName, String joinToken) {
-    String id =
-            requestor.sendRequestAndAwaitReply("none",
-                    MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
-                    String.class, playerName, joinToken);
-    FutureGame proxy = new FutureGameProxy(id, requestor);
+    FutureGame proxy = null;
+    try {
+      String id =
+              requestor.sendRequestAndAwaitReply("none",
+                      MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
+                      String.class, playerName, joinToken);
+      proxy = new FutureGameProxy(id, requestor);
+    } catch (IPCException exc) {
+      // TODO: switch on type of exception
+      throw new UnknownServantException(exc.getMessage());
+    }
     return proxy;
   }
 }

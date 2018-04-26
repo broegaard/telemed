@@ -130,7 +130,10 @@ public class TestScenario {
       assertThat(exc.getMessage(), containsString("Findus"));
     }
 
-    // Next
+    // What happens in case you retrieve a game before it is made? Just a null
+    FutureGame player1Future = lobby.createGame("Pedersen", 1);
+    Game game = player1Future.getGame();
+    assertThat(game, is(nullValue()));
 
   }
 }

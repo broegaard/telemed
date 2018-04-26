@@ -591,6 +591,78 @@ Commit ea71879.
 
 Goal: Handle error cases.
 
+As the server side code has no error handling, I of course start
+there. I adopt to throw exceptions as this will illustrate exception
+handling propagation across network boundaries. 
+
+I introduce an UnknownServantException using the test case
+
+    @Test
+    public void shouldFailIfNonExistingObjects() {
+      FutureGame player2Future;
+      // Try to join unknown game
+      try {
+        player2Future = lobby.joinGame("Findus", "unknown-token");
+        fail("Lobby should throw an UnknownServantException due to the unknown join token.");
+      } catch (UnknownServantException exc) {
+        // Correct response
+        assertThat(exc.getMessage(), containsString("unknown-token"));
+        assertThat(exc.getMessage(), containsString("Findus"));
+      }
+    }
+    
+Working. Commit 7bf351b.
+
+Turning to client side where there are more error issues.
+
+So I copy the test code into the client test case context.
+
+Actually, the test case on client side passes but for the wrong
+reason - it is because we use the LocalMethodCallClientRequestHandler
+which means the client and server objects are in the same java context
+which is not similar to a real distributed setting. We need to encode
+a catch in the invoker as it is its role to handle server side exceptions.
+
+So I enter a try catch in the invoker's handleRequest method
+
+
+    } catch (UnknownServantException e) {
+      reply =
+              new ReplyObject(
+                      HttpServletResponse.SC_NOT_FOUND,
+                      e.getMessage());
+    }
+
+using the HTTP Status code for 'resource not found' as indication to
+the client that something was requested but not found.
+
+Now the test case fails, because the StandardJSONRequster in the
+FRDS.Broker library code tests the status code and throws an
+IPCException for all status codes in the above 200 range.
+
+We have several options for where to catch this exception, but
+I find doing so in the proxy makes sense: it is the joinGame method
+that will fail if a wrong join token is provided.
+
+    @Override
+    public FutureGame joinGame(String playerName, String joinToken) {
+      FutureGame proxy = null;
+      try {
+        String id =
+                requestor.sendRequestAndAwaitReply("none",
+                        MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
+                        String.class, playerName, joinToken);
+        proxy = new FutureGameProxy(id, requestor);
+      } catch (IPCException exc) {
+        // TODO: switch on type of exception
+        throw new UnknownServantException(exc.getMessage());
+      }
+      return proxy;
+    }
+
+Done, and tests pass.
+
+Commit: 
 
 
 
