@@ -22,8 +22,14 @@ import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
 
+import gamelobby.domain.UnknownServantException;
+import org.junit.Before;
 import org.junit.Test;
 
+import javax.servlet.http.HttpServletResponse;
+
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -36,10 +42,15 @@ import static org.hamcrest.core.IsNull.nullValue;
  */
 public class TestScenario {
 
+  private GameLobby lobby;
+
+  @Before
+  public void setup() {
+    lobby = GameLobbyServant.getInstance();
+  }
+
   @Test
   public void shouldHandleStory1() {
-    // Get the game lobby singleton
-    GameLobby lobby = GameLobbyServant.getInstance();
     assertThat(lobby, is(not(nullValue())));
 
     // Ask lobby to create a game for a beginner (playerLevel = 0).
@@ -77,14 +88,13 @@ public class TestScenario {
     assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
 
     // Our second player sees the same game state
-    Game gameForPlayer2= player1Future.getGame();
+    Game gameForPlayer2= player2Future.getGame();
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
   }
 
   @Test
   public void shouldCreateUniqueObjectIdForFutureGame() {
-    GameLobby lobby = GameLobbyServant.getInstance();
     FutureGame player1Future = lobby.createGame("Pedersen", 0);
     String uniqueObjectId1 = player1Future.getId();
     FutureGame player2Future = lobby.createGame("Hansen", 0);
@@ -100,11 +110,27 @@ public class TestScenario {
 
   @Test
   public void shouldMakeUniqueJoinTokens() {
-     GameLobby lobby = GameLobbyServant.getInstance();
      FutureGame player1Future = lobby.createGame("Pedersen", 1);
      String joinTokenGame1 = player1Future.getJoinToken();
      FutureGame player2Future = lobby.createGame("Hardy", 17);
      String joinTokenGame2 = player2Future.getJoinToken();
      assertThat(joinTokenGame1, is(not(joinTokenGame2)));
    }
+
+  @Test
+  public void shouldFailIfNonExistingObjects() {
+    FutureGame player2Future;
+    // Try to join unknown game
+    try {
+      player2Future = lobby.joinGame("Findus", "unknown-token");
+      fail("Lobby should throw an UnknownServantException due to the unknown join token.");
+    } catch (UnknownServantException exc) {
+      // Correct response
+      assertThat(exc.getMessage(), containsString("unknown-token"));
+      assertThat(exc.getMessage(), containsString("Findus"));
+    }
+
+    // Next
+
+  }
 }

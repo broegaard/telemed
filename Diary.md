@@ -52,7 +52,7 @@ small steps in a Story 1 test case:
         assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
 
         // Our second player sees the same game state
-        Game gameForPlayer2= player1Future.getGame();
+        Game gameForPlayer2= player2Future.getGame();
         assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
         assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
       }
@@ -585,6 +585,11 @@ AtomicInteger to increment a counter for every created game.
 Removing debug info from the LocalMethodCallClientRequestHandler and
 the happy path code is done.
 
+Commit ea71879.
+
+### Iteration 8
+
+Goal: Handle error cases.
 
 
 

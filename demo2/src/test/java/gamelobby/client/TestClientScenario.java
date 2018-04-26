@@ -89,9 +89,8 @@ public class TestClientScenario {
     assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
 
     // Our second player sees the same game state
-    Game gameForPlayer2= player1Future.getGame();
+    Game gameForPlayer2= player2Future.getGame();
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
-
   }
 }

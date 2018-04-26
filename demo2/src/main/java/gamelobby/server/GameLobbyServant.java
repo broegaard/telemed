@@ -22,6 +22,7 @@ import frds.broker.Servant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
+import gamelobby.domain.UnknownServantException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,10 +60,11 @@ public class GameLobbyServant implements Servant, GameLobby {
   @Override
   public FutureGame joinGame(String playerName, String joinToken) {
     FutureGameServant future = gamesInLobby.get(joinToken);
-    // TODO: Handle lookup of non-existing game
-
-    // Transform the future so it represents a valid
-    // game
+    if (future==null) {
+      throw new UnknownServantException("The FutureGame object for join token " + joinToken
+              + " was not found. Requested by player: " + playerName);
+    }
+    // Transform the future so it represents a valid game
     Game theActualGame = new GameServant(future.getFirstPlayerName(), playerName);
     future.setGame(theActualGame);
 
