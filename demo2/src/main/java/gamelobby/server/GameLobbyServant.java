@@ -26,8 +26,7 @@ import gamelobby.domain.GameLobby;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * At 24 Apr 2018
+/** Servant implementation of the lobby.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

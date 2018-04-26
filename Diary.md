@@ -519,6 +519,9 @@ Commit 8df508e. Getting the invoker code fully in place pending.
 
 Time spent 4 hours.
 
+Day 3
+-----
+
 ### Iteration 6 continued
 
 Ok, fixing the join invoker code:
@@ -555,7 +558,32 @@ Pending tasks
   * Refactor the invoker code which is blobbing at the moment.
   * Make manual demo programs (real server, real clients)
   
-Commit: 
+Commit: d5f0a5d
+
+### Iteration 7
+
+Goal: Remove fake code join token generation.
+
+Process: Make a test case in which 4 players make two games. Only make
+the test in the server test package as it is solely a domain issue.
+
+The test is easy - create two games and compare join tokens
+
+    @Test
+    public void shouldMakeUniqueJoinTokens() {
+       GameLobby lobby = GameLobbyServant.getInstance();
+       FutureGame player1Future = lobby.createGame("Pedersen", 1);
+       String joinTokenGame1 = player1Future.getJoinToken();
+       FutureGame player2Future = lobby.createGame("Hardy", 17);
+       String joinTokenGame2 = player2Future.getJoinToken();
+       assertThat(joinTokenGame1, is(not(joinTokenGame2)));
+     }
+
+Fails. Fixing is also easy, I use an class variable of type
+AtomicInteger to increment a counter for every created game.
+
+Removing debug info from the LocalMethodCallClientRequestHandler and
+the happy path code is done.
 
 
 

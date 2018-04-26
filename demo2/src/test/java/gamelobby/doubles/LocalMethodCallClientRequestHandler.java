@@ -52,12 +52,12 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
     lastRequest = requestObject;
-    System.out.println("--> "+ requestObject);
+    // System.out.println("--> "+ requestObject);
     // The send to the server can be mimicked by a direct method call
     lastReply = invoker.handleRequest(requestObject.getObjectId(), 
         requestObject.getOperationName(), 
         requestObject.getPayload());
-    System.out.println("--< "+ lastReply);
+    // System.out.println("--< "+ lastReply);
     return lastReply;
   }
 

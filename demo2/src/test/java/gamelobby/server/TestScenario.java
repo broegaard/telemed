@@ -96,6 +96,15 @@ public class TestScenario {
   public void shouldCreateIDForGame() {
     Game game = new GameServant("Hans", "Peter");
     assertThat(game.getId(), is(not(nullValue())));
+   }
 
+  @Test
+  public void shouldMakeUniqueJoinTokens() {
+     GameLobby lobby = GameLobbyServant.getInstance();
+     FutureGame player1Future = lobby.createGame("Pedersen", 1);
+     String joinTokenGame1 = player1Future.getJoinToken();
+     FutureGame player2Future = lobby.createGame("Hardy", 17);
+     String joinTokenGame2 = player2Future.getJoinToken();
+     assertThat(joinTokenGame1, is(not(joinTokenGame2)));
    }
 }

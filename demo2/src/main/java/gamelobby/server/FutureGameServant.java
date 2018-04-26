@@ -24,9 +24,9 @@ import gamelobby.domain.Game;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * At 24 Apr 2018
+/** Servant implementation of FutureGame role.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -36,6 +36,11 @@ public class FutureGameServant implements FutureGame {
   private Game theGame;
   private String firstPlayer;
   private String id;
+
+  // Make a global thread safe counter for the join token
+  // Note: This will ONLY work in a single-server solution;
+  // you cannot load-balance multiple servers using this technique
+  private static AtomicInteger gameCounter = new AtomicInteger();
 
   public FutureGameServant(String playerName, int playerLevel) {
     // ignore the player level for now
@@ -47,17 +52,10 @@ public class FutureGameServant implements FutureGame {
     // Servant-ClientProxy objects together
     id = UUID.randomUUID().toString();
 
-    // TODO: Make random UUIDs
-    joinToken = "42";
-
+    // Create a unique game join token.
+    joinToken = "game-"+gameCounter.incrementAndGet();
 
     // No actual game has been created yet.
-    theGame = null;
-  }
-
-  // Required by Marshalling
-  public FutureGameServant() {
-    joinToken = null; firstPlayer = null;
     theGame = null;
   }
 

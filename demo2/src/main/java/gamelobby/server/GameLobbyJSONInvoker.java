@@ -33,8 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * At 25 Apr 2018
+/** The invoker role for the game lobby system.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -86,7 +85,6 @@ public class GameLobbyJSONInvoker implements Invoker {
       // created game that will be referenced by future client calls,
       // thus this object must be stored server side under its id.
       String gameId = futureGame.getGame().getId();
-      System.out.println("--> storing game id" + gameId);
       gameMap.put(gameId, futureGame.getGame());
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
