@@ -18,6 +18,7 @@
 
 package gamelobby.client;
 
+import frds.broker.IPCException;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 import gamelobby.domain.UnknownServantException;
@@ -41,6 +42,8 @@ import gamelobby.doubles.LocalMethodCallClientRequestHandler;
 import gamelobby.server.GameLobbyJSONInvoker;
 import gamelobby.server.GameLobbyServant;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 /** TDD from the client side of the proxies and the invoker.
  * All done using the fake-object CRH and SRH pair.
@@ -49,6 +52,7 @@ import gamelobby.server.GameLobbyServant;
  */
 public class TestClientScenario {
   private GameLobby lobbyProxy;
+  private Requestor requestor;
 
   @Before
   public void setup() {
@@ -62,7 +66,7 @@ public class TestClientScenario {
     // method client request handler to avoid any real IPC layer.
     ClientRequestHandler clientRequestHandler =
             new LocalMethodCallClientRequestHandler(invoker);
-    Requestor requestor =
+    requestor =
             new StandardJSONRequestor(clientRequestHandler);
 
     // Finally, create the client proxy for the lobby
@@ -117,5 +121,13 @@ public class TestClientScenario {
       assertThat(exc.getMessage(), containsString("Findus"));
     }
 
+    // Test for retrieval on non-existing game on server side
+    try {
+      Game proxy = new GameProxy("unknown-id", requestor);
+      String firstPlayerName = proxy.getPlayerName(0);
+      fail("Server should reply with an IPCexception");
+    } catch (IPCException e) {
+      assertThat(e.getStatusCode(), is(HttpServletResponse.SC_NOT_FOUND));
+    }
   }
 }

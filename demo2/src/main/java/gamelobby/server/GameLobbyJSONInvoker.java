@@ -78,8 +78,8 @@ public class GameLobbyJSONInvoker implements Invoker {
         String joinToken = gson.fromJson(array.get(1), String.class);
 
         FutureGame futureGame = lobby.joinGame(playerName, joinToken);
-
-        // TODO: Handle non existing game
+        // Note: if the joinToken is unknown, lobby will throw exception
+        // which is caught below and handled.
 
         // Return the id of the future game joined so client has reference to it
         String futureGameId = futureGame.getId();
@@ -111,7 +111,11 @@ public class GameLobbyJSONInvoker implements Invoker {
 
       } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
         Game game = gameMap.get(objectId);
-        // TODO handle non existing game
+        if (game == null) {
+          throw new UnknownServantException(
+                  "Game with object id: " + objectId + " does not exist.");
+        }
+
         int index = gson.fromJson(array.get(0), Integer.class);
         String name = game.getPlayerName(index);
         reply = new ReplyObject(HttpServletResponse.SC_OK, name);

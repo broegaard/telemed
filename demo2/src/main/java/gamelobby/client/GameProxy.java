@@ -19,12 +19,14 @@
 package gamelobby.client;
 
 import frds.broker.ClientProxy;
+import frds.broker.IPCException;
 import frds.broker.Requestor;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 
-/**
- * At 25 Apr 2018
+/** Proxy for the game. NEVER create it your self,
+ * get it from the FutureGame once the 'isAvailable()'
+ * method returns true.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -32,7 +34,7 @@ public class GameProxy implements Game, ClientProxy {
   private final String objectId;
   private final Requestor requestor;
 
-  public GameProxy(String objectId, Requestor requestor) {
+  GameProxy(String objectId, Requestor requestor) {
     this.objectId = objectId;
     this.requestor = requestor;
   }

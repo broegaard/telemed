@@ -662,7 +662,35 @@ that will fail if a wrong join token is provided.
       return proxy;
     }
 
-Done, and tests pass. Commit 
+Done, and tests pass. Commit 4c92398.
+
+### Iteration 8.b
+
+More exceptional cases - only one left - retrieving a game that does
+not exist, in 'getPlayerName'. This is actually difficult to test - as
+the protocol does not allow getting a game proxy to call on; but
+we can induce the error by creating the GameProxy object directly.
+
+    // Test for retrieval on non-existing game on server side
+    Game proxy = new GameProxy("unknown-id", requestor);
+    String firstPlayerName = proxy.getPlayerName(0);
+
+This trigger TDD of the relevant invoker code:
+
+        Game game = gameMap.get(objectId);
+        if (game == null) {
+          throw new UnknownServantException(
+                  "Game with object id: " + objectId + " does not exist.");
+        }
+
+        int index = gson.fromJson(array.get(0), Integer.class);
+        String name = game.getPlayerName(index);
+        reply = new ReplyObject(HttpServletResponse.SC_OK, name);
+
+I do not catch the IPC exception in the GameProxy; it is a breach of
+the protocol, and thus the client should never be in this
+situation. Still we have made the server more robust by handling the
+error over there.
 
 
 
