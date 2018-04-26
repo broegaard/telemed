@@ -511,9 +511,51 @@ After: commit: 8df508e
 The last piece of the puzzle is the Game.getPlayerName
 method. Business as usual: Make the proxy code; make the invoker
 code - or *not so fast*. We need to store the game under the game id
-of course, so a bit of tweaking in the joinGame invoker code.
+of course, so a bit of tweaking in the joinGame invoker code; 
 
-And some issues. Stopping now; 'break' pattern.
+Stopping now in 'red bar'; 'break' pattern.
+
+Commit 8df508e. Getting the invoker code fully in place pending.
+
+Time spent 4 hours.
+
+### Iteration 6 continued
+
+Ok, fixing the join invoker code:
+
+    } else if (operationName.equals(MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD)) {
+      String playerName = gson.fromJson(array.get(0), String.class);
+      String joinToken = gson.fromJson(array.get(1), String.class);
+
+      FutureGame futureGame = lobby.joinGame(playerName,joinToken);
+
+      // TODO: Handle non existing game
+
+      // Return the id of the future game joined so client has reference to it
+      String futureGameId = futureGame.getId();
+
+      // Joining a game also creates it so there is another server side
+      // created game that will be referenced by future client calls,
+      // thus this object must be stored server side under its id.
+      String gameId = futureGame.getGame().getId();
+      System.out.println("--> storing game id" + gameId);
+      gameMap.put(gameId, futureGame.getGame());
+
+      reply = new ReplyObject(HttpServletResponse.SC_OK,
+              gson.toJson(futureGameId));
+
+Time spent: less than half hour.
+
+Now all happy path code is working.
+
+Pending tasks
+
+  * Remove fake code for join token generation.
+  * TDD of the unhappy path (non existing games etc.)
+  * Refactor the invoker code which is blobbing at the moment.
+  * Make manual demo programs (real server, real clients)
+  
+Commit: 
 
 
 

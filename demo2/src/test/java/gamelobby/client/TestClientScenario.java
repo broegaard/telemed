@@ -93,6 +93,5 @@ public class TestClientScenario {
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
 
-
   }
 }

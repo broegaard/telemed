@@ -78,14 +78,19 @@ public class GameLobbyJSONInvoker implements Invoker {
       FutureGame futureGame = lobby.joinGame(playerName,joinToken);
 
       // TODO: Handle non existing game
-      String id = futureGame.getId();
 
-      // Store game for future reference
-      System.out.println("--> storing " + id);
-      gameMap.put(id, futureGame.getGame());
+      // Return the id of the future game joined so client has reference to it
+      String futureGameId = futureGame.getId();
+
+      // Joining a game also creates it so there is another server side
+      // created game that will be referenced by future client calls,
+      // thus this object must be stored server side under its id.
+      String gameId = futureGame.getGame().getId();
+      System.out.println("--> storing game id" + gameId);
+      gameMap.put(gameId, futureGame.getGame());
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
-              gson.toJson(id));
+              gson.toJson(futureGameId));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
       FutureGame futureGame = futureGameMap.get(objectId);
