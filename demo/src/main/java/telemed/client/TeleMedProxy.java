@@ -29,6 +29,8 @@ import frds.broker.Requestor;
 import telemed.common.OperationNames;
 import telemed.domain.*;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * The ClientProxy implementation of the TeleMed role. This proxy object
  * resides on the client side and acts as a TeleMed instance, but all method
@@ -76,8 +78,9 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
       to = requestor.sendRequestAndAwaitReply(uniqueId,
               OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class);
     } catch (IPCException e) {
-      // TODO: introduce status code in IPCException and use it
-      // If e.getStatusCode != SC_NOT_FOUND throw ipc exception again
+      if (e.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
+        throw e;
+      }
       to = null;
     }
     return to;
