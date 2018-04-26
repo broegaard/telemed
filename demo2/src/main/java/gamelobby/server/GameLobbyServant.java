@@ -46,7 +46,7 @@ public class GameLobbyServant implements Servant, GameLobby {
    */
   private Map<String, FutureGameServant> gamesInLobby;
 
-  public GameLobbyServant() {
+  GameLobbyServant() {
     gamesInLobby = new HashMap<>();
   }
 

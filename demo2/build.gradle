@@ -41,20 +41,17 @@ dependencies {
 
 task lobbyServer(type: JavaExec) {
   group 'demo2'
-  description 'Run Http/URI Tunnel based GameLobby server'
+  description 'Run Socket based GameLobby server'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.LobbyMainHTTP'
-  // args db
+  main = 'gamelobby.main.LobbyServer'
 }
 
-/*
-task homeHttp(type: JavaExec) {
-  group 'demo'
-  description 'Run a single TeleMed client operation (Http)'
+task lobbyClient(type: JavaExec) {
+  group 'demo2'
+  description 'Run a single GameLobby client operation (Socket)'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.HomeClientHTTP'
-  args op, id, sys, dia, host
+  main = 'gamelobby.main.LobbyClient'
+  args op, player, token, host
 }
-*/

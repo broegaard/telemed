@@ -690,9 +690,31 @@ This trigger TDD of the relevant invoker code:
 I do not catch the IPC exception in the GameProxy; it is a breach of
 the protocol, and thus the client should never be in this
 situation. Still we have made the server more robust by handling the
-error over there.
+error over there. Updating the test case. Done
+
+Commit e6141a7.
 
 
+### Iteration 9
 
+Goal: Make Demo programs.
 
+Made gradle tasks and the main programs. The case makes for rather
+stupid clients so actually only a single scenario is possible.
+
+  * gradle :demo2:lobbyServer
+
+And then
+
+    csdev@m31:~/proj/broker$ gradle :demo2:lobbyClient -q -Pplayer=Henrik -Pop=create
+    LobbyClient: Asked to do operation create for player Henrik
+     Future created, the join token is game-3
+    csdev@m31:~/proj/broker$ gradle :demo2:lobbyClient -q -Pname=Baerbak -Ptoken=game-3 -Pop=join
+    LobbyClient: Asked to do operation join for player Pedersen
+     Future joined, available is true
+     The Game id is ab200d3d-cf51-473e-82a8-cfc35238d81c
+     The Game's 1st player is Henrik
+     The Game's 2nd player is Pedersen
+
+Done. Commit 
 
