@@ -26,6 +26,8 @@ import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * At 25 Apr 2018
  *
@@ -58,7 +60,9 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
                       String.class, playerName, joinToken);
       proxy = new FutureGameProxy(id, requestor);
     } catch (IPCException exc) {
-      // TODO: switch on type of exception
+      if (exc.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
+        throw exc;
+      }
       throw new UnknownServantException(exc.getMessage());
     }
     return proxy;

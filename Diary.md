@@ -654,15 +654,17 @@ that will fail if a wrong join token is provided.
                         String.class, playerName, joinToken);
         proxy = new FutureGameProxy(id, requestor);
       } catch (IPCException exc) {
-        // TODO: switch on type of exception
+        if (exc.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
+          throw exc;
+        }
         throw new UnknownServantException(exc.getMessage());
       }
       return proxy;
     }
 
-Done, and tests pass.
+Done, and tests pass. Commit 
 
-Commit: 
+
 
 
 
