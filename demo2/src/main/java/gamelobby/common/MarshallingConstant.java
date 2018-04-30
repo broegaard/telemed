@@ -25,13 +25,18 @@ package gamelobby.common;
  */
 public class MarshallingConstant {
 
+  // Type prefixes
+  public static final String GAME_LOBBY_PREFIX = "gamelobby";
+  public static final String FUTUREGAME_PREFIX = "futuregame";
+  public static final String GAME_PREFIX = "game";
+
   // Method ids for marshalling
-  public static final String GAMELOBBY_CREATE_GAME_METHOD = "gamelobby_create_game_method";
-  public static final String GAMELOBBY_JOIN_GAME_METHOD = "gamelobby_join_game_method";;
+  public static final String GAMELOBBY_CREATE_GAME_METHOD = GAME_LOBBY_PREFIX + "_create_game_method";
+  public static final String GAMELOBBY_JOIN_GAME_METHOD = GAME_LOBBY_PREFIX + "_join_game_method";;
 
-  public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = "futuregame_get_join_token_method";
-  public static final String FUTUREGAME_IS_AVAILABLE_METHOD = "futuregame_is_available_method";
-  public static final String FUTUREGAME_GET_GAME_METHOD = "futuregame_get_game_method";
+  public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = FUTUREGAME_PREFIX + "_get_join_token_method";
+  public static final String FUTUREGAME_IS_AVAILABLE_METHOD = FUTUREGAME_PREFIX + "_is_available_method";
+  public static final String FUTUREGAME_GET_GAME_METHOD = FUTUREGAME_PREFIX + "_get_game_method";
 
-  public static final String GAME_GET_PLAYER_NAME = "game_get_player_name_method";
+  public static final String GAME_GET_PLAYER_NAME = GAME_PREFIX + "_get_player_name_method";
 }

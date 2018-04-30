@@ -54,11 +54,11 @@ public class GameLobbyJSONInvoker implements Invoker {
     // and put them in a map, binding them to the
     // operationName prefixes
     Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
-    invokerMap.put("gamelobby", gameLobbyInvoker);
+    invokerMap.put(MarshallingConstant.GAME_LOBBY_PREFIX, gameLobbyInvoker);
     Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
-    invokerMap.put("futuregame", futureGameInvoker);
+    invokerMap.put(MarshallingConstant.FUTUREGAME_PREFIX, futureGameInvoker);
     Invoker gameInvoker = new GameInvoker(objectStorage, gson);
-    invokerMap.put("game", gameInvoker);
+    invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
   }
 
   @Override

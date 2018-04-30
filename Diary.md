@@ -832,3 +832,71 @@ get clean code that works; but first I force this do over branch back
 into development.
 
 
+    git push origin development-do-over:development --force
+    git checkout development
+    git pull
+    
+
+Well, the only duplicated code is the demarshaling of payload. Is it
+worth a separate class or an inheritance hierarchy? I decide that it
+is not.
+
+Done.
+
+The final invoker
+
+    @Override
+    public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+      ReplyObject reply = null;
+
+      // Identify the Invoker to use
+      String type = operationName.substring(0, operationName.indexOf('_'));
+      Invoker subInvoker = invokerMap.get(type);
+
+      // And do the upcall
+      try {
+        reply = subInvoker.handleRequest(objectId, operationName, payload);
+
+      } catch (UnknownServantException e) {
+        reply =
+                new ReplyObject(
+                        HttpServletResponse.SC_NOT_FOUND,
+                        e.getMessage());
+      }
+
+      return reply;
+    }
+
+Ahh - some magic constants floating around, better clean them up.
+
+    public class MarshallingConstant {
+
+      // Type prefixes
+      public static final String GAME_LOBBY_PREFIX = "gamelobby";
+      private static final String FUTUREGAME_PREFIX = "futuregame";
+      private static final String GAME_PREFIX = "game";
+
+      // Method ids for marshalling
+      public static final String GAMELOBBY_CREATE_GAME_METHOD = GAME_LOBBY_PREFIX + "_create_game_method";
+      public static final String GAMELOBBY_JOIN_GAME_METHOD = GAME_LOBBY_PREFIX + "_join_game_method";;
+
+      public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = FUTUREGAME_PREFIX + "_get_join_token_method";
+      public static final String FUTUREGAME_IS_AVAILABLE_METHOD = FUTUREGAME_PREFIX + "_is_available_method";
+      public static final String FUTUREGAME_GET_GAME_METHOD = FUTUREGAME_PREFIX + "_get_game_method";
+
+      public static final String GAME_GET_PLAYER_NAME = GAME_PREFIX + "_get_player_name_method";
+    }
+
+And the invoker map population code becomes:
+
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
+    invokerMap.put(MarshallingConstant.GAME_LOBBY_PREFIX, gameLobbyInvoker);
+    Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
+    invokerMap.put(MarshallingConstant.FUTUREGAME_PREFIX, futureGameInvoker);
+    Invoker gameInvoker = new GameInvoker(objectStorage, gson);
+    invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
+
+
+Pending? More JavaDoc.
+
+Total time: one hour.
