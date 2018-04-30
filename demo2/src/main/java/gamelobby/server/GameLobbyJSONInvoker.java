@@ -30,6 +30,8 @@ import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /** The invoker role for the game lobby system.
  *
@@ -38,6 +40,7 @@ import javax.servlet.http.HttpServletResponse;
 public class GameLobbyJSONInvoker implements Invoker {
   private final GameLobby lobby;
   private final ObjectStorage objectStorage;
+  private final Map<String, Invoker> invokerMap;
   private Gson gson;
 
   public GameLobbyJSONInvoker(GameLobby lobby) {
@@ -45,6 +48,13 @@ public class GameLobbyJSONInvoker implements Invoker {
     gson = new Gson();
 
     objectStorage = new InMemoryObjectStorage();
+    invokerMap = new HashMap<>();
+
+    // Create an invoker for each handled type
+    // and put them in a map, binding them to the
+    // operationName prefixes
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
+    invokerMap.put("gamelobby", gameLobbyInvoker);
   }
 
   @Override
@@ -56,37 +66,15 @@ public class GameLobbyJSONInvoker implements Invoker {
     JsonArray array =
             parser.parse(payload).getAsJsonArray();
 
+    // Identify the Dispatcher to use
+    String type = operationName.substring(0, operationName.indexOf('_'));
+    System.out.println(" ---> " + type);
+    Invoker subInvoker = invokerMap.get(type);
+
     try {
 
-      if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
-        String playerName = gson.fromJson(array.get(0), String.class);
-        int level = gson.fromJson(array.get(1), Integer.class);
-        FutureGame futureGame = lobby.createGame(playerName, level);
-        String id = futureGame.getId();
-        objectStorage.putFutureGame(id, futureGame);
-
-        reply = new ReplyObject(HttpServletResponse.SC_CREATED,
-                gson.toJson(id));
-
-      } else if (operationName.equals(MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD)) {
-        String playerName = gson.fromJson(array.get(0), String.class);
-        String joinToken = gson.fromJson(array.get(1), String.class);
-
-        FutureGame futureGame = lobby.joinGame(playerName, joinToken);
-        // Note: if the joinToken is unknown, lobby will throw exception
-        // which is caught below and handled.
-
-        // Return the id of the future game joined so client has reference to it
-        String futureGameId = futureGame.getId();
-
-        // Joining a game also creates it so there is another server side
-        // created game that will be referenced by future client calls,
-        // thus this object must be stored server side under its id.
-        String gameId = futureGame.getGame().getId();
-        objectStorage.putGame(gameId, futureGame.getGame());
-
-        reply = new ReplyObject(HttpServletResponse.SC_OK,
-                gson.toJson(futureGameId));
+      if (type.equals("gamelobby")) {
+        reply = subInvoker.handleRequest(objectId,operationName,payload);
 
       } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
         FutureGame futureGame = objectStorage.getFutureGame(objectId);

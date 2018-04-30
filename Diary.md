@@ -812,3 +812,11 @@ The resulting ObjectStorage becomes
     }
 
 All tests pass.
+
+Commit the stuff: 6af87ec
+
+Next, I merge the real development branch into this branch
+
+    git merge development
+    
+A bit of conflicts to be handled.
