@@ -823,3 +823,4 @@ A bit of conflicts to be handled. Done.
 
 Commit 86c391c introduces the invoker for the lobby.
 
+Commit 4781332 introduces the future game invoker.

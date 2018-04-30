@@ -57,42 +57,21 @@ public class GameLobbyJSONInvoker implements Invoker {
     invokerMap.put("gamelobby", gameLobbyInvoker);
     Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
     invokerMap.put("futuregame", futureGameInvoker);
+    Invoker gameInvoker = new GameInvoker(objectStorage, gson);
+    invokerMap.put("game", gameInvoker);
   }
 
   @Override
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
 
-    // Demarshall parameters into a JsonArray
-    JsonParser parser = new JsonParser();
-    JsonArray array =
-            parser.parse(payload).getAsJsonArray();
-
-    // Identify the Dispatcher to use
+    // Identify the Invoker to use
     String type = operationName.substring(0, operationName.indexOf('_'));
-    System.out.println(" ---> " + type);
     Invoker subInvoker = invokerMap.get(type);
 
+    // And do the upcall
     try {
-
-      if (type.equals("gamelobby")) {
-        reply = subInvoker.handleRequest(objectId, operationName, payload);
-
-      } else if (type.equals("futuregame")) {
-        reply = subInvoker.handleRequest(objectId, operationName, payload);
-        
-      } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
-        Game game = objectStorage.getGame(objectId);
-        if (game == null) {
-          throw new UnknownServantException(
-                  "Game with object id: " + objectId + " does not exist.");
-        }
-
-        int index = gson.fromJson(array.get(0), Integer.class);
-        String name = game.getPlayerName(index);
-        reply = new ReplyObject(HttpServletResponse.SC_OK, name);
-
-      }
+      reply = subInvoker.handleRequest(objectId, operationName, payload);
 
     } catch (UnknownServantException e) {
       reply =
