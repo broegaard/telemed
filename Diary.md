@@ -824,3 +824,11 @@ A bit of conflicts to be handled. Done.
 Commit 86c391c introduces the invoker for the lobby.
 
 Commit 4781332 introduces the future game invoker.
+
+Commit c6d48f5 introduces the game invoker.
+
+However, quite some duplicated code around. So a bit of clean up to
+get clean code that works; but first I force this do over branch back
+into development.
+
+

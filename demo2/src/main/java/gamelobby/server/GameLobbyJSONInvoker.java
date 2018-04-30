@@ -50,7 +50,7 @@ public class GameLobbyJSONInvoker implements Invoker {
     objectStorage = new InMemoryObjectStorage();
     invokerMap = new HashMap<>();
 
-    // Create an invoker for each handled type
+    // Create an invoker for each handled type/class
     // and put them in a map, binding them to the
     // operationName prefixes
     Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
