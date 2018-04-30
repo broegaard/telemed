@@ -30,9 +30,6 @@ import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 /** The invoker role for the game lobby system.
  *
@@ -40,16 +37,14 @@ import java.util.Optional;
  */
 public class GameLobbyJSONInvoker implements Invoker {
   private final GameLobby lobby;
+  private final ObjectStorage objectStorage;
   private Gson gson;
-  private Map<String, FutureGame> futureGameMap;
-  private Map<String, Game> gameMap;
 
   public GameLobbyJSONInvoker(GameLobby lobby) {
     this.lobby = lobby;
     gson = new Gson();
 
-    futureGameMap = new HashMap<>();
-    gameMap = new HashMap<>();
+    objectStorage = new InMemoryObjectStorage();
   }
 
   @Override
@@ -68,7 +63,7 @@ public class GameLobbyJSONInvoker implements Invoker {
         int level = gson.fromJson(array.get(1), Integer.class);
         FutureGame futureGame = lobby.createGame(playerName, level);
         String id = futureGame.getId();
-        futureGameMap.put(id, futureGame);
+        objectStorage.putFutureGame(id, futureGame);
 
         reply = new ReplyObject(HttpServletResponse.SC_CREATED,
                 gson.toJson(id));
@@ -88,29 +83,29 @@ public class GameLobbyJSONInvoker implements Invoker {
         // created game that will be referenced by future client calls,
         // thus this object must be stored server side under its id.
         String gameId = futureGame.getGame().getId();
-        gameMap.put(gameId, futureGame.getGame());
+        objectStorage.putGame(gameId, futureGame.getGame());
 
         reply = new ReplyObject(HttpServletResponse.SC_OK,
                 gson.toJson(futureGameId));
 
       } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
-        FutureGame futureGame = futureGameMap.get(objectId);
+        FutureGame futureGame = objectStorage.getFutureGame(objectId);
         String token = futureGame.getJoinToken();
         reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
 
       } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
-        FutureGame futureGame = futureGameMap.get(objectId);
+        FutureGame futureGame = objectStorage.getFutureGame(objectId);
         boolean isAvailable = futureGame.isAvailable();
         reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
 
       } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
-        FutureGame futureGame = futureGameMap.get(objectId);
+        FutureGame futureGame = objectStorage.getFutureGame(objectId);
         Game game = futureGame.getGame();
         String id = game.getId();
         reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
 
       } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
-        Game game = gameMap.get(objectId);
+        Game game = objectStorage.getGame(objectId);
         if (game == null) {
           throw new UnknownServantException(
                   "Game with object id: " + objectId + " does not exist.");

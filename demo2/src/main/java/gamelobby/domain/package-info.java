@@ -23,7 +23,7 @@
  * dispatch on the server side, the Game roles does not contain
  * any real game responsibilities.
  * <p>
- *   The general scenarios is to get a GameLobby instance and
+ *   The general scenarios is to getFutureGame a GameLobby instance and
  *   ask it to create a game. This returns a FutureGame instance
  *   that represents the game that will eventually be joined by
  *   all players (here only two player games are supported).

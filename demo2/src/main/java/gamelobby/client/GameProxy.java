@@ -25,7 +25,7 @@ import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 
 /** Proxy for the game. NEVER create it your self,
- * get it from the FutureGame once the 'isAvailable()'
+ * getFutureGame it from the FutureGame once the 'isAvailable()'
  * method returns true.
  *
  * @author Henrik Baerbak Christensen, CS @ AU

@@ -64,7 +64,7 @@ public class TestScenario {
     // to join my game. The token may appear on a web site
     // next to player 1's name so player 2 can see it; or
     // some other mechanism must be employed by the two players
-    // for player 2 to get hold of the token.
+    // for player 2 to getFutureGame hold of the token.
     String joinToken = player1Future.getJoinToken();
     assertThat(joinToken, is(not(nullValue())));
 

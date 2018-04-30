@@ -1,5 +1,5 @@
-Development Diary
-=================
+Development Diary for multi-object Broker / Demo2
+=================================================
 
 Goal: To develop 'demo2' which uses multiple objects.
 
@@ -716,5 +716,99 @@ And then
      The Game's 1st player is Henrik
      The Game's 2nd player is Pedersen
 
-Done. Commit 
+Done. Commit 380131f
 
+Note that a lot of details are still pending. You may join the same
+game several times which overwrites the second player. Logging is
+missing. But, has little relevance for the Broker of multi-object
+learning objective.
+
+### Iteration 10
+
+We should anti-blob the Invoker. At the moment all methods are handled
+by one large switch in the invoker, and the caching of servant objects
+is also one big ball of mud.
+
+One solution to it, mentioned as demultiplexing or dispatchin in
+Posa-4, is to associate specific 'upcall responsibles' for each type
+on the server side: thereby have type specific invokers. We have three
+types: GameLobby, FutureGame, and Game, so that would lead to three
+sub-invokers.
+
+I have actually prepared somewhat for this. The naming of the method
+
+    public class MarshallingConstant {
+
+      // Method ids for marshalling
+      public static final String GAMELOBBY_CREATE_GAME_METHOD = "gamelobby_create_game_method";
+      public static final String GAMELOBBY_JOIN_GAME_METHOD = "gamelobby_join_game_method";;
+
+      public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = "futuregame_get_join_token_method";
+      public static final String FUTUREGAME_IS_AVAILABLE_METHOD = "futuregame_is_available_method";
+      public static final String FUTUREGAME_GET_GAME_METHOD = "futuregame_get_game_method";
+
+      public static final String GAME_GET_PLAYER_NAME = "game_get_player_name_method";
+    }
+
+follows a pattern which prefix the method name with the type:
+"gamelobby_", "futuregame_", etc.
+
+So the idea is to find the first substring in the operationName given
+to the handleRequest method; and then lookup an appropriate
+subinvoker and delegate to it.
+
+I can use the existing client test cases for this refactoring.
+
+First shot
+
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby);
+    invokerMap.put("gamelobby", gameLobbyInvoker);
+
+And I made some way on this path - to find that it is Do Over! The
+problem is the HashMaps of created objects; they are used across
+invokers! That is the lobby invoker must access the FutureGame map; as
+must the FutureGame invoker. 
+
+Thus it is better to retract to an earlier commit and then FIRST
+introduce an abstraction that encapsulate the maps, make that work,
+and THEN introduce invokers. I name this abstraction
+'ObjectStorage'. Actually it is great abstraction because it also
+loosen the binding between the invokers and the actual object
+persistence implementation - I would use a real cache service like
+MemCached instead, or a SQL database, or...
+
+About 3 hours
+
+Day 4
+-----
+
+The Do Over is made by
+
+  * git checkout <last-good-state>
+  * git branch -b development-do-over
+  
+Now introduce the Storage in this branch, I
+
+  * remove the 'futureGameMap', introduce interface ObjectStorage, and
+    change all refs to futureGameMap to the equivalent
+    
+        objectStorage = new InMemoryObjectStorage();
+
+        objectStorage.put(id, futureGame);
+
+    etc.
+   * Easy to make to work.
+   
+   * Do same procedure with the gameMap.
+   
+The resulting ObjectStorage becomes
+
+    public interface ObjectStorage {
+      void putFutureGame(String objectId, FutureGame futureGame);
+      FutureGame getFutureGame(String objectId);
+
+      void putGame(String objectId, Game game);
+      Game getGame(String objectId);
+    }
+
+All tests pass.
