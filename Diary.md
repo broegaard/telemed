@@ -819,4 +819,7 @@ Next, I merge the real development branch into this branch
 
     git merge development
     
-A bit of conflicts to be handled.
+A bit of conflicts to be handled. Done.
+
+Commit 86c391c introduces the invoker for the lobby.
+

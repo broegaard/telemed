@@ -55,6 +55,8 @@ public class GameLobbyJSONInvoker implements Invoker {
     // operationName prefixes
     Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
     invokerMap.put("gamelobby", gameLobbyInvoker);
+    Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
+    invokerMap.put("futuregame", futureGameInvoker);
   }
 
   @Override
@@ -74,24 +76,11 @@ public class GameLobbyJSONInvoker implements Invoker {
     try {
 
       if (type.equals("gamelobby")) {
-        reply = subInvoker.handleRequest(objectId,operationName,payload);
+        reply = subInvoker.handleRequest(objectId, operationName, payload);
 
-      } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
-        FutureGame futureGame = objectStorage.getFutureGame(objectId);
-        String token = futureGame.getJoinToken();
-        reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
-
-      } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
-        FutureGame futureGame = objectStorage.getFutureGame(objectId);
-        boolean isAvailable = futureGame.isAvailable();
-        reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
-
-      } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
-        FutureGame futureGame = objectStorage.getFutureGame(objectId);
-        Game game = futureGame.getGame();
-        String id = game.getId();
-        reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
-
+      } else if (type.equals("futuregame")) {
+        reply = subInvoker.handleRequest(objectId, operationName, payload);
+        
       } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
         Game game = objectStorage.getGame(objectId);
         if (game == null) {
