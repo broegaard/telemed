@@ -43,6 +43,7 @@ public class GameLobbyJSONInvoker implements Invoker {
   private Gson gson;
   private Map<String, FutureGame> futureGameMap;
   private Map<String, Game> gameMap;
+  private Map<String, Invoker> invokerMap;
 
   public GameLobbyJSONInvoker(GameLobby lobby) {
     this.lobby = lobby;
@@ -50,6 +51,12 @@ public class GameLobbyJSONInvoker implements Invoker {
 
     futureGameMap = new HashMap<>();
     gameMap = new HashMap<>();
+
+    // Create an invoker for each handled type
+    // and put them in a map, binding them to the
+    // operationName prefixes
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, gson);
+    invokerMap.put("gamelobby", gameLobbyInvoker);
   }
 
   @Override
@@ -60,6 +67,11 @@ public class GameLobbyJSONInvoker implements Invoker {
     JsonParser parser = new JsonParser();
     JsonArray array =
             parser.parse(payload).getAsJsonArray();
+
+    // Identify the Dispatcher to use
+    String type = operationName.substring(0, operationName.indexOf('_'));
+    System.out.println(" ---> " + type);
+    Invoker subInvoker = invokerMap.get(type);
 
     try {
 
