@@ -3,7 +3,7 @@ FRDS.Broker Library
 
 From the
 book
-[Flexible, Reliable, Distributed Software* (FRDS)](https://leanpub.com/frds),
+[Flexible, Reliable, Distributed Software (FRDS)](https://leanpub.com/frds),
 by *Henrik Bærbak Christensen / Aarhus University / www.baerbak.com*.
 
 Version history is available [here](version.md).
@@ -18,7 +18,7 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '1.1'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '1.2'
     }
 
 What is this repository for?
