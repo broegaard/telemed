@@ -906,3 +906,5 @@ Day 5:
 
 Just cleaning up code: moving classes into suitable packages; adding
 javadoc; fixing a few wrong 'extends Servant' here and there.
+
+Total: one hour.

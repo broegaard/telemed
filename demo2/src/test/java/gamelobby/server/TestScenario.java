@@ -36,7 +36,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsNull.nullValue;
 
 /**
- * At 24 Apr 2018
+ * TDD of the server side lobby handling.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

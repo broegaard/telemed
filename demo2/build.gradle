@@ -41,7 +41,7 @@ dependencies {
 
 task lobbyServer(type: JavaExec) {
   group 'demo2'
-  description 'Run Socket based GameLobby server'
+  description 'Run GameLobby server (Socket)'
 
   classpath sourceSets.test.runtimeClasspath
   main = 'gamelobby.main.LobbyServer'
