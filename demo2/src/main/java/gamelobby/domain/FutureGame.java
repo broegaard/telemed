@@ -18,19 +18,47 @@
 
 package gamelobby.domain;
 
-import frds.broker.Servant;
-
 /** A 'Future' that represents a Game instance
- * that will eventually be created.
+ * that will eventually be created or has been
+ * created.
+ *
+ * <p>
+ *   Never create FutureGame instances, you have
+ *   to use the GameLobby to create it.
+ * </p>
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface FutureGame extends Servant {
+public interface FutureGame {
+  /** Return the 'join token' which is a string
+   * that the second player uses, to join a given
+   * game.
+   * @return the join token for this future game.
+   */
   String getJoinToken();
 
+  /** Returns if a game is available, that is,
+   * two players are connected to play a game.
+   *
+   * @return false in case only a single player
+   * has joined/created the game; true once
+   * two players have joined.
+   */
   boolean isAvailable();
 
+  /** Get the real game instance.
+   * PRECONDITION: You can only get a
+   * game instance if the method 'isAvailable()'
+   * returns true.
+   *
+   * @return the game instance that this
+   * future game represents.
+   */
   Game getGame();
 
+  /** Get the unique id of this game.
+   *
+   * @return id of this game instance.
+   */
   String getId();
 }

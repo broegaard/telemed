@@ -16,34 +16,40 @@
  *
  */
 
-package gamelobby.server;
+package gamelobby.marshall;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
-import gamelobby.domain.FutureGame;
-import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
+import gamelobby.service.InMemoryObjectStorage;
+import gamelobby.service.ObjectStorage;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
-/** The invoker role for the game lobby system.
+/** The main/root invoker role for the game lobby system.
+ * <p>
+ *   This implementation uses sub-invokers, one for
+ *   each type/class of servant role.
+ * </p>
+ * <p>
+ *   The marshalling format is JSON and GSON is
+ *   used as implementation library.
+ * </p>
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameLobbyJSONInvoker implements Invoker {
+public class GameLobbyRootInvoker implements Invoker {
   private final GameLobby lobby;
   private final ObjectStorage objectStorage;
   private final Map<String, Invoker> invokerMap;
   private Gson gson;
 
-  public GameLobbyJSONInvoker(GameLobby lobby) {
+  public GameLobbyRootInvoker(GameLobby lobby) {
     this.lobby = lobby;
     gson = new Gson();
 
@@ -65,7 +71,7 @@ public class GameLobbyJSONInvoker implements Invoker {
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
 
-    // Identify the Invoker to use
+    // Identify the invoker to use
     String type = operationName.substring(0, operationName.indexOf('_'));
     Invoker subInvoker = invokerMap.get(type);
 

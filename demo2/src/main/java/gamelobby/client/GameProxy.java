@@ -24,7 +24,7 @@ import frds.broker.Requestor;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 
-/** Proxy for the game. NEVER create it your self,
+/** Proxy for the game. Never create it your self,
  * getFutureGame it from the FutureGame once the 'isAvailable()'
  * method returns true.
  *

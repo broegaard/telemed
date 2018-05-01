@@ -16,7 +16,7 @@
  *
  */
 
-package gamelobby.server;
+package gamelobby.marshall;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -26,13 +26,12 @@ import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
+import gamelobby.service.ObjectStorage;
 
 import javax.servlet.http.HttpServletResponse;
 
-/** The Sub Invoker responsible for handling GameLobby
+/** The sub invoker responsible for handling GameLobby
  * method calls.
- *
- * At 26 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

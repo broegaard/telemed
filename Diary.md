@@ -900,3 +900,9 @@ And the invoker map population code becomes:
 Pending? More JavaDoc.
 
 Total time: one hour.
+
+Day 5:
+------
+
+Just cleaning up code: moving classes into suitable packages; adding
+javadoc; fixing a few wrong 'extends Servant' here and there.

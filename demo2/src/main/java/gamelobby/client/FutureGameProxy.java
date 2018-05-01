@@ -25,7 +25,8 @@ import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 
 /**
- * At 25 Apr 2018
+ * The client proxy for the FutureGame. Never create it
+ * by itself, use the game lobby to get one.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

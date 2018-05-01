@@ -16,16 +16,17 @@
  *
  */
 
-package gamelobby.server;
+package gamelobby.service;
 
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
+import gamelobby.service.ObjectStorage;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /** An ObjectStorage that keeps all servant objects in memory.
- * At 30 Apr 2018
+ * Only suitable for single server solutions.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

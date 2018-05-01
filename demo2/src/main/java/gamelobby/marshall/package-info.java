@@ -16,32 +16,15 @@
  *
  */
 
-package gamelobby.domain;
-
-/** The actual Game object that represents some
- * game. Here we just have a game with two players,
- * and the only responsibility is to know the names
- * of player 1 and player 2.
+/** The server side marshalling implementations based on
+ * JSON and GSON library.
+ *
  * <p>
- *   Games cannot be created by themselves, you
- *   have to use the GameLobby to create one.
+ *   The server must be configured with the GameLobbyRootInvoker
+ *   which in turn uses sub-invokers for the three roles in
+ *   the system.
  * </p>
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface Game {
-  /** Get name of given player.
-   * PRECONDITON: only index == 0 and 1 are
-   * allowed.
-   * @param index the player to get the name of,
-   *              either 0 or 1
-   * @return name of the player
-   */
-  String getPlayerName(int index);
-
-  /** Get the unique id of this game object
-   *
-   * @return object id.
-   */
-  String getId();
-}
+package gamelobby.marshall;

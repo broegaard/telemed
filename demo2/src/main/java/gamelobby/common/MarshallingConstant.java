@@ -18,8 +18,14 @@
 
 package gamelobby.common;
 
-/**
- * At 25 Apr 2018
+/** Constants used by the marshalling layer in the
+ * broker pattern to identify object types and method
+ * names.
+ *
+ * NOTE: method names / operations names MUST be formatted
+ * with an underscore between the type prefix and the
+ * method name as this convention is used by the
+ * invoker.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

@@ -19,6 +19,7 @@
 package gamelobby.server;
 
 import frds.broker.Servant;
+
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 import gamelobby.domain.GameLobby;
@@ -27,7 +28,7 @@ import gamelobby.domain.UnknownServantException;
 import java.util.HashMap;
 import java.util.Map;
 
-/** Servant implementation of the lobby.
+/** Servant implementation of the game lobby.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -35,6 +36,10 @@ public class GameLobbyServant implements Servant, GameLobby {
 
   private static GameLobby singleton;
 
+  /** Get the singleton game lobby instance on the
+   * server side.
+   * @return the one and only lobby instance.
+   */
   public static GameLobby getInstance() {
     if (singleton == null)
       singleton = new GameLobbyServant();

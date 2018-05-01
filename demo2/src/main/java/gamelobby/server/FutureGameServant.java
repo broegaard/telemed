@@ -21,8 +21,6 @@ package gamelobby.server;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,6 +38,8 @@ public class FutureGameServant implements FutureGame {
   // Make a global thread safe counter for the join token
   // Note: This will ONLY work in a single-server solution;
   // you cannot load-balance multiple servers using this technique
+  // as server-1 may create the same 'unique' token
+  // as server-2
   private static AtomicInteger gameCounter = new AtomicInteger();
 
   public FutureGameServant(String playerName, int playerLevel) {

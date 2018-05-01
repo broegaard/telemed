@@ -29,7 +29,7 @@ import gamelobby.domain.UnknownServantException;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * At 25 Apr 2018
+ * The client proxy for the game lobby.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

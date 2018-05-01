@@ -39,7 +39,7 @@ import frds.broker.marshall.json.StandardJSONRequestor;
 
 import gamelobby.domain.GameLobby;
 import gamelobby.doubles.LocalMethodCallClientRequestHandler;
-import gamelobby.server.GameLobbyJSONInvoker;
+import gamelobby.marshall.GameLobbyRootInvoker;
 import gamelobby.server.GameLobbyServant;
 
 import javax.servlet.http.HttpServletResponse;
@@ -60,7 +60,7 @@ public class TestClientScenario {
     GameLobby lobby = GameLobbyServant.getInstance();
 
     // Server side broker implementation of the Invoker
-    Invoker invoker = new GameLobbyJSONInvoker(lobby);
+    Invoker invoker = new GameLobbyRootInvoker(lobby);
 
     // Create client side broker implementations, using the local
     // method client request handler to avoid any real IPC layer.

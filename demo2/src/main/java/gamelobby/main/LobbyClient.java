@@ -28,8 +28,8 @@ import gamelobby.domain.GameLobby;
 
 import java.io.IOException;
 
-/**
- * At 26 Apr 2018
+/** A crude manual test case to be run from the command line,
+ * allows a client to create and join games.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

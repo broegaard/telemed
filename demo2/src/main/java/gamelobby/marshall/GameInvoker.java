@@ -16,7 +16,7 @@
  *
  */
 
-package gamelobby.server;
+package gamelobby.marshall;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -24,21 +24,22 @@ import com.google.gson.JsonParser;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
-import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
+import gamelobby.domain.UnknownServantException;
+import gamelobby.service.ObjectStorage;
 
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * At 30 Apr 2018
+ * The sub invoker for game instances.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class FutureGameInvoker implements Invoker {
+public class GameInvoker implements Invoker {
   private final ObjectStorage objectStorage;
   private final Gson gson;
 
-  public FutureGameInvoker(ObjectStorage objectStorage, Gson gson) {
+  public GameInvoker(ObjectStorage objectStorage, Gson gson) {
     this.objectStorage = objectStorage;
     this.gson = gson;
   }
@@ -46,29 +47,22 @@ public class FutureGameInvoker implements Invoker {
   @Override
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
-
     // Demarshall parameters into a JsonArray
     JsonParser parser = new JsonParser();
     JsonArray array =
             parser.parse(payload).getAsJsonArray();
+    if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
+      Game game = objectStorage.getGame(objectId);
+      if (game == null) {
+        throw new UnknownServantException(
+                "Game with object id: " + objectId + " does not exist.");
+      }
 
-    if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
-      String token = futureGame.getJoinToken();
-      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
+      int index = gson.fromJson(array.get(0), Integer.class);
+      String name = game.getPlayerName(index);
+      reply = new ReplyObject(HttpServletResponse.SC_OK, name);
 
-    } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
-      boolean isAvailable = futureGame.isAvailable();
-      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
-
-    } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
-      Game game = futureGame.getGame();
-      String id = game.getId();
-      reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
     }
-
     return reply;
   }
 }

@@ -18,8 +18,6 @@
 
 package gamelobby.domain;
 
-import frds.broker.Servant;
-
 /**
  * The GameLobby is responsible for allowing players to
  * create and join games. One player must create a game,
@@ -29,8 +27,29 @@ import frds.broker.Servant;
  *   the actual Game instance once both players are active.
  * </p>
  */
-public interface GameLobby extends Servant {
+public interface GameLobby {
+  /** Create a new 'future' game to be played.
+   *
+   * @param playerName Name of the player
+   * @param playerLevel Level of play, to represent
+   *                    novice, casual, expert, etc.
+   *                    (not used in this demo)
+   * @return a FutureGame that can be used for the
+   * second player to join the game.
+   */
   FutureGame createGame(String playerName, int playerLevel);
 
+  /** Join an existing game.
+   *
+   * @param playerName Name of the player
+   * @param joinToken A unique string that identifies
+   *                  the FutureGame that this player
+   *                  wants to join. Must be provided by
+   *                  the creating player.
+   * @return a FutureGame that can be used to
+   * get the actual game.
+   * @throws UnknownServantException in case the
+   * join token does not represent any existing game.
+   */
   FutureGame joinGame(String playerName, String joinToken);
 }

@@ -22,11 +22,10 @@ import frds.broker.Invoker;
 import frds.broker.ipc.socket.SocketServerRequestHandler;
 
 import gamelobby.domain.GameLobby;
-import gamelobby.server.GameLobbyJSONInvoker;
+import gamelobby.marshall.GameLobbyRootInvoker;
 import gamelobby.server.GameLobbyServant;
 
 /** Socket based GameLobby server.
- * At 26 Apr 2018
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -40,7 +39,7 @@ public class LobbyServer {
     // Define the server side delegates
 
     GameLobby lobby = GameLobbyServant.getInstance();
-    Invoker invoker = new GameLobbyJSONInvoker(lobby);
+    Invoker invoker = new GameLobbyRootInvoker(lobby);
 
     // Configure a socket based server request handler
     SocketServerRequestHandler ssrh =
