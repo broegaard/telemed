@@ -16,6 +16,10 @@
  *
  */
 
-include 'broker'
-include 'demo'
-include 'demo2'
+/**
+ * The Servant implementation of the three domain roles:
+ * GameLobby, FutureGame, Game.
+ *
+ * @author Henrik Baerbak Christensen, CS @ AU
+ */
+package gamelobby.server;

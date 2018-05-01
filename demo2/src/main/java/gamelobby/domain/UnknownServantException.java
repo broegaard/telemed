@@ -16,6 +16,20 @@
  *
  */
 
-include 'broker'
-include 'demo'
-include 'demo2'
+package gamelobby.domain;
+
+/** Exception thrown in case an request for an
+ * unknown servant object is made.
+ *
+ *
+ * @author Henrik Baerbak Christensen, CS @ AU
+ */
+public class UnknownServantException extends RuntimeException {
+  public UnknownServantException(String message) {
+    super(message);
+  }
+
+  public UnknownServantException(String message, Throwable cause) {
+    super(message, cause);
+  }
+}

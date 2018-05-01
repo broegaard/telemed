@@ -16,6 +16,9 @@
  *
  */
 
-include 'broker'
-include 'demo'
-include 'demo2'
+/**
+ * Server side services, the ObjectStorage.
+ *
+ * @author Henrik Baerbak Christensen, CS @ AU
+ */
+package gamelobby.service;

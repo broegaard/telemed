@@ -29,6 +29,9 @@ import frds.broker.ReplyObject;
 import frds.broker.RequestObject;
 import frds.broker.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Implementation of the Client Request Handler using simple sockets.
  * As in HTTP protocol 1.0 days, the socket is opened and closed

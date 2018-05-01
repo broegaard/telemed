@@ -16,6 +16,15 @@
  *
  */
 
-include 'broker'
-include 'demo'
-include 'demo2'
+/** The server side marshalling implementations based on
+ * JSON and GSON library.
+ *
+ * <p>
+ *   The server must be configured with the GameLobbyRootInvoker
+ *   which in turn uses sub-invokers for the three roles in
+ *   the system.
+ * </p>
+ *
+ * @author Henrik Baerbak Christensen, CS @ AU
+ */
+package gamelobby.marshall;

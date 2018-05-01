@@ -54,7 +54,7 @@ public class StandardJSONRequestor implements Requestor {
 
     // First, verify that the request succeeded
     if (!replyFrom.isSuccess()) {
-      throw new IPCException(
+      throw new IPCException(replyFrom.getStatusCode(),
           "Failure during client requesting operation '"
                   + operationName
                   + "'. ErrorMessage is: "
