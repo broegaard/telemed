@@ -1,7 +1,18 @@
 FRDS.Broker Library
 ==============
 
-From the book
+The **FRDS.Broker** library is a teaching oriented implementation of
+the *Broker* architectural pattern for distributed remote method
+invocation. It defines the central roles of the pattern and provides
+implementations of those roles that are not domain/use case
+specific. It provides a JSON based (GSon library) *Requestor*
+implementation, and implementations of the *ClientRequestHandler* and
+*ServerRequestHandler* roles in both a Java socket based and a
+Http/URI tunneling based variants. The latter us based upon the
+UniRest and Spark-Java libraries.
+
+The **Broker** pattern and the source code is explained in detail in
+the book
 [Flexible, Reliable, Distributed Software (FRDS)](https://leanpub.com/frds),
 by *Henrik Bærbak Christensen / Aarhus University / www.baerbak.com*.
 
