@@ -1,8 +1,7 @@
 FRDS.Broker Library
 ==============
 
-From the
-book
+From thebook
 [Flexible, Reliable, Distributed Software (FRDS)](https://leanpub.com/frds),
 by *Henrik Bærbak Christensen / Aarhus University / www.baerbak.com*.
 
