@@ -64,7 +64,6 @@ public interface TeleMed {
   List<TeleObservation> getObservationsFor(String patientId, 
 	  TimeInterval interval);
 
-  
   /**
    * Return the tele observation with the assigned ID
    * 

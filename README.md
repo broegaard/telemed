@@ -53,6 +53,9 @@ This repository serves multiple purposes.
      objects on the server, and handle multi-object method
      dispatch. Folder: *demo2*.
   
+  4. It has the source code of an implementation of TeleMed that uses
+     REST instead of Broker for communication. Folder: *demo-rest*.
+  
 ### TeleMed
 
 The TeleMed system is a small distributed system in which patients
