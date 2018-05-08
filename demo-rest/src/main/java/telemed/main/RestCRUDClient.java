@@ -23,7 +23,7 @@ public class RestCRUDClient {
     System.out.println("RestCRUDClient: Doing the Create Read Update Delete operations.");
     String host = args[0];
     int port = Integer.parseInt(args[1]);
-    boolean no_delete = args[2].equals("true");
+    boolean delete = args[2].equals("true");
     
     TeleMed teleMed = null;
     // Create client side delegates
@@ -52,7 +52,7 @@ public class RestCRUDClient {
     to = teleMed.getObservation(id);
     System.out.println(" -> New value: "+to);
     
-    if (! no_delete) {
+    if (delete) {
       // DELETE
       System.out.println("Delete: Perform DELETE of id: "+id);
       isValid = teleMed.delete(id);
@@ -67,10 +67,10 @@ public class RestCRUDClient {
   }
 
   private static void explainAndDie() {
-    System.out.println("Usage: RestCRUDClient {host} {port} {no-delete}");
+    System.out.println("Usage: RestCRUDClient {host} {port} {delete}");
     System.out.println("       host = name/ip of host");
     System.out.println("       port = port number of server");
-    System.out.println("       no-delete = 'true'|'false'; if 'true' the observation will not be deleted");
+    System.out.println("       delete = 'true'|'false'; if 'true' the observation will be deleted again");
     System.exit(-1);
   }
 }

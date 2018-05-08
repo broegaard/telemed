@@ -1,5 +1,6 @@
 package telemed.rest;
 
+import frds.broker.ClientProxy;
 import frds.broker.IPCException;
 import frds.broker.ipc.http.MimeMediaType;
 import telemed.domain.TeleMed;
@@ -23,7 +24,7 @@ import telemed.ipc.http.Constants;
  * @author Henrik Baerbak Christensen, Aarhus University.
  *
  */
-public class TeleMedRESTProxy implements TeleMed {
+public class TeleMedRESTProxy implements TeleMed, ClientProxy {
 
     private String baseURL;
     private Gson gson;
@@ -113,7 +114,7 @@ public class TeleMedRESTProxy implements TeleMed {
         // TODO: Verify returned status code
         int statusCode = jsonResponse.getStatus();
 
-        return statusCode == HttpServletResponse.SC_OK;
+        return statusCode == HttpServletResponse.SC_CREATED;
     }
 
     @Override

@@ -58,5 +58,5 @@ task demoRest(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.RestCRUDClient'
-  args host, port, nodelete
+  args host, port, delete
 }
