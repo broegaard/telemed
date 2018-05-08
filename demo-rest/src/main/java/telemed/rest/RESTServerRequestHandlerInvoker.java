@@ -140,10 +140,11 @@ public class RESTServerRequestHandlerInvoker
     });
 
     // GET HTML = getObservationFor
-    String getHtmlRoute = "/"+ Constants.BLOODPRESSURE_PATH + ":patientId";
+    String getHtmlRoute = "/"+ Constants.BLOODPRESSURE_PATH + "/for/:patientId";
 
     get(getHtmlRoute, (req, res) -> {
       String patientId = req.params(":patientId");
+      System.out.println("--> FOR "+patientId);
 
       List<TeleObservation> theList = teleMed.getObservationsFor(patientId,
           TimeInterval.LAST_DAY);

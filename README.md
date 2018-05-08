@@ -151,6 +151,24 @@ And let 'Findus' join the game, using the provided game token `game-1`
      The Game's 1st player is Pedersen
      The Game's 2nd player is Findus
 
+How do I run Demo-REST?
+---
+
+Start the REST server
+
+    gradle serverRest
+    
+The client just executes a CRUD scenario, most of the data is
+hardwired.
+
+    gradle demoRest
+    
+You can avoid the delete by
+
+    gradle demoRest -Pdelete=false
+    
+In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-0001/]()
+
 
 Credits
 ===
