@@ -109,12 +109,12 @@ public class RESTServerRequestHandlerInvoker
 
       boolean isValid = teleMed.correct(uniqueId, teleObs);
 
+      // According to RFC 7231, PUT returns 200 OK
       int lastStatusCode = HttpServletResponse.SC_OK;
       if (!isValid) {
         lastStatusCode = HttpServletResponse.SC_NOT_FOUND;
       }
 
-      // Normally: 200 OK
       res.status(lastStatusCode);
       res.type(MimeMediaType.APPLICATION_JSON);
 

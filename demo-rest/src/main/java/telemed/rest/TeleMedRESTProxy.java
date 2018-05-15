@@ -42,7 +42,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         String path = Constants.BLOODPRESSURE_PATH;
         try {
             jsonResponse = Unirest.post(baseURL+path).
-                    header("accept", MimeMediaType.APPLICATION_JSON).
+                    header("Accept", MimeMediaType.APPLICATION_JSON).
                     header("Content-type", MimeMediaType.APPLICATION_JSON).
                     body(payload).asJson();
         } catch (UnirestException e) {
@@ -71,7 +71,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         String path = Constants.BLOODPRESSURE_PATH + uniqueId;
         try {
             jsonResponse = Unirest.get(baseURL+path).
-                    header("accept", MimeMediaType.APPLICATION_JSON).
+                    header("Accept", MimeMediaType.APPLICATION_JSON).
                     header("Content-type", MimeMediaType.APPLICATION_JSON).asJson();
         } catch (UnirestException e) {
             throw new IPCException("Unitest GET failed", e);
@@ -104,7 +104,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         String path = Constants.BLOODPRESSURE_PATH + uniqueId;
         try {
             jsonResponse = Unirest.put(baseURL+path).
-                    header("accept", MimeMediaType.APPLICATION_JSON).
+                    header("Accept", MimeMediaType.APPLICATION_JSON).
                     header("Content-type", MimeMediaType.APPLICATION_JSON).
                     body(payload).asJson();
         } catch (UnirestException e) {
@@ -114,7 +114,8 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         // TODO: Verify returned status code
         int statusCode = jsonResponse.getStatus();
 
-        return statusCode == HttpServletResponse.SC_CREATED;
+        // According to RFC 7231, PUT returns 200 OK
+        return statusCode == HttpServletResponse.SC_OK;
     }
 
     @Override
@@ -124,7 +125,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         HttpResponse<JsonNode> jsonResponse = null;
         try {
             jsonResponse = Unirest.delete(baseURL+path).
-                    header("accept", MimeMediaType.APPLICATION_JSON).
+                    header("Accept", MimeMediaType.APPLICATION_JSON).
                     header("Content-type", MimeMediaType.APPLICATION_JSON).
                     asJson();
         } catch (UnirestException e) {

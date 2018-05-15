@@ -13,7 +13,7 @@ import telemed.rest.TeleMedRESTProxy;
  */
 public class RestCRUDClient {
   
-  private static final String NANCY_CPR = "251248-0001";
+  private static final String NANCY_CPR = "251248-1234";
 
   public static void main(String[] args) {
     if (args.length < 3) {

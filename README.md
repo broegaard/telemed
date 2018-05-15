@@ -151,7 +151,7 @@ And let 'Findus' join the game, using the provided game token `game-1`
      The Game's 1st player is Pedersen
      The Game's 2nd player is Findus
 
-How do I run Demo-REST?
+How do I run REST based TeleMed?
 ---
 
 Start the REST server
@@ -167,7 +167,7 @@ You can avoid the delete by
 
     gradle demoRest -Pdelete=false
     
-In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-0001/]()
+In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-1234/](localhost:4666/bp/for/251248-1234/).
 
 
 Credits
