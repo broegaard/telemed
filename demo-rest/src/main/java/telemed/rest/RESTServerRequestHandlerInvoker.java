@@ -48,6 +48,13 @@ public class RESTServerRequestHandlerInvoker
   }
 
   @Override
+  public void setPortAndInvoker(int port, Invoker invoker) {
+    this.port = port;
+    // invoker not relevant.
+  }
+
+
+  @Override
   public void start() {
     // Set the port to listen to
     port(port);
@@ -166,6 +173,7 @@ public class RESTServerRequestHandlerInvoker
   public void stop() {
     stop();
   }
+
 
   @Override
   public ReplyObject handleRequest(String objectId, String operationName, String payload) {

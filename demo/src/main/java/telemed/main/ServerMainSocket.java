@@ -70,7 +70,8 @@ public class ServerMainSocket {
 
     // Configure a socket based server request handler
     SocketServerRequestHandler ssrh =
-            new SocketServerRequestHandler(port, invoker);
+            new SocketServerRequestHandler();
+    ssrh.setPortAndInvoker(port, invoker);
     
     // Welcome
     // Welcome

@@ -42,4 +42,11 @@ public interface ServerRequestHandler {
    *
    */
   void stop();
+
+  /** Set the port that the request handler should listen
+   * to; and define invoker to do the upcall to.
+   * @param port the TPC/IP port number to listen to.
+   * @param invoker the Invoker to delegate to.
+   */
+  void setPortAndInvoker(int port, Invoker invoker);
 }

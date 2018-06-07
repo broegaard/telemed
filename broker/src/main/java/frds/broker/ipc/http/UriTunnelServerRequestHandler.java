@@ -41,23 +41,35 @@ import org.slf4j.LoggerFactory;
 public class UriTunnelServerRequestHandler
         implements ServerRequestHandler {
 
+  public static final String DEFAULT_URI_TUNNEL_PATH = "tunnel";
+
   protected final Gson gson;
-  protected final Invoker invoker;
-  protected final int port;
+  protected Invoker invoker;
+  protected int port;
   protected int lastStatusCode;
   protected String lastVerb;
-  private final String tunnelRoute;
-  private final Logger logger;
+  protected String tunnelRoute;
+  protected final Logger logger;
 
+  /** Create a URI Tunnel based server request handler,
+   * defaulting to path '/tunnel'. Remember to set port
+   * and Invoker before starting the server process.
+   */
+  public UriTunnelServerRequestHandler() {
+    gson = new Gson();
+    logger = LoggerFactory.getLogger(UriTunnelServerRequestHandler.class);
+    tunnelRoute = DEFAULT_URI_TUNNEL_PATH;
+  }
+  @Override
+  public void setPortAndInvoker(int port, Invoker invoker) {
+    this.port = port; this.invoker = invoker;
+  }
 
   public UriTunnelServerRequestHandler(Invoker invoker,
                                        int port, String tunnelRoute) {
-    this.invoker = invoker;
-    this.port = port;
+    this();
+    setPortAndInvoker(port, invoker);
     this.tunnelRoute = tunnelRoute;
-    gson = new Gson();
-
-    logger = LoggerFactory.getLogger(UriTunnelServerRequestHandler.class);
   }
 
   @Override
@@ -94,7 +106,7 @@ public class UriTunnelServerRequestHandler
   public void stop() {
     // Pending
   }
-  
+
   /**
    * Return status code of last operation. A test retrieval interface.
    * 

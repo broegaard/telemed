@@ -118,8 +118,8 @@ To fetch the last week's data for patient with id=87, issue
     
 If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
-HTTP based version can also be viewed from the web page
-[http://localhost:4567/bp/pid=87]
+HTTP based version can also be viewed from the web page (last part of
+URI must match requested patient id) [http://localhost:4567/bp/87]
     
 Review `gradle.properties` for default values for the arguments to the
 server and the client.

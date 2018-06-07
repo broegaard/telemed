@@ -35,7 +35,7 @@ public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
   private final Gson gson;
-  private String baseURL;
+  protected String baseURL;
   private final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
