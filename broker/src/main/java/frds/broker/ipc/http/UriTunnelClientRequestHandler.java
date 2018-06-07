@@ -35,7 +35,7 @@ public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
   private final Gson gson;
-  private final String baseURL;
+  private String baseURL;
   private final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
@@ -50,6 +50,26 @@ public class UriTunnelClientRequestHandler
     path = pathForPost;
     gson = new Gson();
   }
+
+  /**
+   * Construct a URI Tunnel based CRH. Will communicate
+   * using POST messages over http://localhost:4567/tunnel.
+   * Remember to call setServer before the first invocation
+   * to rewire to another server.
+   */
+
+  public UriTunnelClientRequestHandler() {
+    baseURL = "http://localhost:4567/";
+    path = "tunnel";
+    gson = new Gson();
+  }
+
+  @Override
+  public void setServer(String hostname, int port) {
+    baseURL = "http://" + hostname + ":" + port + "/";
+}
+
+
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {

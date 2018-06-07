@@ -38,6 +38,8 @@ public class HomeClientSocket extends HomeClientTemplate {
 
   @Override
   public ClientRequestHandler createClientRequestHandler(String hostname, int port) {
+    ClientRequestHandler crh = new SocketClientRequestHandler();
+    crh.setServer(hostname, port);
     return new SocketClientRequestHandler(hostname, port);
   }
 
