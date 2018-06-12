@@ -104,7 +104,13 @@ public class UriTunnelServerRequestHandler
 
   @Override
   public void stop() {
-    // Pending
+    spark.Spark.stop();
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() + ", port " + port +
+        ", root path: '" + tunnelRoute + "'";
   }
 
   /**

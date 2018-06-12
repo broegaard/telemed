@@ -32,7 +32,7 @@ public class RequestObject {
   /* Include version identity of payload to allow
    * marshalling robustness in future formats.
    */
-  private final int versionIdentity = Constants.MARSHALLING_VERSION;
+  private final int versionIdentity = Versioning.MARSHALLING_VERSION;
 
   public RequestObject( String objectId, String operationName, String payload) {
     this.objectId = objectId;
