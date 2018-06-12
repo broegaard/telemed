@@ -118,4 +118,9 @@ public class SocketClientRequestHandler
     // every request
   }
 
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() +
+        ", " + hostname + ':' + port;
+  }
 }

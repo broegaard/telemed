@@ -37,7 +37,7 @@ public class ReplyObject {
   /* Include version identity of payload to allow
    * marshalling robustness in future formats.
    */
-  private int versionIdentity = Constants.MARSHALLING_VERSION;
+  private int versionIdentity = Versioning.MARSHALLING_VERSION;
 
   /**
    * Create a reply with the given status code. If the status code represents a

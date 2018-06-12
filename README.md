@@ -28,7 +28,7 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '1.2'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '1.4'
     }
 
 What is this repository for?
@@ -46,7 +46,8 @@ This repository serves multiple purposes.
   2. It has the source code of the TeleMed system, which is used in
        the FRDS book to show the Broker pattern in action, and
        contains tests of both the Broker and TeleMed implementation.
-       Folder: *demo*.
+       Folder: *demo*. Note that his project also contains core test
+       code for the broker library.
        
   3. It has the source code (and development diary) of the GameLobby
      system, which is used in FRDS to show how to create remote

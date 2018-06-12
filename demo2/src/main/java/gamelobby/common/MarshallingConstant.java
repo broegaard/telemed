@@ -18,7 +18,7 @@
 
 package gamelobby.common;
 
-/** Constants used by the marshalling layer in the
+/** Versioning used by the marshalling layer in the
  * broker pattern to identify object types and method
  * names.
  *

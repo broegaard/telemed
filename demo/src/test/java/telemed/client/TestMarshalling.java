@@ -28,7 +28,7 @@ import frds.broker.Requestor;
 import frds.broker.marshall.json.StandardJSONRequestor;
 import org.junit.Before;
 import org.junit.Test;
-import frds.broker.Constants;
+import frds.broker.Versioning;
 import telemed.domain.TeleMed;
 import telemed.domain.TeleObservation;
 import telemed.doubles.FakeObjectXDSDatabase;
@@ -73,20 +73,27 @@ public class TestMarshalling {
 
   @Test
   public void shouldVerifyMarshallingFormat() {
+    // Change marshalling format to a new version
+    Versioning.SetMarshallingFormatVersion(7);
+
     // Nancy uploads a single observation
     teleMed.processAndStore(teleObs1);
 
     // 'smoke testing' the request and reply
     RequestObject req = clientRequestHandler.getLastRequest();
     assertThat(req.getObjectId(), is(HelperMethods.NANCY_ID));
-    assertThat(req.getVersionIdentity(), is(Constants.MARSHALLING_VERSION));
+    assertThat(req.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
     // some 'smoke testing' of the payload
     assertThat(req.getPayload(), containsString("\"systolic\":{\"value\":120.0,"));
 
     ReplyObject rep = clientRequestHandler.getLastReply();
     assertThat(rep.getStatusCode(), is(HttpServletResponse.SC_CREATED));
-    assertThat(rep.getVersionIdentity(), is(Constants.MARSHALLING_VERSION));
+    assertThat(rep.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
     assertThat(rep.getPayload(), is("\"uid-1\""));
+  }
+
+  @Test
+  public void shouldVerifyToString() {
   }
 
 }

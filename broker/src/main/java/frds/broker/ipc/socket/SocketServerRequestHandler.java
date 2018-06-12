@@ -152,4 +152,8 @@ public class SocketServerRequestHandler
     isStopped = true; // Will only stop after next message...
   }
 
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() + ", port " + port;
+  }
 }
