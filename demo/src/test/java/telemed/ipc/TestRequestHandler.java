@@ -77,6 +77,7 @@ public class TestRequestHandler implements Invoker {
     assertThat(reply.isSuccess(), is(true));
     assertThat(reply.getPayload(), is(MARSHALLED_REPLY_OBJECT));
 
+    crh.close();
     srh.stop();
   }
 
@@ -106,6 +107,7 @@ public class TestRequestHandler implements Invoker {
     assertThat(reply.isSuccess(), is(true));
     assertThat(reply.getPayload(), is(MARSHALLED_REPLY_OBJECT));
 
+    crh.close();
     srh.stop();
   }
 
