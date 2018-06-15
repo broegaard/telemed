@@ -44,4 +44,18 @@ public interface Game {
    * @return object id.
    */
   String getId();
+
+  /** Get the name of the player whose turn
+   * it is.
+   * @return name of player in turn
+   */
+  String getPlayerInTurn();
+
+  /** "Make a move" - the only action provided
+   * here is that the player in turn changes
+   * back and forth between the two players.
+   * Note: No validation is made that it is
+   * the 'right' player who makes a 'move'!
+   */
+  void move();
 }

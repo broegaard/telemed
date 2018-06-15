@@ -50,4 +50,18 @@ public class GameProxy implements Game, ClientProxy {
   public String getId() {
     return objectId;
   }
+
+  @Override
+  public String getPlayerInTurn() {
+    String name = requestor.sendRequestAndAwaitReply(objectId,
+        MarshallingConstant.GAME_GET_PLAYER_IN_TURN, String.class);
+    return name;
+  }
+
+  @Override
+  public void move() {
+    requestor.sendRequestAndAwaitReply(objectId,
+        MarshallingConstant.GAME_MOVE, String.class);
+
+  }
 }

@@ -45,4 +45,6 @@ public class MarshallingConstant {
   public static final String FUTUREGAME_GET_GAME_METHOD = FUTUREGAME_PREFIX + "_get_game_method";
 
   public static final String GAME_GET_PLAYER_NAME = GAME_PREFIX + "_get_player_name_method";
+  public static final String GAME_GET_PLAYER_IN_TURN = GAME_PREFIX + "_get_player_in_turn_method";
+  public static final String GAME_MOVE = GAME_PREFIX + "_move_method";
 }
