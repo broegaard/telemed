@@ -153,7 +153,7 @@ And let 'Findus' join the game, using the provided game token `game-1` as id:
      The Game's 2nd player is Findus
 
 Finally, once the game is created clients can make 'moves' (here id is
-assigned to the real game id):
+assigned to the real game id that was provided in the join output):
 
     csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
     LobbyClient: Asked to do operation move for player Pedersen
