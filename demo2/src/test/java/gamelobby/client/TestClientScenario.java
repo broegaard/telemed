@@ -108,12 +108,24 @@ public class TestClientScenario {
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
     assertThat(gameForPlayer2.getPlayerInTurn(), is("Pedersen"));
 
+    // And the ID's of the games are the same
+    assertThat(gameForPlayer1.getId(), is(gameForPlayer2.getId()));
+
     // Make a state change, player one makes a move
     gameForPlayer1.move();
 
     // And verify turn is now the opposite player
     assertThat(gameForPlayer1.getPlayerInTurn(), is("Findus"));
     assertThat(gameForPlayer2.getPlayerInTurn(), is("Findus"));
+
+    // Finally, we may need to talk with our game instance without
+    // having to get the instance from the future game; like
+    // Findus accidentially closes the program and then wants
+    // to rejoin after restarting.
+    String idOfGameGivenToMeByMyOpponent = gameForPlayer1.getId();
+    Game theSameGame = new GameProxy(idOfGameGivenToMeByMyOpponent,
+        requestor);
+    assertThat(theSameGame.getPlayerInTurn(), is("Findus"));
   }
 
   @Test

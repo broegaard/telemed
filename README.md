@@ -143,14 +143,34 @@ Let user 'Pedersen' create a game
     LobbyClient: Asked to do operation create for player Pedersen
      Future created, the join token is game-1
 
-And let 'Findus' join the game, using the provided game token `game-1`
+And let 'Findus' join the game, using the provided game token `game-1` as id:
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Ptoken=game-1 -Pplayer=Findus -Phost=10.11.96.127
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
     LobbyClient: Asked to do operation join for player Findus
      Future joined, available is true
-     The Game id is 609833b2-bf8d-421c-beb1-9aac1464aac2
+     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
      The Game's 1st player is Pedersen
      The Game's 2nd player is Findus
+
+Finally, once the game is created clients can make 'moves' (here id is
+assigned to the real game id):
+
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    LobbyClient: Asked to do operation move for player Pedersen
+    The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    The Game's PLAYER IN TURN is Pedersen
+    A move was made, and now PLAYER IN TURN is Findus
+    
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    LobbyClient: Asked to do operation move for player Pedersen
+    The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    The Game's PLAYER IN TURN is Findus
+    A move was made, and now PLAYER IN TURN is Pedersen
+
+Note: The current oversimplified design does not have a notion of
+client identity. Ideally, two clients ought to be running, one
+handling Pedersen, and the other Findus, and the server should be able
+to tell which is which. This is left as an exercise for the reader :).
 
 How do I run REST based TeleMed?
 ---

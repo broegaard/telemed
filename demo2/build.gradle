@@ -53,5 +53,5 @@ task lobbyClient(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'gamelobby.main.LobbyClient'
-  args op, player, token, host
+  args op, player, id, host
 }
