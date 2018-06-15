@@ -96,16 +96,36 @@ public class TestClientScenario {
     assertThat(player1Future.isAvailable(), is(true));
     assertThat(player2Future.isAvailable(), is(true));
 
-    // And they can manipulate it; not really interesting as
-    // our focus it just the multiple objects exchanged.
+    // And they can make state changes and read game state to the game
     Game gameForPlayer1 = player1Future.getGame();
     assertThat(gameForPlayer1.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer1.getPlayerName(1), is("Findus"));
+    assertThat(gameForPlayer1.getPlayerInTurn(), is("Pedersen"));
 
     // Our second player sees the same game state
-    Game gameForPlayer2= player2Future.getGame();
+    Game gameForPlayer2 = player2Future.getGame();
     assertThat(gameForPlayer2.getPlayerName(0), is("Pedersen"));
     assertThat(gameForPlayer2.getPlayerName(1), is("Findus"));
+    assertThat(gameForPlayer2.getPlayerInTurn(), is("Pedersen"));
+
+    // And the ID's of the games are the same
+    assertThat(gameForPlayer1.getId(), is(gameForPlayer2.getId()));
+
+    // Make a state change, player one makes a move
+    gameForPlayer1.move();
+
+    // And verify turn is now the opposite player
+    assertThat(gameForPlayer1.getPlayerInTurn(), is("Findus"));
+    assertThat(gameForPlayer2.getPlayerInTurn(), is("Findus"));
+
+    // Finally, we may need to talk with our game instance without
+    // having to get the instance from the future game; like
+    // Findus accidentially closes the program and then wants
+    // to rejoin after restarting.
+    String idOfGameGivenToMeByMyOpponent = gameForPlayer1.getId();
+    Game theSameGame = new GameProxy(idOfGameGivenToMeByMyOpponent,
+        requestor);
+    assertThat(theSameGame.getPlayerInTurn(), is("Findus"));
   }
 
   @Test

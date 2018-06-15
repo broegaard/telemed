@@ -51,18 +51,31 @@ public class GameInvoker implements Invoker {
     JsonParser parser = new JsonParser();
     JsonArray array =
             parser.parse(payload).getAsJsonArray();
-    if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
-      Game game = objectStorage.getGame(objectId);
-      if (game == null) {
-        throw new UnknownServantException(
-                "Game with object id: " + objectId + " does not exist.");
-      }
 
+    Game game = getGameOrThrowUnknownException(objectId);
+
+    if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_NAME)) {
       int index = gson.fromJson(array.get(0), Integer.class);
       String name = game.getPlayerName(index);
       reply = new ReplyObject(HttpServletResponse.SC_OK, name);
 
+    } else if (operationName.equals(MarshallingConstant.GAME_GET_PLAYER_IN_TURN)) {
+      String name = game.getPlayerInTurn();
+      reply = new ReplyObject(HttpServletResponse.SC_OK, name);
+
+    } else if (operationName.equals(MarshallingConstant.GAME_MOVE)) {
+      game.move();
+      reply = new ReplyObject(HttpServletResponse.SC_OK, null);
     }
     return reply;
+  }
+
+  private Game getGameOrThrowUnknownException(String objectId) {
+    Game game = objectStorage.getGame(objectId);
+    if (game == null) {
+      throw new UnknownServantException(
+          "Game with object id: " + objectId + " does not exist.");
+    }
+    return game;
   }
 }

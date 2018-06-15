@@ -18,6 +18,7 @@
 
 package gamelobby.server;
 
+import frds.broker.Servant;
 import gamelobby.domain.Game;
 
 import java.util.UUID;
@@ -28,7 +29,8 @@ import java.util.UUID;
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameServant implements Game {
+public class GameServant implements Game, Servant {
+  private int playerInTurn;
   private String[] playerList = new String[2];
   private String objectId;
 
@@ -38,6 +40,9 @@ public class GameServant implements Game {
 
     // Assign unique id
     objectId = UUID.randomUUID().toString();
+
+    // And let player one go first
+    playerInTurn = 0;
   }
 
   @Override
@@ -48,5 +53,16 @@ public class GameServant implements Game {
   @Override
   public String getId() {
     return objectId;
+  }
+
+  @Override
+  public String getPlayerInTurn() {
+    return getPlayerName(playerInTurn);
+  }
+
+  @Override
+  public void move() {
+    // alternate between value 0 and 1
+    playerInTurn = (playerInTurn + 1) % 2;
   }
 }
