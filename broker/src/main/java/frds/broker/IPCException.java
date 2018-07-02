@@ -21,7 +21,7 @@ package frds.broker;
 /** The superclass of any exceptions occurring during IPC between
  * client and server.
  * <p>
- *   To facilitate communication about root causes, http
+ *   To facilitate communication about root causes, ipc
  *   status codes can be used using one of the constructors.
  * </p>
  */

@@ -39,18 +39,32 @@ import frds.broker.ServerRequestHandler;
  */
 public class SocketServerRequestHandler
         implements Runnable, ServerRequestHandler {
-  private final int portNumber;
+  private int port;
   private ServerSocket serverSocket = null;
-  private final Invoker invoker;
+  private Invoker invoker = null;
   private final Gson gson;
 
-  public SocketServerRequestHandler(int portno, Invoker invoker) {
-    portNumber = portno;
-    this.invoker = invoker;
+  /** Construct a socket based server request handler.
+   * Remember to set the invoker delegate and port before
+   * starting the process.
+   */
+  public SocketServerRequestHandler() {
     gson = new Gson();
   }
 
+  @Override
+  public void setPortAndInvoker(int port, Invoker invoker) {
+    this.port = port;
+    this.invoker = invoker;
+  }
+
+  public SocketServerRequestHandler(int port, Invoker invoker) {
+    this();
+    setPortAndInvoker(port, invoker);
+  }
+
   private boolean isStopped;
+
   @Override
   public void run() {
     openServerSocket();
@@ -116,12 +130,12 @@ public class SocketServerRequestHandler
   
   private void openServerSocket() {
     try {
-      this.serverSocket = new ServerSocket(this.portNumber);
+      this.serverSocket = new ServerSocket(this.port);
       System.out.println("Socket accepting on port: "
-              + portNumber);
+              + port);
     } catch (IOException e) {
       System.out.println("Failed to open server socket at port "
-              + portNumber);
+              + port);
       System.exit(-1);
     } 
   }
@@ -136,5 +150,10 @@ public class SocketServerRequestHandler
   @Override
   public void stop() {
     isStopped = true; // Will only stop after next message...
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() + ", port " + port;
   }
 }

@@ -40,16 +40,30 @@ import javax.servlet.http.HttpServletResponse;
 public class SocketClientRequestHandler
         implements ClientRequestHandler {
 
-  private final String hostname;
-  private final int port;
+  private String hostname;
+  private int port;
   private PrintWriter out;
   private BufferedReader in;
   private final Gson gson;
 
-  public SocketClientRequestHandler(String hostname, int port) {
+  /** Create the CRH. Remember to use
+   * 'setServer' before any sendToServer
+   * calls.
+   */
+
+  public SocketClientRequestHandler() {
+    gson = new Gson();
+  }
+
+  @Override
+  public void setServer(String hostname, int port) {
     this.hostname = hostname;
     this.port = port;
-    gson = new Gson();
+  }
+
+  public SocketClientRequestHandler(String hostname, int port) {
+    this();
+    setServer(hostname, port);
   }
 
   @Override
@@ -104,4 +118,9 @@ public class SocketClientRequestHandler
     // every request
   }
 
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() +
+        ", " + hostname + ':' + port;
+  }
 }

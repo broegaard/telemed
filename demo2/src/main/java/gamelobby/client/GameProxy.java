@@ -24,9 +24,13 @@ import frds.broker.Requestor;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 
-/** Proxy for the game. Never create it your self,
- * getFutureGame it from the FutureGame once the 'isAvailable()'
- * method returns true.
+/** Proxy for the game. In the normal scenario, you
+ * do not create it yourself, but go through the
+ * GameLobby to get a FutureGame which will create
+ * a game for you. One exception is in case you
+ * have an object id for a valid, running, game
+ * on the server in which case you can create
+ * the proxy directly.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
@@ -34,7 +38,7 @@ public class GameProxy implements Game, ClientProxy {
   private final String objectId;
   private final Requestor requestor;
 
-  GameProxy(String objectId, Requestor requestor) {
+  public GameProxy(String objectId, Requestor requestor) {
     this.objectId = objectId;
     this.requestor = requestor;
   }
@@ -49,5 +53,19 @@ public class GameProxy implements Game, ClientProxy {
   @Override
   public String getId() {
     return objectId;
+  }
+
+  @Override
+  public String getPlayerInTurn() {
+    String name = requestor.sendRequestAndAwaitReply(objectId,
+        MarshallingConstant.GAME_GET_PLAYER_IN_TURN, String.class);
+    return name;
+  }
+
+  @Override
+  public void move() {
+    requestor.sendRequestAndAwaitReply(objectId,
+        MarshallingConstant.GAME_MOVE, String.class);
+
   }
 }

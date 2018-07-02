@@ -19,3 +19,4 @@
 include 'broker'
 include 'demo'
 include 'demo2'
+include 'demo-rest'

@@ -17,7 +17,7 @@
  */
 
 /*
- * Build file for Broker Demo 2 applications, by Henrik Baerbak Christensen.
+ * Build file for REST TeleMed applications, by Henrik Baerbak Christensen.
  */
 
 apply plugin: 'java'
@@ -28,7 +28,11 @@ repositories {
 }
 
 dependencies {
+  // Get marker interfaces from Broker
   compile project(':broker')
+  // Get domain code from TeleMed in demo subproject
+  compile project(':demo')
+  
   // Bind SLF4J it to the Log4J logging framework
   compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
 
@@ -37,21 +41,22 @@ dependencies {
 }
 
 
-// === Demo of HTTP/URI Tunnel based GameLobby system
+// === Demo of REST based TeleMed system
 
-task lobbyServer(type: JavaExec) {
-  group 'demo2'
-  description 'Run GameLobby server (Socket)'
+task serverRest(type: JavaExec) {
+  group 'demo-rest'
+  description 'Run based TeleMed server'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'gamelobby.main.LobbyServer'
+  main = 'telemed.main.ServerMainREST'
+  args port
 }
 
-task lobbyClient(type: JavaExec) {
-  group 'demo2'
-  description 'Run a single GameLobby client operation (Socket)'
+task demoRest(type: JavaExec) {
+  group 'demo-rest'
+  description 'Demonstrate a full CRUD cycle of TeleMed using REST'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'gamelobby.main.LobbyClient'
-  args op, player, id, host
+  main = 'telemed.main.RestCRUDClient'
+  args host, port, delete
 }

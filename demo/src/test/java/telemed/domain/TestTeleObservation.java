@@ -53,7 +53,8 @@ public class TestTeleObservation {
     Gson gson = new Gson();
     String json = gson.toJson(to);
 
-    assertThat(json, containsString("\"patientId\":\"251248-0000\""));
+    assertThat(json, containsString("\"patientId\":\""
+            + HelperMethods.NANCY_ID+"\""));
 
     TeleObservation copy = gson.fromJson(json, TeleObservation.class);
     assertThat( copy.getPatientId(), is(HelperMethods.NANCY_ID));

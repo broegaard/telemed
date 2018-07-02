@@ -34,22 +34,42 @@ import frds.broker.RequestObject;
 public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
+  public static final String PROTOCOL = "http";
+
   private final Gson gson;
-  private final String baseURL;
-  private final String path;
+  protected String baseURL;
+  protected final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
-   * using POST messages over http://(hostname):(port)/(pathForPost)
+   * using POST messages over ipc://(hostname):(port)/(pathForPost)
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
    * @param pathForPost the path for the POST messages
    */
   public UriTunnelClientRequestHandler(String hostname, int port, String pathForPost) {
-    baseURL = "http://" + hostname + ":" + port + "/";
+    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
     path = pathForPost;
     gson = new Gson();
   }
+
+  /**
+   * Construct a URI Tunnel based CRH. Will communicate
+   * using POST messages over http://localhost:4567/tunnel.
+   * Remember to call setServer before the first invocation
+   * to rewire to another server.
+   */
+
+  public UriTunnelClientRequestHandler() {
+    baseURL = PROTOCOL + "://localhost:4567/";
+    path = "tunnel";
+    gson = new Gson();
+  }
+
+  @Override
+  public void setServer(String hostname, int port) {
+    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
+}
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
@@ -82,6 +102,12 @@ public class UriTunnelClientRequestHandler
   @Override
   public void close() {
     // Not applicable for a HTTP connection.
+  }
+
+  @Override
+  public String toString() {
+    return getClass().getCanonicalName() +
+        ", " + baseURL + ", root path: '" + path + "'";
   }
 
 }

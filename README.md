@@ -1,8 +1,18 @@
 FRDS.Broker Library
 ==============
 
-From the
-book
+The **FRDS.Broker** library is a teaching oriented implementation of
+the *Broker* architectural pattern for distributed remote method
+invocation. It defines the central roles of the pattern and provides
+implementations of those roles that are not domain/use case
+specific. It provides a JSON based (GSon library) *Requestor*
+implementation, and implementations of the *ClientRequestHandler* and
+*ServerRequestHandler* roles in both a Java socket based and a
+Http/URI tunneling based variants. The latter us based upon the
+UniRest and Spark-Java libraries.
+
+The **Broker** pattern and the source code is explained in detail in
+the book
 [Flexible, Reliable, Distributed Software (FRDS)](https://leanpub.com/frds),
 by *Henrik Bærbak Christensen / Aarhus University / www.baerbak.com*.
 
@@ -18,7 +28,7 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '1.2'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '1.4'
     }
 
 What is this repository for?
@@ -36,12 +46,16 @@ This repository serves multiple purposes.
   2. It has the source code of the TeleMed system, which is used in
        the FRDS book to show the Broker pattern in action, and
        contains tests of both the Broker and TeleMed implementation.
-       Folder: *demo*.
+       Folder: *demo*. Note that his project also contains core test
+       code for the broker library.
        
   3. It has the source code (and development diary) of the GameLobby
      system, which is used in FRDS to show how to create remote
      objects on the server, and handle multi-object method
      dispatch. Folder: *demo2*.
+  
+  4. It has the source code of an implementation of TeleMed that uses
+     REST instead of Broker for communication. Folder: *demo-rest*.
   
 ### TeleMed
 
@@ -105,8 +119,8 @@ To fetch the last week's data for patient with id=87, issue
     
 If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
-HTTP based version can also be viewed from the web page
-[http://localhost:4567/bp/pid=87]
+HTTP based version can also be viewed from the web page (last part of
+URI must match requested patient id) [http://localhost:4567/bp/87]
     
 Review `gradle.properties` for default values for the arguments to the
 server and the client.
@@ -129,14 +143,52 @@ Let user 'Pedersen' create a game
     LobbyClient: Asked to do operation create for player Pedersen
      Future created, the join token is game-1
 
-And let 'Findus' join the game, using the provided game token `game-1`
+And let 'Findus' join the game, using the provided game token `game-1` as id:
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Ptoken=game-1 -Pplayer=Findus -Phost=10.11.96.127
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
     LobbyClient: Asked to do operation join for player Findus
      Future joined, available is true
-     The Game id is 609833b2-bf8d-421c-beb1-9aac1464aac2
+     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
      The Game's 1st player is Pedersen
      The Game's 2nd player is Findus
+
+Finally, once the game is created clients can make 'moves' (here id is
+assigned to the real game id that was provided in the join output):
+
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    LobbyClient: Asked to do operation move for player Pedersen
+    The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    The Game's PLAYER IN TURN is Pedersen
+    A move was made, and now PLAYER IN TURN is Findus
+    
+    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    LobbyClient: Asked to do operation move for player Pedersen
+    The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    The Game's PLAYER IN TURN is Findus
+    A move was made, and now PLAYER IN TURN is Pedersen
+
+Note: The current oversimplified design does not have a notion of
+client identity. Ideally, two clients ought to be running, one
+handling Pedersen, and the other Findus, and the server should be able
+to tell which is which. This is left as an exercise for the reader :).
+
+How do I run REST based TeleMed?
+---
+
+Start the REST server
+
+    gradle serverRest
+    
+The client just executes a CRUD scenario, most of the data is
+hardwired.
+
+    gradle demoRest
+    
+You can avoid the delete by
+
+    gradle demoRest -Pdelete=false
+    
+In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-1234/](localhost:4666/bp/for/251248-1234/).
 
 
 Credits

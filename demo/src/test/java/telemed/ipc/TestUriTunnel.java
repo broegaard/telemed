@@ -16,7 +16,7 @@
  *
  */
 
-package telemed.http;
+package telemed.ipc;
 
 import frds.broker.ClientRequestHandler;
 import frds.broker.Requestor;
@@ -43,16 +43,15 @@ import telemed.marshall.json.TeleMedJSONInvoker;
 /** Test that a simple upload and fetch scenario is working
  * using the HTTP URI Tunneling variants of the Client- and
  * ServerRequestHandlers.
- * <p>
- * For reasons I have not diagnosed yet, rapid starting and
- * shutting down Spark leads to failures on Ubuntu Linux.
- * Therefore the test is marked to be ignored. Run
- * the test manually in the IDE instead.
- * 
+ *
+ * Note that this test is ignored as I have experienced
+ * Linux not handling the fast start/stop of the web
+ * server correctly, and the test is therefore 'flaky'
+ * (Sam Newman). Run it manually in your IDE.
+ *
  * @author Henrik Baerbak Christensen, Aarhus University.
  *
  */
-
 @Ignore
 public class TestUriTunnel {
 

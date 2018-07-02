@@ -38,7 +38,7 @@ import telemed.domain.*;
 
 public class HelperMethods {
 
-  public static final String NANCY_ID = "251248-0000";
+  public static final String NANCY_ID = "251248-1234";
   
   /** Create an tele observation of 120 over 70 for Nancy on
    * a specific time: 7.30 June 1st 2012. 

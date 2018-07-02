@@ -46,7 +46,17 @@ public interface ClientRequestHandler {
   ReplyObject sendToServer(RequestObject requestObject);
 
   /**
+   * Set the hostname/port of the server that holds the
+   * corresponding server request handler.
+   *
+   * @param hostname ip/dns of the server
+   * @param port the port to communicate on
+   */
+  void setServer(String hostname, int port);
+
+  /**
    * Close the connection to server.
    */
   void close();
+
 }

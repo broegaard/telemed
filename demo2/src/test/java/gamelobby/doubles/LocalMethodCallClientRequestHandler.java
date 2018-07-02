@@ -62,6 +62,11 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   }
 
   @Override
+  public void setServer(String hostname, int port) {
+    // not used
+  }
+
+  @Override
   public void close() {
 
   }
