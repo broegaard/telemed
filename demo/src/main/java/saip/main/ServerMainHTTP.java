@@ -65,10 +65,17 @@ public class ServerMainHTTP {
     } else {
       xds = new MongoXDSAdapter(type, 27017);
     }
+    // Create the TeleMed servant
+    TeleMed tsServant = new TeleMedServant(xds);
+    if (PEHackEnabled.equals("true")) {
+      // To avoid changing the general TeleMed
+      // implementation, we use a Decorator
+      // pattern to change the behavior of
+      // timestamping a bit to introduce the
+      // Performance Enginering hack
+      tsServant = new PEHackDecorator(tsServant);
+    }
     // Create server side implementation of Broker roles
-    boolean peHackEnabled = false;
-    if (PEHackEnabled.equals("true")) { peHackEnabled = true; }
-    TeleMed tsServant = new TeleMedServant(xds, peHackEnabled);
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
 
     UriTunnelServerRequestHandler srh =

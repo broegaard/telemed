@@ -64,7 +64,7 @@ public class TestUriTunnel {
   public void setup() {
     // Server side roles
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
-    TeleMed tsServant = new TeleMedServant(xds, false);
+    TeleMed tsServant = new TeleMedServant(xds);
     TeleMedJSONInvoker invoker = new TeleMedJSONInvoker(tsServant);
 
     serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER, xds);

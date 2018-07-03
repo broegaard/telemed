@@ -55,7 +55,7 @@ public class TestXDSFailureMode {
     XDSBackend xdsf = new FakeObjectXDSDatabase();
     // And wrap it in a saboteur (Meszaros)
     SaboteurXDS xds = new SaboteurXDS(xdsf);
-    TeleMed tsServant = new TeleMedServant(xds, false);
+    TeleMed tsServant = new TeleMedServant(xds);
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
     
     LocalMethodCallClientRequestHandler clientRequestHandler = 

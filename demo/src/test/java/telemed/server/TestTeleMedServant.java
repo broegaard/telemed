@@ -49,7 +49,7 @@ public class TestTeleMedServant {
   @Before
   public void setUp() {
     xds = new FakeObjectXDSDatabase();
-    telemed = new TeleMedServant(xds, false);
+    telemed = new TeleMedServant(xds);
   }
   
   /**

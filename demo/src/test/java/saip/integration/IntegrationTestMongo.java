@@ -37,7 +37,7 @@ public class IntegrationTestMongo {
     // Wipe the DB to ensure reproducible tests
     adapter.dropTheDb("yes-i-am-testing");
     
-    telemed = new TeleMedServant(xds, false);
+    telemed = new TeleMedServant(xds);
   }
   
   @Test
