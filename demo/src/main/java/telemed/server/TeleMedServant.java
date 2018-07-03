@@ -19,8 +19,8 @@
 package telemed.server;
 
 import java.time.LocalDateTime;
-import java.util.*;
 import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 import org.w3c.dom.Document;
 
@@ -36,17 +36,23 @@ import telemed.storage.*;
 public class TeleMedServant implements TeleMed, Servant {
 
   private final XDSBackend xds;
+  private final boolean peHackEnabled;
 
-  public TeleMedServant(XDSBackend xds) {
+  public TeleMedServant(XDSBackend xds, boolean peHackEnabled) {
     this.xds = xds;
+    this.peHackEnabled = peHackEnabled;
   }
 
   @Override
   public String processAndStore(TeleObservation teleObs) {
 
     // Performance testing hack: Overwrite client side
-    // time stamp with present time
-    // teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    // time stamp with present time as the load generator
+    // will always send with the same timestamp, invalidating
+    // our PE tests.
+    if (peHackEnabled) {
+      teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    }
 
     // Generate the XML document representing the
     // observation in HL7 (HealthLevel7) format.

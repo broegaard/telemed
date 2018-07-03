@@ -46,7 +46,7 @@ task serverHttp(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'saip.main.ServerMainHTTP'
-  args db
+  args db, pehack
 }
 
 task homeHttp(type: JavaExec) {

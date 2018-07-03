@@ -30,7 +30,7 @@ public class ServerMainREST {
     // Define the server side delegates
     XDSBackend xds = null;
     xds = new FakeObjectXDSDatabase();
-    TeleMed tsServant = new TeleMedServant(xds);
+    TeleMed tsServant = new TeleMedServant(xds, false);
 
     // Configure the Spark-java servlet
     int port = Integer.parseInt(portNo);

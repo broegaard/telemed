@@ -55,7 +55,7 @@ public class TestMarshalling {
     teleObs1 = HelperMethods.createObservation120over70forNancy();
     // Create server side implementations
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
-    TeleMed teleMedServant = new TeleMedServant(xds);
+    TeleMed teleMedServant = new TeleMedServant(xds, false);
 
     // Server side broker implementations
     Invoker invoker = new TeleMedJSONInvoker(teleMedServant);

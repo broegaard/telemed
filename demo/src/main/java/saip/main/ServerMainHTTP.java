@@ -42,20 +42,21 @@ public class ServerMainHTTP {
   
   public static void main(String[] args) throws Exception {
     // Command line argument parsing and validation
-    if (args.length < 1) {
+    if (args.length < 2) {
       explainAndDie();
     }
-    new ServerMainHTTP(args[0]); // No error handling!
+    new ServerMainHTTP(args[0], args[1]); // No error handling!
   }
   
   private static void explainAndDie() {
     System.out.println("Usage: ServerMainHTTP {db}");
     System.out.println("       db = 'memory' is the in-memory db");
     System.out.println("       db = {host} is MongoDB on 'host:27017'");
+    System.out.println("       pehack = 'true'/'false'; if 'true' then client timestamp is overwritten");
     System.exit(-1);
   }
 
-  public ServerMainHTTP(String type) {
+  public ServerMainHTTP(String type, String PEHackEnabled) {
     int port = 4567;
     // Define the server side delegates
     XDSBackend xds = null;
@@ -65,7 +66,9 @@ public class ServerMainHTTP {
       xds = new MongoXDSAdapter(type, 27017);
     }
     // Create server side implementation of Broker roles
-    TeleMed tsServant = new TeleMedServant(xds);
+    boolean peHackEnabled = false;
+    if (PEHackEnabled.equals("true")) { peHackEnabled = true; }
+    TeleMed tsServant = new TeleMedServant(xds, peHackEnabled);
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
 
     UriTunnelServerRequestHandler srh =

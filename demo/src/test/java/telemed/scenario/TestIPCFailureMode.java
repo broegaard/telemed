@@ -48,7 +48,7 @@ public class TestIPCFailureMode {
   public void setup() {
     // Create server side implementations
     xds = new FakeObjectXDSDatabase();
-    TeleMed tsServant = new TeleMedServant(xds);
+    TeleMed tsServant = new TeleMedServant(xds, false);
 
     // Server side broker implementations
     Invoker invoker = new TeleMedJSONInvoker(tsServant);

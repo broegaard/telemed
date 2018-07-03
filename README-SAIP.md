@@ -41,10 +41,13 @@ To fetch all uploaded measurements for the last week for id=123456
 Scenario 2: As physician, browse all measurements made by patient
 id=123456 by pointing your web browser at
 
-  * [localhost:4567/bp/123456](localhost:4567/bp/12345)
-  
+  * [localhost:4567/bp/123456](localhost:4567/bp/123456)
 
-### Server with database
+If you run the server on a given host with hostname/ip "hostname",
+then tell the client it using switch -Phost=(hostname).
+
+Server with database
+--------------------
 
 An in-memory database is only interesting for testing. To run the
 complete system, you need to start a MongoDB database and connect the
@@ -53,11 +56,18 @@ server to it.
 Ensure you have docker installed and then start a mongodb container
 
     docker run -d --name db0 -p 27017:27017 mongo --noprealloc --smallfiles
-    
+
+(The default MongoDB port '27017' is mapped into the host computer's
+port 27017, so you can access MongoDB on 'hostname:27017'. The
+switches --noprealloc and --smallfiles ensure that MongoDB does not eat
+up all your disk space at once.)
     
 Next start the server with a connection to it
 
     gradle serverHttp -Pdb=localhost
+
+If you run the MongoDB on another host, then tell the server using
+the -Pdb=(hostname) switch.
 
 
 Performance Testing
@@ -73,6 +83,27 @@ statement is NOT a comment
 
 Next, you can find a JMeter sample test plan in
 'TeleMed-Test-Plan.jmx'. Start JMeter and open it.
+
+Digging into the Code base
+===
+
+The TM16 code base is located in the /broker/demo/ folder for
+obscure historical reasons. Sorry... But you only really need
+to look there...
+
+I advice you start by taking a look at the learning test
+
+    test/java/telemed/scenario/TestStory1.java
+
+In this JUnit test case, the `setup()` method initializes the
+Broker pattern, using an in-memory fake object implementation of
+the networking layer, and the test cases demonstrates the Story one
+scenario from the slides on TM16.
+
+Next, have a look at HTTP based distribution case
+
+    main/java/saip/main/ServerMainHTTP.java
+    main/java/saip/main/HomeClientHTTP.java
 
 Context
 ===
