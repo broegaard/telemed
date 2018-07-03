@@ -73,13 +73,13 @@ the -Pdb=(hostname) switch.
 Performance Testing
 ===
 
-First, you need to ensure the 'hack' is enabled in the TeleMedServant
-class in package `telemed.server`, that is, the `teleObs.setTime()`
-statement is NOT a comment
+First, you need to ensure the 'pe hack' is enabled in the TeleMed
+server! You do this by providing setting the switch 'pehack' to
+'true' (all lowercase!), like
 
-    // Performance testing hack: Overwrite client side
-    // time stamp with present time
-    teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    gradle serverHttp -Ppehack=true
+
+This switch works both in the in-memory and in the MongoDB variant.
 
 Next, you can find a JMeter sample test plan in
 'TeleMed-Test-Plan.jmx'. Start JMeter and open it.
