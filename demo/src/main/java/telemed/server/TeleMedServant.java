@@ -46,7 +46,7 @@ public class TeleMedServant implements TeleMed, Servant {
 
     // Performance testing hack: Overwrite client side
     // time stamp with present time
-    teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+    // teleObs.setTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
     // Generate the XML document representing the
     // observation in HL7 (HealthLevel7) format.
