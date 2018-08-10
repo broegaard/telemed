@@ -8,7 +8,7 @@ implementations of those roles that are not domain/use case
 specific. It provides a JSON based (GSon library) *Requestor*
 implementation, and implementations of the *ClientRequestHandler* and
 *ServerRequestHandler* roles in both a Java socket based and a
-Http/URI tunneling based variants. The latter us based upon the
+Http/URI tunneling based variants. The latter is based upon the
 UniRest and Spark-Java libraries.
 
 The **Broker** pattern and the source code is explained in detail in
@@ -57,7 +57,7 @@ This repository serves multiple purposes.
   4. It has the source code of an implementation of TeleMed that uses
      REST instead of Broker for communication. Folder: *demo-rest*.
   
-### TeleMed
+### TeleMed 
 
 The TeleMed system is a small distributed system in which patients
 may upload blood pressure measurements to a central medical server.
@@ -80,7 +80,7 @@ Two variants of the Broker are provided
     implementations similar to what most WebService frameworks will
     produce.
 
-### GameLobby
+### GameLobby 
 
 The GameLobby is a more complex distributed system. The domain is
 players that want to create remote games, that friends can join so
