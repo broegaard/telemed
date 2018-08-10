@@ -72,7 +72,7 @@ two limitations (more detail in FRDS):
      invoke methods on client side objects (no Observer pattern
      possible).
 
-Two variants of the Broker is provided
+Two variants of the Broker are provided
 
   * Socket: Socket based Client- and ServerRequestHandler implementations.
 
