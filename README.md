@@ -56,6 +56,10 @@ This repository serves multiple purposes.
   
   4. It has the source code of an implementation of TeleMed that uses
      REST instead of Broker for communication. Folder: *demo-rest*.
+     
+  5. It has the source code of a rudimentary REST server, *PasteBin*,
+     used in the FRDS book to illustrate the POST and GET verbs of
+     HTTP. Folder: *pastebin*.
   
 ### TeleMed 
 
@@ -97,6 +101,13 @@ as the learning goal is to demonstrate code that
   * Also my [test-driven development diary](demo2/diary.md) is
     included in which I develop the system from scratch in about 14
     hours, including the documentation effort.
+    
+### PasteBin
+
+PasteBin is a rudimentary web server that allows storing and
+retrieving simple text, similar to a server based clipboard.
+
+PasteBin is explained in the separate [README](pastebin/README.md).
 
 How do I run TeleMed?
 ---
