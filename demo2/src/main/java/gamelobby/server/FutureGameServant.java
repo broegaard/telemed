@@ -18,6 +18,7 @@
 
 package gamelobby.server;
 
+import frds.broker.Servant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class FutureGameServant implements FutureGame {
+public class FutureGameServant implements FutureGame, Servant {
   private final String joinToken;
 
   private Game theGame;

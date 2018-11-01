@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class GameLobbyServant implements Servant, GameLobby {
+public class GameLobbyServant implements GameLobby, Servant {
 
   private static GameLobby singleton;
 
