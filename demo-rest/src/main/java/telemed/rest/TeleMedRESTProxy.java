@@ -30,7 +30,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
     private Gson gson;
 
     public TeleMedRESTProxy(String hostname, int port) {
-        baseURL = "ipc://"+hostname+":"+port+"/";
+        baseURL = "http://"+hostname+":"+port+"/";
         gson = new Gson();
     }
 

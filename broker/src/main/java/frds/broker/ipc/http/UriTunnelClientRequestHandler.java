@@ -41,7 +41,7 @@ public class UriTunnelClientRequestHandler
   protected final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
-   * using POST messages over ipc://(hostname):(port)/(pathForPost)
+   * using POST messages over http://(hostname):(port)/(pathForPost)
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server

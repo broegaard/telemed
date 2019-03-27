@@ -45,7 +45,7 @@ dependencies {
 
 task serverRest(type: JavaExec) {
   group 'demo-rest'
-  description 'Run based TeleMed server'
+  description 'Run based TeleMed REST based server'
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainREST'
