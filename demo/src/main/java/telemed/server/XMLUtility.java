@@ -50,7 +50,7 @@ public class XMLUtility {
       throw new RuntimeException(e);
     }
     trans.setOutputProperty(OutputKeys.INDENT, "yes");
-    trans.setOutputProperty( "{ipc://xml.apache.org/xslt}indent-amount", "2" );
+    trans.setOutputProperty( "{http://xml.apache.org/xslt}indent-amount", "2" );
 
     //create string from xml tree
     StringWriter sw = new StringWriter();
