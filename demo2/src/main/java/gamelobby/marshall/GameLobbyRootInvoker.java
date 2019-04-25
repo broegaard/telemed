@@ -24,8 +24,8 @@ import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
-import gamelobby.service.InMemoryObjectStorage;
-import gamelobby.service.ObjectStorage;
+import gamelobby.service.InMemoryNameService;
+import gamelobby.service.NameService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ import java.util.Map;
  */
 public class GameLobbyRootInvoker implements Invoker {
   private final GameLobby lobby;
-  private final ObjectStorage objectStorage;
+  private final NameService nameService;
   private final Map<String, Invoker> invokerMap;
   private Gson gson;
 
@@ -53,17 +53,17 @@ public class GameLobbyRootInvoker implements Invoker {
     this.lobby = lobby;
     gson = new Gson();
 
-    objectStorage = new InMemoryObjectStorage();
+    nameService = new InMemoryNameService();
     invokerMap = new HashMap<>();
 
     // Create an invoker for each handled type/class
     // and put them in a map, binding them to the
     // operationName prefixes
-    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_LOBBY_PREFIX, gameLobbyInvoker);
-    Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
+    Invoker futureGameInvoker = new FutureGameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.FUTUREGAME_PREFIX, futureGameInvoker);
-    Invoker gameInvoker = new GameInvoker(objectStorage, gson);
+    Invoker gameInvoker = new GameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
   }
 

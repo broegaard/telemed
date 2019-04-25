@@ -26,7 +26,7 @@ import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 import gamelobby.domain.UnknownServantException;
-import gamelobby.service.ObjectStorage;
+import gamelobby.service.NameService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -36,11 +36,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class GameInvoker implements Invoker {
-  private final ObjectStorage objectStorage;
+  private final NameService nameService;
   private final Gson gson;
 
-  public GameInvoker(ObjectStorage objectStorage, Gson gson) {
-    this.objectStorage = objectStorage;
+  public GameInvoker(NameService nameService, Gson gson) {
+    this.nameService = nameService;
     this.gson = gson;
   }
 
@@ -71,7 +71,7 @@ public class GameInvoker implements Invoker {
   }
 
   private Game getGameOrThrowUnknownException(String objectId) {
-    Game game = objectStorage.getGame(objectId);
+    Game game = nameService.getGame(objectId);
     if (game == null) {
       throw new UnknownServantException(
           "Game with object id: " + objectId + " does not exist.");

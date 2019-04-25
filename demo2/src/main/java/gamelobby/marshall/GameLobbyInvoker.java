@@ -26,7 +26,7 @@ import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
-import gamelobby.service.ObjectStorage;
+import gamelobby.service.NameService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,11 +38,11 @@ import javax.servlet.http.HttpServletResponse;
 public class GameLobbyInvoker implements Invoker {
   private final GameLobby lobby;
   private final Gson gson;
-  private final ObjectStorage objectStorage;
+  private final NameService nameService;
 
-  public GameLobbyInvoker(GameLobby lobby, ObjectStorage storage, Gson gson) {
+  public GameLobbyInvoker(GameLobby lobby, NameService storage, Gson gson) {
     this.lobby = lobby;
-    this.objectStorage = storage;
+    this.nameService = storage;
     this.gson = gson;
   }
 
@@ -60,7 +60,7 @@ public class GameLobbyInvoker implements Invoker {
       int level = gson.fromJson(array.get(1), Integer.class);
       FutureGame futureGame = lobby.createGame(playerName, level);
       String id = futureGame.getId();
-      objectStorage.putFutureGame(id, futureGame);
+      nameService.putFutureGame(id, futureGame);
 
       reply = new ReplyObject(HttpServletResponse.SC_CREATED,
               gson.toJson(id));
@@ -80,7 +80,7 @@ public class GameLobbyInvoker implements Invoker {
       // created game that will be referenced by future client calls,
       // thus this object must be stored server side under its id.
       String gameId = futureGame.getGame().getId();
-      objectStorage.putGame(gameId, futureGame.getGame());
+      nameService.putGame(gameId, futureGame.getGame());
 
       reply = new ReplyObject(HttpServletResponse.SC_OK,
               gson.toJson(futureGameId));

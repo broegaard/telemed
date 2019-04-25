@@ -374,9 +374,9 @@ which highlight a central issue: The server side have to store all
 server side objects and be able to look them up based upon their
 objectId. In web architectures it is often called session id and there
 are several methods to keep this kind of server state. I will return
-to this issue later; but for now we just keep an internal
-hashmap. This will suffice for our learning purposes but does not work
-in real production servers.
+to this issue later; but for now we just keep an internal hashmap that
+acts as an internal Name Service. This will suffice for our learning
+purposes but does not work in real production servers.
 
 So - two things - make a HashMap, and implement the servant upcall
 code:
@@ -771,11 +771,12 @@ must the FutureGame invoker.
 
 Thus it is better to retract to an earlier commit and then FIRST
 introduce an abstraction that encapsulate the maps, make that work,
-and THEN introduce invokers. I name this abstraction
-'ObjectStorage'. Actually it is great abstraction because it also
-loosen the binding between the invokers and the actual object
-persistence implementation - I would use a real cache service like
-MemCached instead, or a SQL database, or...
+and THEN introduce invokers. I name this abstraction 'NameService' as
+that is what it is: a name service that can stores and supports lookup
+of servant objects based upon object id. It is great abstraction
+because it also loosen the binding between the invokers and the actual
+object persistence implementation - I would use a real cache service
+like MemCached instead, or a SQL database, or ...
 
 About 3 hours
 
@@ -789,21 +790,21 @@ The Do Over is made by
   
 Now introduce the Storage in this branch, I
 
-  * remove the 'futureGameMap', introduce interface ObjectStorage, and
+  * remove the 'futureGameMap', introduce interface NameService, and
     change all refs to futureGameMap to the equivalent
     
-        objectStorage = new InMemoryObjectStorage();
+        nameService = new InMemoryNameService();
 
-        objectStorage.put(id, futureGame);
+        nameService.put(id, futureGame);
 
     etc.
    * Easy to make to work.
    
    * Do same procedure with the gameMap.
    
-The resulting ObjectStorage becomes
+The resulting NameService becomes
 
-    public interface ObjectStorage {
+    public interface NameService {
       void putFutureGame(String objectId, FutureGame futureGame);
       FutureGame getFutureGame(String objectId);
 
@@ -889,11 +890,11 @@ Ahh - some magic constants floating around, better clean them up.
 
 And the invoker map population code becomes:
 
-    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, objectStorage, gson);
+    Invoker gameLobbyInvoker = new GameLobbyInvoker(lobby, nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_LOBBY_PREFIX, gameLobbyInvoker);
-    Invoker futureGameInvoker = new FutureGameInvoker(objectStorage, gson);
+    Invoker futureGameInvoker = new FutureGameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.FUTUREGAME_PREFIX, futureGameInvoker);
-    Invoker gameInvoker = new GameInvoker(objectStorage, gson);
+    Invoker gameInvoker = new GameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
 
 
@@ -908,3 +909,13 @@ Just cleaning up code: moving classes into suitable packages; adding
 javadoc; fixing a few wrong 'extends Servant' here and there.
 
 Total: one hour.
+
+
+Later iteration:
+----------------
+
+The code base has been refactored to use the NameService interface
+name, originally it was named ObjectStorage in the code base and in
+this diary. Thus the diary here is not completely true to the
+development process, but I considered it better to adjust the diary to
+the current state of the code.

@@ -21,14 +21,14 @@ package gamelobby.service;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
 
-/** Storage of servant objects created by the server.
- * Basically encapsulates Map's that allows 'put' and 'get'
- * operations on the server side servant objects.
+/** A simple 'name service' that allows the server
+ * side to map object identities to servant objects.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public interface ObjectStorage {
-  /** Put a future game into the map under given id
+public interface NameService {
+
+  /** Put a future game into the name service under given id
    *
    * @param objectId ID of the object
    * @param futureGame the servant object
@@ -42,7 +42,7 @@ public interface ObjectStorage {
    */
   FutureGame getFutureGame(String objectId);
 
-  /** Put a game into the map under given id
+  /** Put a game into the name service under given id
    *
    * @param objectId ID of the object
    * @param game the servant object

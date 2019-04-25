@@ -20,21 +20,20 @@ package gamelobby.service;
 
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
-import gamelobby.service.ObjectStorage;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/** An ObjectStorage that keeps all servant objects in memory.
+/** An NameService that keeps all servant objects in memory.
  * Only suitable for single server solutions.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */
-public class InMemoryObjectStorage implements ObjectStorage {
+public class InMemoryNameService implements NameService {
   private Map<String, FutureGame> futureGameMap;
   private Map<String, Game> gameMap;
 
-  public InMemoryObjectStorage() {
+  public InMemoryNameService() {
     this.futureGameMap = new HashMap<>();
     this.gameMap = new HashMap<>();
   }

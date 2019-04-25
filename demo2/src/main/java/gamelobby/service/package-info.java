@@ -17,7 +17,7 @@
  */
 
 /**
- * Server side services, the ObjectStorage.
+ * Server side services, the NameService.
  *
  * @author Henrik Baerbak Christensen, CS @ AU
  */

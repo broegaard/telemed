@@ -26,7 +26,7 @@ import frds.broker.ReplyObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.Game;
-import gamelobby.service.ObjectStorage;
+import gamelobby.service.NameService;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,11 +35,11 @@ import javax.servlet.http.HttpServletResponse;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class FutureGameInvoker implements Invoker {
-  private final ObjectStorage objectStorage;
+  private final NameService nameService;
   private final Gson gson;
 
-  public FutureGameInvoker(ObjectStorage objectStorage, Gson gson) {
-    this.objectStorage = objectStorage;
+  public FutureGameInvoker(NameService nameService, Gson gson) {
+    this.nameService = nameService;
     this.gson = gson;
   }
 
@@ -53,17 +53,17 @@ public class FutureGameInvoker implements Invoker {
             parser.parse(payload).getAsJsonArray();
 
     if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
+      FutureGame futureGame = nameService.getFutureGame(objectId);
       String token = futureGame.getJoinToken();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(token));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_IS_AVAILABLE_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
+      FutureGame futureGame = nameService.getFutureGame(objectId);
       boolean isAvailable = futureGame.isAvailable();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(isAvailable));
 
     } else if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_GAME_METHOD)) {
-      FutureGame futureGame = objectStorage.getFutureGame(objectId);
+      FutureGame futureGame = nameService.getFutureGame(objectId);
       Game game = futureGame.getGame();
       String id = game.getId();
       reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(id));
