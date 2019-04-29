@@ -31,7 +31,7 @@ dependencies {
   // Get marker interfaces from Broker
   compile project(':broker')
   // Get domain code from TeleMed in demo subproject
-  compile project(':demo')
+  compile project(':telemed')
   
   // Bind SLF4J it to the Log4J logging framework
   compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'

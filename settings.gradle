@@ -17,6 +17,6 @@
  */
 
 include 'broker'
-include 'demo'
+include 'telemed'
 include 'demo2'
 include 'demo-rest'

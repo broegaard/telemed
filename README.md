@@ -46,7 +46,7 @@ This repository serves multiple purposes.
   2. It has the source code of the TeleMed system, which is used in
        the FRDS book to show the Broker pattern in action, and
        contains tests of both the Broker and TeleMed implementation.
-       Folder: *demo*. Note that his project also contains core test
+       Folder: *telemed*. Note that his project also contains core test
        code for the broker library.
        
   3. It has the source code (and development diary) of the GameLobby
