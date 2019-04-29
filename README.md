@@ -117,16 +117,16 @@ multiple times to upload or fetch blood pressure measurements.
 
 To start the TeleMed server, open a shell and issue
 
-    gradle serverSocket
+    gradle :telemed:serverSocket
 
 To upload blood pressure (123,99) for patient with id=241248 to the
 server located at IP localhost, open another shell and issue
 
-    gradle -q homeSocket -Pid=241248 -Psys=123 -Pdia=99 -Phost=localhost
+    gradle -q :telemed:homeSocket -Pid=241248 -Psys=123 -Pdia=99 -Phost=localhost
 
 To fetch the last week's data for patient with id=87, issue
 
-    gradle -q homeSocket -Pop=fetch -Pid=87
+    gradle -q :telemed:homeSocket -Pop=fetch -Pid=87
     
 If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
