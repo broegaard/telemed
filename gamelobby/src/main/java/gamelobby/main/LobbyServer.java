@@ -30,12 +30,13 @@ import gamelobby.server.GameLobbyServant;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class LobbyServer {
+
   public static void main(String[] args) throws Exception {
     new LobbyServer();
   }
 
   public LobbyServer() {
-    int port = 37321;
+    int port = Constant.SERVER_PORT;
     // Define the server side delegates
 
     GameLobby lobby = GameLobbyServant.getInstance();

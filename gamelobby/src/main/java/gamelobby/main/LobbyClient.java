@@ -50,7 +50,7 @@ public class LobbyClient {
 
     System.out.println("LobbyClient: Asked to do operation "+operation+" for player "+name);
     ClientRequestHandler clientRequestHandler
-            = new SocketClientRequestHandler(hostname, 37321);
+            = new SocketClientRequestHandler(hostname, Constant.SERVER_PORT);
     Requestor requestor = new StandardJSONRequestor(clientRequestHandler);
 
     GameLobby lobby = new GameLobbyProxy(requestor);

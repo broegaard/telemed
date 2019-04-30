@@ -152,7 +152,7 @@ Note the IP of the running server (I use `10.11.96.127` below).
 
 Let user 'Pedersen' create a game
 
-    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=create -Phost=10.11.96.127 -Pplayer=Pedersen
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=create -Pplayer=Pedersen -Phost=10.11.96.127 
     LobbyClient: Asked to do operation create for player Pedersen
      Future created, the join token is game-1
 
