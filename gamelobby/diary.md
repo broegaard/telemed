@@ -1,6 +1,10 @@
 Development Diary for multi-object Broker / Demo2
 =================================================
 
+*Note: The diary refers to 'demo2' which has been renamed to
+'telemed-rest' after the diary was written.*
+
+
 Goal: To develop 'demo2' which uses multiple objects.
 
 Day 1

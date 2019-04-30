@@ -34,7 +34,7 @@ Get it using Gradle:
 What is this repository for?
 -----------
 
-The Broker library used in teaching context based on
+The Broker library used in a teaching context based on
 the book *Flexible, Reliable, Distributed Software*.
 
 This repository serves multiple purposes.
