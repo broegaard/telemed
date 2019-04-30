@@ -52,7 +52,7 @@ This repository serves multiple purposes.
   3. It has the source code (and development diary) of the GameLobby
      system, which is used in FRDS to show how to create remote
      objects on the server, and handle multi-object method
-     dispatch. Folder: *demo2*.
+     dispatch. Folder: *gamelobby*.
   
   4. It has the source code of an implementation of TeleMed that uses
      REST instead of Broker for communication. Folder: *demo-rest*.
@@ -88,8 +88,8 @@ Two variants of the Broker are provided
 
 The GameLobby is a more complex distributed system. The domain is
 players that want to create remote games, that friends can join so
-distributed play is possible. The game itself is not interesting here,
-as the learning goal is to demonstrate code that
+play over the internet is possible. The game itself is not interesting
+here, as the learning goal is to demonstrate code that:
 
   * Create objects on the server side, new servants, and allows the
     clients to bind client proxies to them for remote method calls.
@@ -98,7 +98,7 @@ as the learning goal is to demonstrate code that
     avoids 'blob' invokers, by creating sub-invokers, one for each
     type of role/servant type in the system.
     
-  * Also my [test-driven development diary](demo2/diary.md) is
+  * Also my [test-driven development diary](gamelobby/diary.md) is
     included in which I develop the system from scratch in about 14
     hours, including the documentation effort.
     
@@ -140,23 +140,25 @@ How do I run GameLobby?
 ---
 
 The GameLobby system is primarily intended to be reviewed through the
-test cases, but manual tests can be made using the command line.
+test cases, but manual tests can be made using the command line. The
+focus is on the creation of a shared game instance, so no usefull game
+behavior is implemented.
 
 Start server
 
-    gradle lobbyServer
+    gradle :gamelobby:lobbyServer
     
 Note the IP of the running server (I use `10.11.96.127` below).
 
 Let user 'Pedersen' create a game
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=create -Phost=10.11.96.127 -Pplayer=Pedersen
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=create -Phost=10.11.96.127 -Pplayer=Pedersen
     LobbyClient: Asked to do operation create for player Pedersen
      Future created, the join token is game-1
 
 And let 'Findus' join the game, using the provided game token `game-1` as id:
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
     LobbyClient: Asked to do operation join for player Findus
      Future joined, available is true
      The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
@@ -166,13 +168,13 @@ And let 'Findus' join the game, using the provided game token `game-1` as id:
 Finally, once the game is created clients can make 'moves' (here id is
 assigned to the real game id that was provided in the join output):
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e -Phost=10.11.96.127
     LobbyClient: Asked to do operation move for player Pedersen
     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
     The Game's PLAYER IN TURN is Pedersen
     A move was made, and now PLAYER IN TURN is Findus
     
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e -Phost=10.11.96.127
     LobbyClient: Asked to do operation move for player Pedersen
     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
     The Game's PLAYER IN TURN is Findus

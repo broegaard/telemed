@@ -18,5 +18,5 @@
 
 include 'broker'
 include 'telemed'
-include 'demo2'
+include 'gamelobby'
 include 'demo-rest'
