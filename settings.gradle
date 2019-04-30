@@ -19,4 +19,4 @@
 include 'broker'
 include 'telemed'
 include 'gamelobby'
-include 'demo-rest'
+include 'telemed-rest'

@@ -55,7 +55,7 @@ This repository serves multiple purposes.
      dispatch. Folder: *gamelobby*.
   
   4. It has the source code of an implementation of TeleMed that uses
-     REST instead of Broker for communication. Folder: *demo-rest*.
+     REST instead of Broker for communication. Folder: *telemed-rest*.
      
   5. It has the source code of a rudimentary REST server, *PasteBin*,
      used in the FRDS book to illustrate the POST and GET verbs of
@@ -185,21 +185,21 @@ client identity. Ideally, two clients ought to be running, one
 handling Pedersen, and the other Findus, and the server should be able
 to tell which is which. This is left as an exercise for the reader :).
 
-How do I run REST based TeleMed?
+How do I run the REST based TeleMed?
 ---
 
 Start the REST server
 
-    gradle serverRest
+    gradle :telemed-rest:serverRest
     
 The client just executes a CRUD scenario, most of the data is
 hardwired.
 
-    gradle demoRest
+    gradle :telemed-rest:demoRest
     
 You can avoid the delete by
 
-    gradle demoRest -Pdelete=false
+    gradle :telemed-rest:demoRest -Pdelete=false
     
 In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-1234/](localhost:4666/bp/for/251248-1234/).
 
