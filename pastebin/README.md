@@ -62,3 +62,12 @@ web server. The sequence below is shown using Curl.
     null
 
 
+Note on Design
+---
+
+The PasteBin design is purely to demonstrate POST/GET in a RESTish
+architectural style, and coded to minimize the code base size, thus
+the domain code (storing and retrieving clips from a clipboard) is
+embedded in the REST server role, `Server`, by hardcoding a HashMap of
+`Bin` instances. A better design would of course separate the domain
+code into suitable roles and implementations of these roles.
