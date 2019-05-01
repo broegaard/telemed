@@ -26,7 +26,7 @@ import telemed.server.XMLUtility;
 import telemed.storage.XDSBackend;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import static spark.Spark.*;
@@ -79,8 +79,8 @@ public class TeleMedUriTunnelServerRequestHandler
 
       List<Document> list;
       // Calculate the time interval to search within
-      LocalDateTime now = LocalDateTime.now();
-      LocalDateTime someTimeAgo = now.minusDays(7);
+      OffsetDateTime now = OffsetDateTime.now();
+      OffsetDateTime someTimeAgo = now.minusDays(7);
 
       list = xds.retriveDocumentSet(patientId, someTimeAgo, now);
       html += "<H3>There are " + list.size() + " observations.</H3>\n";

@@ -19,6 +19,7 @@
 package telemed.storage;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 import org.w3c.dom.Document;
@@ -73,7 +74,7 @@ public interface XDSBackend {
    *          end of time interval
    * @return list of all documents that fulfil criteria
    */
-  List<Document> retriveDocumentSet(String personID, LocalDateTime start, LocalDateTime end);
+  List<Document> retriveDocumentSet(String personID, OffsetDateTime start, OffsetDateTime end);
 
   /**
    * Given a uniqueId assigned to a document, fetch that particular document.

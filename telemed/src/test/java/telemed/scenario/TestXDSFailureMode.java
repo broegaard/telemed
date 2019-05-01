@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import frds.broker.IPCException;
@@ -99,7 +100,7 @@ public class TestXDSFailureMode {
       return delegate.provideAndRegisterDocument(metaData, observationAsHL7);
     }
 
-    public List<Document> retriveDocumentSet(String personID, LocalDateTime start, LocalDateTime end) {
+    public List<Document> retriveDocumentSet(String personID, OffsetDateTime start, OffsetDateTime end) {
       return delegate.retriveDocumentSet(personID, start, end);
     }
 

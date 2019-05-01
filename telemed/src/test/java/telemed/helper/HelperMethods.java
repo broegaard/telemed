@@ -21,6 +21,8 @@ package telemed.helper;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 import org.w3c.dom.Document;
 
@@ -41,11 +43,11 @@ public class HelperMethods {
   public static final String NANCY_ID = "251248-1234";
   
   /** Create an tele observation of 120 over 70 for Nancy on
-   * a specific time: 7.30 June 1st 2012. 
+   * a specific time: 7.30 June 1st 2012 UTC.
    */
   public static TeleObservation createObservation120over70forNancy() {
     TeleObservation to = new TeleObservation(HelperMethods.NANCY_ID, 120.0, 70.0);
-    to.setTime(LocalDateTime.of(2012, 6, 1, 7, 30, 0));
+    to.setTime(OffsetDateTime.of(2012, 6, 1, 7, 30, 12, 0, ZoneOffset.UTC));
     return to;
   }
 
@@ -58,7 +60,7 @@ public class HelperMethods {
     assertEquals("ClinicalDocument", doc.getDocumentElement().getNodeName());
     
     // assert timestamp stored correctly
-    assertEquals("20120601073000", 
+    assertEquals("2012-06-01T07:30:12Z",
         XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value", 0, 
             "effectiveTime", "ClinicalDocument", doc));
     

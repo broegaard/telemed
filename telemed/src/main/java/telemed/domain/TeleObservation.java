@@ -33,7 +33,7 @@ public class TeleObservation {
   private final String patientId;
   private final ClinicalQuantity systolic;
   private final ClinicalQuantity diastolic;
-  private LocalDateTime time;
+  private OffsetDateTime time;
   
   /** Construct a tele observation for the given patient and the
    * given blood pressure
@@ -44,7 +44,7 @@ public class TeleObservation {
   public TeleObservation(String patientId, double systolic, double diastolic) {
     this.patientId = patientId;
     // Timestamp the observation to 'now' but ignore the milliseconds
-    this.time = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    this.time = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS);
     // The codes 'MSC...' are part of a Danish telemedic code system.
     this.systolic = new ClinicalQuantity(systolic, "mm(Hg)","MSC88019","Systolic BP");
     this.diastolic = new ClinicalQuantity(diastolic, "mm(Hg)","MSC88020","Diastolic BP");
@@ -65,7 +65,7 @@ public class TeleObservation {
    * 
    * @return time of observation.
    */
-  public LocalDateTime getTime() {
+  public OffsetDateTime getTime() {
     return time;
   }
 
@@ -75,7 +75,7 @@ public class TeleObservation {
    * @param time
    *          the time to set for this observation
    */
-  public void setTime(LocalDateTime time) {
+  public void setTime(OffsetDateTime time) {
     this.time = time.truncatedTo(ChronoUnit.SECONDS);
   }
 

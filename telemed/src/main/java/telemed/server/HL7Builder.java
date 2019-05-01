@@ -19,6 +19,7 @@
 package telemed.server;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.xml.parsers.*;
@@ -34,9 +35,6 @@ import telemed.domain.*;
  */
 public class HL7Builder implements Builder {
 
-  // Formatter for the date-time format required by HL7
-  public static final DateTimeFormatter HL7_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-  
   // The document to be built
   private Document document;
   private Element root;
@@ -72,9 +70,12 @@ public class HL7Builder implements Builder {
     // Create the effectiveTime, that is, the time the
     // observation was made.
     Element time = document.createElement("effectiveTime");
-    // Date observationTime = new Date( to.getTime() );
-    LocalDateTime observationTime = to.getTime();
-    String timeInHL7Format = HL7_TIME_FORMAT.format(observationTime);// formatter.format(observationTime);
+
+    // The HL7 time format is
+    // DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    // but I use ISO8601 as it is easy to read, and support time zones.
+    OffsetDateTime observationTime = to.getTime();
+    String timeInHL7Format = DateTimeFormatter.ISO_OFFSET_DATE_TIME.format(observationTime);
     time.setAttribute("value", timeInHL7Format);
     
     root.appendChild(time);

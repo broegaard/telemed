@@ -93,19 +93,18 @@ public class FakeObjectXDSDatabase implements XDSBackend {
   }
 
   @Override
-  public List<Document> retriveDocumentSet(String personID, LocalDateTime startTime,
-      LocalDateTime endTime) {
+  public List<Document> retriveDocumentSet(String personID, OffsetDateTime startTime,
+      OffsetDateTime endTime) {
     List<Document> thelist = new ArrayList<>();
     
     Instant instant; Date d;
     
-    ZoneId cet = Utility.CET;
-    ZonedDateTime start2 = ZonedDateTime.of(startTime, cet);
+    OffsetDateTime start2 = startTime;
     instant = start2.toInstant();
     d = Date.from(instant);
     long start = d.getTime();
     
-    ZonedDateTime end2 = ZonedDateTime.of(endTime, cet);
+    OffsetDateTime end2 = endTime;
     instant = end2.toInstant();
     d = Date.from(instant);
     long end = d.getTime();

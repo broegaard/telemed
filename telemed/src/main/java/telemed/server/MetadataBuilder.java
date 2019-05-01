@@ -38,8 +38,8 @@ public class MetadataBuilder implements Builder {
   public void buildPatientInfo(TeleObservation to) {
     metadata.setPersonID( to.getPatientId() );
 
-    // We need to convert the local time to CET ZonedDateTime
-    ZonedDateTime zdt = to.getTime().atZone(Utility.CET);
+    // We need to convert the time to a epoch in milliseconds
+    OffsetDateTime zdt = to.getTime();
     // And then to an instant
     Instant instant = zdt.toInstant();
     long timestamp = instant.toEpochMilli();

@@ -23,6 +23,9 @@ import static org.hamcrest.CoreMatchers.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
 
@@ -150,7 +153,7 @@ public class TestTeleMedServant {
     // Change the time for to2, to3, and to4
     
     // 'Rewind' to2, by 23 hours
-    LocalDateTime ldt = to1.getTime();
+    OffsetDateTime ldt = to1.getTime();
     ldt = ldt.minusHours(23);
     to2.setTime(ldt);
     
@@ -212,9 +215,9 @@ public class TestTeleMedServant {
     // Reset the timestamps of the observations to
     // something known
     
-    to1.setTime( LocalDateTime.of(2012, 6, 1, 7, 30));
-    to2.setTime( LocalDateTime.of(2012, 6, 1, 10, 30));
-    to3.setTime( LocalDateTime.of(2012, 6, 1, 8, 30));
+    to1.setTime( OffsetDateTime.of(2012, 6, 1, 7, 30, 0, 0, ZoneOffset.UTC));
+    to2.setTime( OffsetDateTime.of(2012, 6, 1, 10, 30, 0,0, ZoneOffset.UTC));
+    to3.setTime( OffsetDateTime.of(2012, 6, 1, 8, 30, 0, 0, ZoneOffset.UTC));
     
     // Upload all three of them
 
@@ -229,9 +232,9 @@ public class TestTeleMedServant {
     
     Collection<Document> list; Document[] array; Document doc;
 
-    LocalDateTime at0730ldt = LocalDateTime.of(2012, 6, 1, 7, 27);
-    LocalDateTime at1030ldt = LocalDateTime.of(2012, 6, 1, 10, 35);
-    LocalDateTime at0830ldt = LocalDateTime.of(2012, 6, 1, 8, 25);
+    OffsetDateTime at0730ldt = OffsetDateTime.of(2012, 6, 1, 7, 27, 0, 0, ZoneOffset.UTC);
+    OffsetDateTime at1030ldt = OffsetDateTime.of(2012, 6, 1, 10, 35, 0, 0, ZoneOffset.UTC);
+    OffsetDateTime at0830ldt = OffsetDateTime.of(2012, 6, 1, 8, 25, 0, 0, ZoneOffset.UTC);
 
     // ----------------------------------------------------------------
     // First, search for person 1 between 0730 and 1030
@@ -244,8 +247,7 @@ public class TestTeleMedServant {
     assertEquals("pid001",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("extension",
                     0, "id", "patient", doc));
-    // The HL7 format is YYYYMMDDHHMMSS for time stamps
-    assertEquals("20120601073000",
+    assertEquals("2012-06-01T07:30:00Z",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
                     0, "effectiveTime", "ClinicalDocument", doc));
 
@@ -254,7 +256,7 @@ public class TestTeleMedServant {
     assertEquals("pid001",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("extension",
                     0, "id", "patient", doc));
-    assertEquals("20120601103000",
+    assertEquals("2012-06-01T10:30:00Z",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
                     0, "effectiveTime", "ClinicalDocument", doc));
 
@@ -264,7 +266,7 @@ public class TestTeleMedServant {
     assertEquals( 1, list.size() );
     array = (Document[])list.toArray(new Document[list.size()]);  
     doc = array[0];
-    assertEquals("20120601073000",
+    assertEquals("2012-06-01T07:30:00Z",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
                     0, "effectiveTime", "ClinicalDocument", doc));
    
@@ -279,8 +281,7 @@ public class TestTeleMedServant {
     assertEquals("pid002",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("extension",
                     0, "id", "patient", doc));
-    // The HL7 format is YYYYMMDDHHMMSS for time stamps
-    assertEquals("20120601083000",
+    assertEquals("2012-06-01T08:30:00Z",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
                     0, "effectiveTime", "ClinicalDocument", doc));
   }
@@ -288,6 +289,30 @@ public class TestTeleMedServant {
   @Test
   public void shouldSupportModificationMethods() {
     validateModificationMethods(telemed);
+  }
+
+  @Test
+  public void shouldHandleTimeZoneConversions() {
+    // Make a measurement now, but made in US/Pacific
+    ZoneId USPacific = ZoneId.of("US/Pacific");
+    OffsetDateTime justNow = OffsetDateTime.now(USPacific);
+    // System.out.println("--> "+ justNow);
+    TeleObservation to1;
+    to1 = new TeleObservation("pid001", 130, 80);
+    to1.setTime(justNow);
+
+    String id = telemed.processAndStore(to1);
+
+    // Ensure that it shows up in the local time zone (Assumption that
+    // this test is run in some timezone whose time is ahead of US/Pacific).
+    List<TeleObservation> intervalTOList =
+            telemed.getObservationsFor("pid001", TimeInterval.LAST_DAY);
+    assertThat(intervalTOList.size(), is(1));
+
+    /*
+    TeleObservation stored = intervalTOList.get(0);
+    System.out.println("--> " + stored);
+*/
   }
 
   public static void validateModificationMethods(TeleMed telemed) {
@@ -310,7 +335,7 @@ public class TestTeleMedServant {
     
     // Revise the t02 observation
     to = new TeleObservation("pid001", 227.0, 91.0);
-    to.setTime(LocalDateTime.of(2011, 3, 1, 7, 30));
+    to.setTime(OffsetDateTime.of(2011, 3, 1, 7, 30, 0, 0, ZoneOffset.UTC));
     boolean isValid = telemed.correct(id2, to);
     assertThat(isValid, is(true));
     

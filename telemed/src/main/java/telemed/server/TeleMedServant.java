@@ -19,6 +19,7 @@
 package telemed.server;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 import org.w3c.dom.Document;
@@ -64,8 +65,8 @@ public class TeleMedServant implements TeleMed, Servant {
   public List<TeleObservation> getObservationsFor(String patientId, TimeInterval interval) {
     List<TeleObservation> teleObsList = new ArrayList<>();
     // Calculate the time interval to search within
-    LocalDateTime now = LocalDateTime.now(); 
-    LocalDateTime someTimeAgo = null;
+    OffsetDateTime now = OffsetDateTime.now();
+    OffsetDateTime someTimeAgo = null;
     if (interval == TimeInterval.LAST_DAY) {
       someTimeAgo = now.minusDays(1);
     } else if (interval == TimeInterval.LAST_WEEK) {
@@ -100,7 +101,7 @@ public class TeleMedServant implements TeleMed, Servant {
     if (doc == null) { return false; }
     
     // Maintain the time stamp, cannot be corrected
-    LocalDateTime originalTime = getTimeFromHL7Document(doc);
+    OffsetDateTime originalTime = getTimeFromHL7Document(doc);
     to.setTime(originalTime);
     
     // Create a new document from the given tele obs
@@ -135,18 +136,18 @@ public class TeleMedServant implements TeleMed, Servant {
             Double.parseDouble(diaAsString));
 
     // Retrieve the time stamp and convert it into java equivalent
-    LocalDateTime ldt;
+    OffsetDateTime ldt;
     ldt = getTimeFromHL7Document(d);
     to.setTime(ldt);
     return to;
   }
 
-  private LocalDateTime getTimeFromHL7Document(Document d) {
-    LocalDateTime ldt;
+  private OffsetDateTime getTimeFromHL7Document(Document d) {
+    OffsetDateTime ldt;
     String timestamp = XMLUtility.
             getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
                     0, "effectiveTime", "ClinicalDocument", d);
-    ldt = LocalDateTime.parse(timestamp, HL7Builder.HL7_TIME_FORMAT);
+    ldt = OffsetDateTime.parse(timestamp);
     return ldt;
   }
 

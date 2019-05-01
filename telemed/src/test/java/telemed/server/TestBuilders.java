@@ -72,7 +72,7 @@ public class TestBuilders {
     assertEquals( HelperMethods.NANCY_ID, meta.getPersonID() );
     
     // assert time stamp in metadata
-    assertEquals( 1338528600000L, meta.getTimestamp() );
+    assertEquals( 1338535812000L, meta.getTimestamp() );
   }
   
 }

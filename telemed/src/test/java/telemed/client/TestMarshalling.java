@@ -21,6 +21,7 @@ package telemed.client;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
+import com.google.gson.Gson;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import frds.broker.RequestObject;
@@ -38,6 +39,7 @@ import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.server.TeleMedServant;
 
 import javax.servlet.http.HttpServletResponse;
+import java.time.OffsetDateTime;
 
 
 /**
@@ -83,6 +85,7 @@ public class TestMarshalling {
     RequestObject req = clientRequestHandler.getLastRequest();
     assertThat(req.getObjectId(), is(HelperMethods.NANCY_ID));
     assertThat(req.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
+
     // some 'smoke testing' of the payload
     assertThat(req.getPayload(), containsString("\"systolic\":{\"value\":120.0,"));
 
@@ -93,7 +96,15 @@ public class TestMarshalling {
   }
 
   @Test
-  public void shouldVerifyToString() {
+  public void shouldVerifyGSonHandlingOffsetDateTime() {
+    OffsetDateTime now = OffsetDateTime.now();
+    System.out.println("--> " + now);
+    Gson gson = new Gson();
+    String asJson = gson.toJson(now);
+    System.out.println("--2> " + asJson);
+
+    OffsetDateTime demarshall = gson.fromJson(asJson, OffsetDateTime.class);
+    System.out.println("--3> " + demarshall);
   }
 
 }
