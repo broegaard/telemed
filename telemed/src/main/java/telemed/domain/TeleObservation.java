@@ -19,13 +19,13 @@
 package telemed.domain;
 
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 /**
  * The domain object for a tele observation for blood pressure. This encapsulates
  * a persons identity (which person does this measurements belong to), the time
- * of the observation (in Central European Time), and of course the systolic and
- * diastolic measurements.
+ * of the observation, and of course the systolic and diastolic measurements.
  */
 
 public class TeleObservation {
@@ -33,7 +33,12 @@ public class TeleObservation {
   private final String patientId;
   private final ClinicalQuantity systolic;
   private final ClinicalQuantity diastolic;
-  private OffsetDateTime time;
+  /* One unfortunate implementation detail sneaks into this domain object,
+    namely that Gson cannot correctly deserialize OffsetDateTime objects.
+    Therefore, we choose a ISO 8601 string representation to avoid the
+    issue.
+   */
+  private String timeAsISO8601;
   
   /** Construct a tele observation for the given patient and the
    * given blood pressure
@@ -44,7 +49,7 @@ public class TeleObservation {
   public TeleObservation(String patientId, double systolic, double diastolic) {
     this.patientId = patientId;
     // Timestamp the observation to 'now' but ignore the milliseconds
-    this.time = OffsetDateTime.now().truncatedTo(ChronoUnit.SECONDS);
+    setTime(OffsetDateTime.now());
     // The codes 'MSC...' are part of a Danish telemedic code system.
     this.systolic = new ClinicalQuantity(systolic, "mm(Hg)","MSC88019","Systolic BP");
     this.diastolic = new ClinicalQuantity(diastolic, "mm(Hg)","MSC88020","Diastolic BP");
@@ -66,6 +71,7 @@ public class TeleObservation {
    * @return time of observation.
    */
   public OffsetDateTime getTime() {
+    OffsetDateTime time = OffsetDateTime.parse(timeAsISO8601);
     return time;
   }
 
@@ -76,7 +82,8 @@ public class TeleObservation {
    *          the time to set for this observation
    */
   public void setTime(OffsetDateTime time) {
-    this.time = time.truncatedTo(ChronoUnit.SECONDS);
+    OffsetDateTime time2 = time.truncatedTo(ChronoUnit.SECONDS);
+    this.timeAsISO8601 = time2.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
   }
 
   /**
@@ -96,6 +103,6 @@ public class TeleObservation {
   }
   
   public String toString() {
-    return "Blood pressure for ID="+getPatientId()+" Measured=("+getSystolic() + ","+getDiastolic()+") at "+time;
+    return "Blood pressure for ID="+getPatientId()+" Measured=("+getSystolic() + ","+getDiastolic()+") at "+timeAsISO8601;
   }
 }

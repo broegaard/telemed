@@ -51,7 +51,6 @@ public class StandardJSONRequestor implements Requestor {
     // Do the IPC to the server using my client request handler
     ReplyObject replyFrom =
             clientRequestHandler.sendToServer(request);
-    System.out.println("----> " + replyFrom);
 
     // First, verify that the request succeeded
     if (!replyFrom.isSuccess()) {
