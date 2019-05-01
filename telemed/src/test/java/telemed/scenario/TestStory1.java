@@ -123,9 +123,7 @@ public class TestStory1 {
     teleMed.processAndStore(to);
     List<TeleObservation> lastDayList = teleMed.getObservationsFor("id42", TimeInterval.LAST_DAY);
     TeleObservation obs = lastDayList.get(0);
-    System.out.println("--> " + obs);
     assertThat(obs.toString(), is(to.toString()));
-
   }
 
   @Test

@@ -59,9 +59,21 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
 	  TimeInterval interval) {
     Type collectionType = 
       new TypeToken<List<TeleObservation>>(){}.getType();
-    return requestor.sendRequestAndAwaitReply(patientId,
-        OperationNames.GET_OBSERVATIONS_FOR_OPERATION, 
-        collectionType, interval);
+
+    // Handle empty return values (404 error code)
+    List<TeleObservation> returnedList;
+    try {
+      returnedList = requestor.sendRequestAndAwaitReply(patientId,
+              OperationNames.GET_OBSERVATIONS_FOR_OPERATION,
+              collectionType, interval);
+    } catch(IPCException e) {
+      if (e.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
+        throw e;
+      }
+      returnedList = new ArrayList<>();
+    }
+
+    return returnedList;
   }
 
   @Override
@@ -73,7 +85,7 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
   @Override
   public TeleObservation getObservation(String uniqueId) {
     TeleObservation to;
-
+    // Handle empty return values (404 error code)
     try {
       to = requestor.sendRequestAndAwaitReply(uniqueId,
               OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class);

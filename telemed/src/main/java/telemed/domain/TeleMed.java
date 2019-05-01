@@ -51,7 +51,8 @@ public interface TeleMed {
 
   /**
    * Retrieve all observations for the given time interval for the 
-   * given patient.
+   * given patient. If no observations exists return a 0 sized
+   * list.
    * 
    * @param patientId
    *          the ID of the patient to retrieve observations for

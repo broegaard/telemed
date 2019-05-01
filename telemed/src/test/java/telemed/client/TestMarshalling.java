@@ -94,17 +94,4 @@ public class TestMarshalling {
     assertThat(rep.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
     assertThat(rep.getPayload(), is("\"uid-1\""));
   }
-
-  @Test
-  public void shouldVerifyGSonHandlingOffsetDateTime() {
-    OffsetDateTime now = OffsetDateTime.now();
-    System.out.println("--> " + now);
-    Gson gson = new Gson();
-    String asJson = gson.toJson(now);
-    System.out.println("--2> " + asJson);
-
-    OffsetDateTime demarshall = gson.fromJson(asJson, OffsetDateTime.class);
-    System.out.println("--3> " + demarshall);
-  }
-
 }
