@@ -240,7 +240,7 @@ public class TestTeleMedServant {
     // First, search for person 1 between 0730 and 1030
     list = thexds.retriveDocumentSet( "pid001", at0730ldt, at1030ldt);
     assertEquals( 2, list.size() );
-    array = (Document[])list.toArray(new Document[list.size()]);  
+    array = list.toArray(new Document[list.size()]);
     
     // Validate entry 1 
     doc = array[0];
@@ -264,7 +264,7 @@ public class TestTeleMedServant {
     // Second, search for person 1 between 0730 and 0830
     list = thexds.retriveDocumentSet( "pid001", at0730ldt, at0830ldt);
     assertEquals( 1, list.size() );
-    array = (Document[])list.toArray(new Document[list.size()]);  
+    array = list.toArray(new Document[list.size()]);
     doc = array[0];
     assertEquals("2012-06-01T07:30:00Z",
             XMLUtility.getValueOfAttrNamedInNodeIndexNamedEnclosedInNodeInDoc("value",
@@ -274,7 +274,7 @@ public class TestTeleMedServant {
     // Third, search for person 2 between 0730 and 1030
     list = thexds.retriveDocumentSet( "pid002", at0730ldt, at1030ldt);
     assertEquals( 1, list.size() );
-    array = (Document[])list.toArray(new Document[list.size()]);  
+    array = list.toArray(new Document[list.size()]);
       
     // Validate entry
     doc = array[0];

@@ -58,7 +58,7 @@ public class TeleMedRESTProxy implements TeleMed, ClientProxy {
         String location = jsonResponse.getHeaders().getFirst("Location");
         // Format: URI ending in /bp/{id}, thus let us split on '/'
         // and pick the last entry
-        String parts[] = location.split("/");
+      String[] parts = location.split("/");
         String teleObsID = parts[parts.length-1];
 
         return teleObsID;

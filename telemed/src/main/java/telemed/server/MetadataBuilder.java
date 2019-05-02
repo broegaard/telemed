@@ -39,9 +39,9 @@ public class MetadataBuilder implements Builder {
     metadata.setPersonID( to.getPatientId() );
 
     // We need to convert the time to a epoch in milliseconds
-    OffsetDateTime zdt = to.getTime();
+    OffsetDateTime dateTime = to.getTime();
     // And then to an instant
-    Instant instant = zdt.toInstant();
+    Instant instant = dateTime.toInstant();
     long timestamp = instant.toEpochMilli();
     metadata.setTimestamp(timestamp);
   }

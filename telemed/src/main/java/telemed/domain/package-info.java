@@ -31,7 +31,7 @@
     single measurement type, namely blood pressure. A blood pressure
     measurement contains two measured quantities (instances
     of <b>ClinicalQuantity</b>): Systolic and Diastolic pressure, both
-    measured in mm(Hg).
+    measured in units of mm(Hg).
 
   <p>
     The interface <b>TeleMed</b> represents the central role in our

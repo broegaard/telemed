@@ -19,7 +19,8 @@
 package telemed.storage;
 
 /**
- * Metadata for a tele observation. Used by the XDS to index observations.
+ * Metadata for a tele observation.
+ * Used by the XDS registry to index observations.
  */
 
 public class MetaData {
@@ -27,18 +28,37 @@ public class MetaData {
   private String personID;
   private long timestamp;
 
+  /**
+   * Return the id of the person which this
+   * metadata is about.
+   * @return person identity.
+   */
   public String getPersonID() {
     return personID;
   }
 
+  /** Setter for the person identity.
+   *
+   * @param personID id of person
+   */
   public void setPersonID(String personID) {
     this.personID = personID;
   }
 
+  /** Return the timestamp of the tele observation
+   * this metadata is about.
+   *
+   * @return unix epoch timestamp for the
+   * associated tele observation
+   */
   public long getTimestamp() {
     return timestamp;
   }
 
+  /** Setter for the timestamp of associated
+   * tele observation
+   * @param timestamp time in unix epoch format
+   */
   public void setTimestamp(long timestamp) {
     this.timestamp = timestamp;
   }

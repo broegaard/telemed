@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 
 import org.w3c.dom.Document;
 
-import telemed.domain.Utility;
 import telemed.storage.*;
 
 /**
