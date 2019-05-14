@@ -16,8 +16,21 @@
  *
  */
 
-include 'broker'
-include 'telemed'
-include 'gamelobby'
-include 'telemed-rest'
-include 'gamelobby-rest'
+/*
+ * Build file for REST based GameLobby.
+ */
+
+apply plugin: 'java'
+apply plugin: 'jacoco'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+  // Get marker interfaces from Broker
+  compile project(':broker')
+
+  testCompile 'junit:junit:4.12'
+}
+

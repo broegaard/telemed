@@ -88,4 +88,14 @@ public class FutureGameServant implements FutureGame, Servant {
   public String getFirstPlayerName() {
     return firstPlayer;
   }
+
+  @Override
+  public String toString() {
+    return "FutureGameServant{" +
+            "joinToken='" + joinToken + '\'' +
+            ", theGame=" + theGame +
+            ", firstPlayer='" + firstPlayer + '\'' +
+            ", id='" + id + '\'' +
+            '}';
+  }
 }
