@@ -26,11 +26,11 @@ public class GameLobbyRestServer {
 
   private void configureRoutes() {
 
-    // Create Remote Game
-    post("/lobby", (req, response) ->
+    // Create FutureGame
+    post("/lobby", (request, response) ->
     {
       // Demarshall body
-      String payload = req.body();
+      String payload = request.body();
       JsonNode asNode = new JsonNode(payload);
       String playerName = asNode.getObject().getString("player");
       Integer level = asNode.getObject().getInt("level");
@@ -42,10 +42,59 @@ public class GameLobbyRestServer {
       // And construct the response of the POST
       response.status(HttpServletResponse.SC_CREATED);
       response.header("Location",
-              req.host() + "/lobby/" + futureGameId);
+              request.host() + "/lobby/" + futureGameId);
       return gson.toJson(fgame);
     });
 
+    // Get FutureGame
+    get( "/lobby/:futureGameId", (request, response) -> {
+      String idAsString = request.params(":futureGameId");
+      // TODO: Handle non-integer provided as path
+      Integer id = Integer.parseInt(idAsString);
+
+      FutureGameResource fgame = database.get(id);
+
+      response.status(HttpServletResponse.SC_OK);
+
+      return gson.toJson(fgame);
+    });
+
+    // Update the FutureGame => make a state transition
+    put( "/lobby/:futureGameId", (request, response) -> {
+      String idAsString = request.params(":futureGameId");
+      // TODO: Handle non-integer provided as path
+      Integer id = Integer.parseInt(idAsString);
+
+      FutureGameResource fgame = database.get(id);
+
+      // Demarshall body
+      String payload = request.body();
+      JsonNode asNode = new JsonNode(payload);
+
+      String playerTwo = asNode.getObject().getString("playerTwo");
+      System.out.println("#--> " + playerTwo);
+
+      // Create game instance
+      int gameId = createGameResourceAndInsertIntoDatabase(fgame);
+
+      // Update resource
+      fgame.setPlayerTwo(playerTwo);
+      fgame.setAvailable(true);
+      fgame.setNext("/lobby/game/" + gameId);
+
+      return gson.toJson(fgame);
+    });
+
+  }
+
+  private GameResource theOneGameOurServerHandles;
+  private int createGameResourceAndInsertIntoDatabase(FutureGameResource fgame) {
+    // Fake it code - we only handle a single game instance with id = 77;
+    int theId = 77;
+    theOneGameOurServerHandles =
+            new GameResource( fgame.getPlayerOne(), fgame.getPlayerTwo(),
+                    fgame.getLevel(), theId);
+    return theId;
   }
 
   private int createFutureGameAndInsertIntoDatabase(String playerName, Integer level) {
