@@ -7,7 +7,8 @@ public class GameResource {
   private final String playerTwo;
   private final int level;
   private final int id;
-  private final String playerInTurn;
+  private String playerInTurn;
+  private int moveCount;
 
   public String getNext() {
     return next;
@@ -22,6 +23,7 @@ public class GameResource {
     this.id = theId;
     this.playerInTurn = playerOne;
     this.next = "/lobby/game/move/" + theId;
+    this.moveCount = 0;
   }
 
   public String getPlayerOne() {
@@ -53,5 +55,18 @@ public class GameResource {
             .add("id=" + id)
             .add("playerInTurn='" + playerInTurn + "'")
             .toString();
+  }
+
+  public void makeAMove() {
+    if (playerInTurn.equals(playerOne)) {
+      playerInTurn = playerTwo;
+    } else {
+      playerInTurn = playerOne;
+    }
+    moveCount++;
+  }
+
+  public int getMoveCount() {
+    return moveCount;
   }
 }

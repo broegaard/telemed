@@ -10,6 +10,16 @@ import java.util.Map;
 
 import static spark.Spark.*;
 
+/** A DEMONSTRATION ONLY game lobby server using REST
+ * to make state changes in a game system.
+ *
+ * NO ERROR CHECKING at all is implemented.
+ *
+ * ONLY ONE FutureGame resource and ONE Game resource
+ * is handled. No real domain code is implemented,
+ * all are Fake-It code within the server.
+ */
+
 public class GameLobbyRestServer {
   private final Gson gson;
 
@@ -72,7 +82,6 @@ public class GameLobbyRestServer {
       JsonNode asNode = new JsonNode(payload);
 
       String playerTwo = asNode.getObject().getString("playerTwo");
-      System.out.println("#--> " + playerTwo);
 
       // Update resource
       fgame.setPlayerTwo(playerTwo);
@@ -93,13 +102,27 @@ public class GameLobbyRestServer {
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
 
-
       response.status(HttpServletResponse.SC_OK);
-      System.out.println("#---> " + theOneGameOurServerHandles);
 
       return gson.toJson(theOneGameOurServerHandles);
     });
 
+    // PUT on move resource
+    put( "/lobby/game/move/:gameId", (request, response) -> {
+      String idAsString = request.params(":gameId");
+      // TODO: Handle non-integer provided as path
+      Integer id = Integer.parseInt(idAsString);
+
+      // Demarshall body
+      String payload = request.body();
+      JsonNode asNode = new JsonNode(payload);
+      asNode.getObject().put("isValid",  true);
+
+      // Update game resource
+      theOneGameOurServerHandles.makeAMove();
+
+      return asNode.getObject();
+    });
 
   }
 

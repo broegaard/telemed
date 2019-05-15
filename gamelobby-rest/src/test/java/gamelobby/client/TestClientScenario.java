@@ -23,6 +23,12 @@ import com.mashape.unirest.http.exceptions.UnirestException;
  * returned ID of the futuregame resource is hardcoded to 42,
  * and the game id to 77 in the server.
  *
+ * Also there is ABSOLUTELY no error checking code in the server
+ * which of course is not realistic, but suffice as the test
+ * scenarios exercised match closely those in the FRDS book
+ * and the code here should only reflect the actual HATEOAS
+ * state machinery of REST systems.
+ *
  */
 public class TestClientScenario {
 
@@ -33,7 +39,6 @@ public class TestClientScenario {
 
   @BeforeClass
   public static void setupGameLobbyRestServer() {
-
     server = new GameLobbyRestServer(PORTNUMBER);
   }
 
@@ -63,7 +68,8 @@ public class TestClientScenario {
 
     // Validate returned resource is the uninitialized future game resource
     // from §7.10 in FRDS.
-    assertThat(reply.getHeaders().getFirst("Location"), is("localhost:" + PORTNUMBER + "/lobby/42"));
+    assertThat(reply.getHeaders().getFirst("Location"),
+            is("localhost:" + PORTNUMBER + "/lobby/42"));
     assertThatReplyIsInitialFutureGameWithStatus(reply, HttpServletResponse.SC_CREATED);
 
     // Pedersen tests that Findus has not joined yet.
@@ -80,16 +86,36 @@ public class TestClientScenario {
             body(body).
             asJson();
 
-    System.out.println(" --PUT -> " + reply.getBody().getObject().toString());
+    // System.out.println(" -- JOIN GAME - PUT -> " + reply.getBody().getObject().toString());
     assertThatReplyIsInitalizedFutureGameWithStatus(reply, HttpServletResponse.SC_OK);
   }
 
   private void executeStory3_PlayingTheGame() throws UnirestException {
     HttpResponse<JsonNode> reply;
+
+    // READ the game resource
     reply = Unirest.get(ROOT_URI + "/lobby/game/77").
             asJson();
 
+    // Assert that no moves have been made and that Pedersen is in turn.
     assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Pedersen");
+    assertThat(reply.getBody().getObject().getInt("moveCount"), is(0));
+
+    // Make a Game Move
+    String body = "{ from : e2, to : e4 }";
+    reply = Unirest.put(ROOT_URI + "/lobby/game/move/77").
+            body(body).
+            asJson();
+
+    // The returned object marks the
+    assertThat(reply.getBody().getObject().getBoolean("isValid"), is(true));
+
+    // READ the game resource again and test that Findus is in turn
+    reply = Unirest.get(ROOT_URI + "/lobby/game/77").
+            asJson();
+
+    assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Findus");
+    assertThat(reply.getBody().getObject().getInt("moveCount"), is(1));
 
   }
 
@@ -102,9 +128,7 @@ public class TestClientScenario {
     assertThat(reply.getBody().getObject().getInt("level"), is(0));
     assertThat(reply.getBody().getObject().getString("playerInTurn"), is(playerInTurn));
     assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/move/77"));
-
   }
-
 
   private void assertThatReplyIsInitalizedFutureGameWithStatus(HttpResponse<JsonNode> reply, int statusCode) {
     assertThat(reply.getStatus(), is(statusCode));
@@ -115,7 +139,6 @@ public class TestClientScenario {
     assertThat(reply.getBody().getObject().getInt("level"), is(0));
     assertThat(reply.getBody().getObject().getBoolean("available"), is(true));
     assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77"));
-
   }
 
   private void assertThatReplyIsInitialFutureGameWithStatus(HttpResponse<JsonNode> reply, int statusCode) {
