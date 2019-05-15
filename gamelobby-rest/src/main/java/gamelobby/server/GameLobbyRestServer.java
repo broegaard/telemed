@@ -74,16 +74,32 @@ public class GameLobbyRestServer {
       String playerTwo = asNode.getObject().getString("playerTwo");
       System.out.println("#--> " + playerTwo);
 
-      // Create game instance
-      int gameId = createGameResourceAndInsertIntoDatabase(fgame);
-
       // Update resource
       fgame.setPlayerTwo(playerTwo);
       fgame.setAvailable(true);
+
+      // Create game instance
+      int gameId = createGameResourceAndInsertIntoDatabase(fgame);
+
       fgame.setNext("/lobby/game/" + gameId);
+      database.put(id, fgame);
 
       return gson.toJson(fgame);
     });
+
+    // Get FutureGame
+    get( "/lobby/game/:gameId", (request, response) -> {
+      String idAsString = request.params(":gameId");
+      // TODO: Handle non-integer provided as path
+      Integer id = Integer.parseInt(idAsString);
+
+
+      response.status(HttpServletResponse.SC_OK);
+      System.out.println("#---> " + theOneGameOurServerHandles);
+
+      return gson.toJson(theOneGameOurServerHandles);
+    });
+
 
   }
 

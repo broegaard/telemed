@@ -100,7 +100,7 @@ public class TestClientScenario {
     assertThat(json.getObject().getString("playerOne"), is("Pedersen"));
     assertThat(json.getObject().getString("playerTwo"), is("Findus"));
     assertThat(reply.getBody().getObject().getInt("level"), is(0));
-    assertThat(reply.getBody().getObject().getBoolean("playerInTurn"), is(playerInTurn));
+    assertThat(reply.getBody().getObject().getString("playerInTurn"), is(playerInTurn));
     assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/move/77"));
 
   }
