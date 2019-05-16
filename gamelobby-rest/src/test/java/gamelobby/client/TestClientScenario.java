@@ -57,7 +57,7 @@ public class TestClientScenario {
   private void executeStory1_CreatingARemoteGame() throws UnirestException {
     HttpResponse<JsonNode> reply;
     // The 'Create Remote Game' payload to be POSTED by Pedersen...
-    String body = "{ player : Pedersen, level : 0 }";
+    String body = "{ playerOne : Pedersen, level : 0 }";
     // the mashape json library will add the missing quotes in the above body...
     JsonNode postLobbyBody = new JsonNode(body);
 
@@ -82,7 +82,7 @@ public class TestClientScenario {
     HttpResponse<JsonNode> reply;
     String body = "{ playerTwo : Findus }";
     // Make the PUT
-    reply = Unirest.put(ROOT_URI + "/lobby/42").
+    reply = Unirest.post(ROOT_URI + "/lobby/42").
             body(body).
             asJson();
 
@@ -103,7 +103,7 @@ public class TestClientScenario {
 
     // Make a Game Move
     String body = "{ from : e2, to : e4 }";
-    reply = Unirest.put(ROOT_URI + "/lobby/game/move/77").
+    reply = Unirest.post(ROOT_URI + "/lobby/game/move/77").
             body(body).
             asJson();
 

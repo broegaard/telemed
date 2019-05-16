@@ -30,21 +30,17 @@ public class GameLobbyRestServer {
     configureRoutes();
   }
 
-  // Create the 'database' of future game resources
-  private int futureGameId = 42;
-  private Map<Integer, FutureGameResource> database
-          = new HashMap<>();
-
   private void configureRoutes() {
 
-    // Create FutureGame
+    // Create Remote Game
     post("/lobby", (request, response) ->
     {
       debugOutput("-> POST /lobby: " + request.body().toString());
+
       // Demarshall body
       String payload = request.body();
       JsonNode asNode = new JsonNode(payload);
-      String playerName = asNode.getObject().getString("player");
+      String playerName = asNode.getObject().getString("playerOne");
       Integer level = asNode.getObject().getInt("level");
 
       // Call 'domain' code to create the future game
@@ -69,7 +65,7 @@ public class GameLobbyRestServer {
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
 
-      FutureGameResource fgame = database.get(id);
+      FutureGameResource fgame = getFutureGameFromDatabase(id);
 
       response.status(HttpServletResponse.SC_OK);
 
@@ -79,7 +75,7 @@ public class GameLobbyRestServer {
     });
 
     // Update the FutureGame => make a state transition
-    put( "/lobby/:futureGameId", (request, response) -> {
+    post( "/lobby/:futureGameId", (request, response) -> {
       debugOutput("-> POST /lobby/{future-game-id}: " + request.body().toString());
 
       String idAsString = request.params(":futureGameId");
@@ -102,7 +98,7 @@ public class GameLobbyRestServer {
       int gameId = createGameResourceAndInsertIntoDatabase(fgame);
 
       fgame.setNext("/lobby/game/" + gameId);
-      database.put(id, fgame);
+      updateFutureGameInDatabase(id, fgame);
 
       debugOutput("-< Reply: " + gson.toJson(fgame));
 
@@ -118,13 +114,15 @@ public class GameLobbyRestServer {
 
       response.status(HttpServletResponse.SC_OK);
 
-      debugOutput("-< Reply: " + gson.toJson(theOneGameOurServerHandles));
+      GameResource game = getGameFromDatabase(id);
 
-      return gson.toJson(theOneGameOurServerHandles);
+      debugOutput("-< Reply: " + gson.toJson(game));
+
+      return gson.toJson(game);
     });
 
-    // PUT on move resource
-    put( "/lobby/game/move/:gameId", (request, response) -> {
+    // POST on move resource
+    post( "/lobby/game/move/:gameId", (request, response) -> {
       debugOutput("-> POST /lobby/game/move/{game-id}: " + request.body().toString());
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
@@ -136,7 +134,8 @@ public class GameLobbyRestServer {
       asNode.getObject().put("isValid",  true);
 
       // Update game resource
-      theOneGameOurServerHandles.makeAMove();
+      GameResource game = getGameFromDatabase(id);
+      game.makeAMove();
 
       debugOutput("-< Reply: " + asNode.getObject());
       return asNode.getObject();
@@ -144,6 +143,27 @@ public class GameLobbyRestServer {
 
   }
 
+
+  // === Domain handling of FutureGame resources
+  private int futureGameId = 42;
+  private Map<Integer, FutureGameResource> database
+          = new HashMap<>();
+
+  private int createFutureGameAndInsertIntoDatabase(String playerName, Integer level) {
+    FutureGameResource f = new FutureGameResource(playerName, level);
+    database.put(futureGameId, f);
+    futureGameId++;
+
+    return futureGameId - 1;
+  }
+  private FutureGameResource getFutureGameFromDatabase(int id) {
+    return database.get(id);
+  }
+  private void updateFutureGameInDatabase(int id, FutureGameResource fgame) {
+    database.put(id, fgame);
+  }
+
+  // === Domain handling of Game resources
   private GameResource theOneGameOurServerHandles;
   private int createGameResourceAndInsertIntoDatabase(FutureGameResource fgame) {
     // Fake it code - we only handle a single game instance with id = 77;
@@ -153,14 +173,10 @@ public class GameLobbyRestServer {
                     fgame.getLevel(), theId);
     return theId;
   }
-
-  private int createFutureGameAndInsertIntoDatabase(String playerName, Integer level) {
-    FutureGameResource f = new FutureGameResource(playerName, level);
-    database.put(futureGameId, f);
-    futureGameId++;
-
-    return futureGameId - 1;
+  private GameResource getGameFromDatabase(int id) {
+    return theOneGameOurServerHandles;
   }
+
 
   public void stop() {
     spark.Spark.stop();
