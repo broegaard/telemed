@@ -2,10 +2,11 @@ package gamelobby.server;
 
 import com.google.gson.Gson;
 import com.mashape.unirest.http.*;
+import spark.Request;
 
 import javax.servlet.http.HttpServletResponse;
 
-import java.awt.*;
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,10 +33,10 @@ public class GameLobbyRestServer {
 
   private void configureRoutes() {
 
-    // Create Remote Game
+    // Create Remote Game (i.e. create a FutureGame resource)
     post("/lobby", (request, response) ->
     {
-      debugOutput("-> POST /lobby: " + request.body().toString());
+      debugOutput(request);
 
       // Demarshall body
       String payload = request.body();
@@ -58,9 +59,10 @@ public class GameLobbyRestServer {
       return gson.toJson(fgame);
     });
 
-    // Get FutureGame
+    // Get FutureGame resource
     get( "/lobby/:futureGameId", (request, response) -> {
-      debugOutput("-> GET /lobby/{future-game-id}: " + request.body().toString());
+      debugOutput(request);
+
       String idAsString = request.params(":futureGameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
@@ -74,9 +76,9 @@ public class GameLobbyRestServer {
       return gson.toJson(fgame);
     });
 
-    // Update the FutureGame => make a state transition
+    // Partial update the FutureGame resource, thereby transition into a valid game
     post( "/lobby/:futureGameId", (request, response) -> {
-      debugOutput("-> POST /lobby/{future-game-id}: " + request.body().toString());
+      debugOutput(request);
 
       String idAsString = request.params(":futureGameId");
       // TODO: Handle non-integer provided as path
@@ -105,9 +107,9 @@ public class GameLobbyRestServer {
       return gson.toJson(fgame);
     });
 
-    // Get FutureGame
+    // Get Game resource
     get( "/lobby/game/:gameId", (request, response) -> {
-      debugOutput("-> GET /lobby/game/{game-id}: " + request.body().toString());
+      debugOutput(request);
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
@@ -121,22 +123,29 @@ public class GameLobbyRestServer {
       return gson.toJson(game);
     });
 
-    // PUT on move resource
-    put( "/lobby/game/move/:gameId", (request, response) -> {
-      debugOutput("-> PUT /lobby/game/move/{game-id}: " + request.body().toString());
-      String idAsString = request.params(":gameId");
+    // Update the move resource, i.e. making a transition in the game's state
+    put( "/lobby/game/:gameId/move/:moveId", (request, response) -> {
+      debugOutput("/// A");
+      debugOutput(request);
+      debugOutput("/// B");
+
+      String gameIdAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
-      Integer id = Integer.parseInt(idAsString);
+      Integer gameId = Integer.parseInt(gameIdAsString);
 
       // Demarshall body
       String payload = request.body();
       JsonNode asNode = new JsonNode(payload);
-      asNode.getObject().put("isValid",  true);
+
+      debugOutput("/// C");
 
       // Update game resource
-      GameResource game = getGameFromDatabase(id);
-      game.makeAMove();
+      GameResource game = getGameFromDatabase(gameId);
+      debugOutput("/// D");
+      MoveResource nextMove = makeAMove(game);
+      debugOutput("/// E");
 
+      // Simply return the same object as PUT
       debugOutput("-< Reply: " + asNode.getObject());
       return asNode.getObject();
     });
@@ -165,16 +174,29 @@ public class GameLobbyRestServer {
 
   // === Domain handling of Game resources
   private GameResource theOneGameOurServerHandles;
+  private List<MoveResource> moveResourceList;
   private int createGameResourceAndInsertIntoDatabase(FutureGameResource fgame) {
     // Fake it code - we only handle a single game instance with id = 77;
     int theId = 77;
     theOneGameOurServerHandles =
             new GameResource( fgame.getPlayerOne(), fgame.getPlayerTwo(),
                     fgame.getLevel(), theId);
+
+    // Create first move resource
+    moveResourceList = new ArrayList<>();
+    MoveResource move = new MoveResource("(unknown name)", "xx", "yy");
     return theId;
   }
+
   private GameResource getGameFromDatabase(int id) {
     return theOneGameOurServerHandles;
+  }
+
+  private MoveResource makeAMove(GameResource game) {
+    int idOfMoveResource = game.makeAMove();
+    assert idOfMoveResource == moveResourceList.size();
+
+    return null;
   }
 
 
@@ -186,5 +208,9 @@ public class GameLobbyRestServer {
     System.out.println(s);
   }
 
+  private void debugOutput(Request request) {
+    debugOutput("-> " + request.requestMethod() + " " + request.pathInfo()
+            + ": " + request.body().toString());
+  }
 
 }

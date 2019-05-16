@@ -8,7 +8,11 @@ public class GameResource {
   private final int level;
   private final int id;
   private String playerInTurn;
-  private int moveCount;
+  private int noOfMovesMade;
+
+  // Not used in our demonstation code, represents
+  // a real game's internal board state...
+  private final String board;
 
   public String getNext() {
     return next;
@@ -16,14 +20,20 @@ public class GameResource {
 
   private final String next;
 
-  public GameResource(String playerOne, String playerTwo, int level, int theId) {
+  public GameResource(String playerOne, String playerTwo,
+                      int level, int theId) {
     this.playerOne = playerOne;
     this.playerTwo = playerTwo;
     this.level = level;
     this.id = theId;
     this.playerInTurn = playerOne;
-    this.next = "/lobby/game/move/" + theId;
-    this.moveCount = 0;
+    this.noOfMovesMade = 0;
+    this.board = "[...]";
+    this.next = computeNextLink();
+  }
+
+  private String computeNextLink() {
+    return "/lobby/game/" + getId() + "/move/" + getNoOfMovesMade();
   }
 
   public String getPlayerOne() {
@@ -46,6 +56,25 @@ public class GameResource {
     return playerInTurn;
   }
 
+  // make a move, and return ID of next move resource
+  public int makeAMove() {
+    if (playerInTurn.equals(playerOne)) {
+      playerInTurn = playerTwo;
+    } else {
+      playerInTurn = playerOne;
+    }
+    noOfMovesMade++;
+    return noOfMovesMade;
+  }
+
+  public int getNoOfMovesMade() {
+    return noOfMovesMade;
+  }
+
+  public String getBoard() {
+    return board;
+  }
+
   @Override
   public String toString() {
     return new StringJoiner(", ", GameResource.class.getSimpleName() + "[", "]")
@@ -54,19 +83,9 @@ public class GameResource {
             .add("level=" + level)
             .add("id=" + id)
             .add("playerInTurn='" + playerInTurn + "'")
+            .add("noOfMovesMade=" + noOfMovesMade)
+            .add("board='" + board + "'")
+            .add("next='" + next + "'")
             .toString();
-  }
-
-  public void makeAMove() {
-    if (playerInTurn.equals(playerOne)) {
-      playerInTurn = playerTwo;
-    } else {
-      playerInTurn = playerOne;
-    }
-    moveCount++;
-  }
-
-  public int getMoveCount() {
-    return moveCount;
   }
 }

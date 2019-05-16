@@ -81,9 +81,10 @@ public class TestClientScenario {
   private void executeStory2_JoiningAnExistingGame() throws UnirestException {
     HttpResponse<JsonNode> reply;
     String body = "{ playerTwo : Findus }";
+    JsonNode postBody = new JsonNode(body);
     // Make the PUT
     reply = Unirest.post(ROOT_URI + "/lobby/42").
-            body(body).
+            body(postBody).
             asJson();
 
     // System.out.println(" -- JOIN GAME - PUT -> " + reply.getBody().getObject().toString());
@@ -99,23 +100,31 @@ public class TestClientScenario {
 
     // Assert that no moves have been made and that Pedersen is in turn.
     assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Pedersen");
-    assertThat(reply.getBody().getObject().getInt("moveCount"), is(0));
+    assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(0));
+    // And that a move resource has been returned as 'next' link
+    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/0"));
 
-    // Make a Game Move
+    System.out.println("================A");
+
+    // Make a Game Move by updating/PUT this resource
     String body = "{ player : Petersen, from : e2, to : e4 }";
-    reply = Unirest.put(ROOT_URI + "/lobby/game/move/77").
-            body(body).
+    JsonNode postBody = new JsonNode(body);
+    reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/0").
+            body(postBody).
             asJson();
 
-    // The returned object marks the
-    assertThat(reply.getBody().getObject().getBoolean("isValid"), is(true));
+    assertThat(reply.getBody().getObject().getString("from"), is("e2"));
 
+    System.out.println("================B");
     // READ the game resource again and test that Findus is in turn
     reply = Unirest.get(ROOT_URI + "/lobby/game/77").
             asJson();
 
     assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Findus");
-    assertThat(reply.getBody().getObject().getInt("moveCount"), is(1));
+    assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(1));
+
+    // And that the next pointer is now pointing to the next move resource
+    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/1"));
 
   }
 
@@ -127,7 +136,7 @@ public class TestClientScenario {
     assertThat(json.getObject().getString("playerTwo"), is("Findus"));
     assertThat(reply.getBody().getObject().getInt("level"), is(0));
     assertThat(reply.getBody().getObject().getString("playerInTurn"), is(playerInTurn));
-    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/move/77"));
+    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/0"));
   }
 
   private void assertThatReplyIsInitalizedFutureGameWithStatus(HttpResponse<JsonNode> reply, int statusCode) {
