@@ -5,6 +5,7 @@ import com.mashape.unirest.http.*;
 
 import javax.servlet.http.HttpServletResponse;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,7 @@ public class GameLobbyRestServer {
     // Create FutureGame
     post("/lobby", (request, response) ->
     {
+      debugOutput("-> POST /lobby: " + request.body().toString());
       // Demarshall body
       String payload = request.body();
       JsonNode asNode = new JsonNode(payload);
@@ -51,13 +53,18 @@ public class GameLobbyRestServer {
 
       // And construct the response of the POST
       response.status(HttpServletResponse.SC_CREATED);
-      response.header("Location",
-              request.host() + "/lobby/" + futureGameId);
+      String location = request.host() + "/lobby/" + futureGameId;
+      response.header("Location", location );
+
+      debugOutput("-< Location: " + location);
+      debugOutput("-< Reply: " + gson.toJson(fgame));
+
       return gson.toJson(fgame);
     });
 
     // Get FutureGame
     get( "/lobby/:futureGameId", (request, response) -> {
+      debugOutput("-> GET /lobby/{future-game-id}: " + request.body().toString());
       String idAsString = request.params(":futureGameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
@@ -66,11 +73,15 @@ public class GameLobbyRestServer {
 
       response.status(HttpServletResponse.SC_OK);
 
+      debugOutput("-< Reply: " + gson.toJson(fgame));
+
       return gson.toJson(fgame);
     });
 
     // Update the FutureGame => make a state transition
     put( "/lobby/:futureGameId", (request, response) -> {
+      debugOutput("-> POST /lobby/{future-game-id}: " + request.body().toString());
+
       String idAsString = request.params(":futureGameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
@@ -93,22 +104,28 @@ public class GameLobbyRestServer {
       fgame.setNext("/lobby/game/" + gameId);
       database.put(id, fgame);
 
+      debugOutput("-< Reply: " + gson.toJson(fgame));
+
       return gson.toJson(fgame);
     });
 
     // Get FutureGame
     get( "/lobby/game/:gameId", (request, response) -> {
+      debugOutput("-> GET /lobby/game/{game-id}: " + request.body().toString());
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
 
       response.status(HttpServletResponse.SC_OK);
 
+      debugOutput("-< Reply: " + gson.toJson(theOneGameOurServerHandles));
+
       return gson.toJson(theOneGameOurServerHandles);
     });
 
     // PUT on move resource
     put( "/lobby/game/move/:gameId", (request, response) -> {
+      debugOutput("-> POST /lobby/game/move/{game-id}: " + request.body().toString());
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
@@ -121,6 +138,7 @@ public class GameLobbyRestServer {
       // Update game resource
       theOneGameOurServerHandles.makeAMove();
 
+      debugOutput("-< Reply: " + asNode.getObject());
       return asNode.getObject();
     });
 
@@ -147,4 +165,10 @@ public class GameLobbyRestServer {
   public void stop() {
     spark.Spark.stop();
   }
+
+  private void debugOutput(String s) {
+    System.out.println(s);
+  }
+
+
 }
