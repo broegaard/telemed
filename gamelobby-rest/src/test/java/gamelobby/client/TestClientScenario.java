@@ -102,8 +102,8 @@ public class TestClientScenario {
     assertThat(reply.getBody().getObject().getInt("moveCount"), is(0));
 
     // Make a Game Move
-    String body = "{ from : e2, to : e4 }";
-    reply = Unirest.post(ROOT_URI + "/lobby/game/move/77").
+    String body = "{ player : Petersen, from : e2, to : e4 }";
+    reply = Unirest.put(ROOT_URI + "/lobby/game/move/77").
             body(body).
             asJson();
 

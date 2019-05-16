@@ -121,9 +121,9 @@ public class GameLobbyRestServer {
       return gson.toJson(game);
     });
 
-    // POST on move resource
-    post( "/lobby/game/move/:gameId", (request, response) -> {
-      debugOutput("-> POST /lobby/game/move/{game-id}: " + request.body().toString());
+    // PUT on move resource
+    put( "/lobby/game/move/:gameId", (request, response) -> {
+      debugOutput("-> PUT /lobby/game/move/{game-id}: " + request.body().toString());
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
       Integer id = Integer.parseInt(idAsString);
