@@ -111,7 +111,8 @@ public class TestClientScenario {
     assertThat(reply.getStatus(), is(HttpServletResponse.SC_OK));
     assertThat(reply.getBody().getObject().getString("from"), is("null"));
 
-    // === Make a Second Game Move by updating/PUT this resource
+
+    // === Make a First Game Move by updating/PUT this resource
     String body = "{ player : Pedersen, from : e2, to : e4 }";
     JsonNode postBody = new JsonNode(body);
     reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/0").
@@ -131,24 +132,24 @@ public class TestClientScenario {
     assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/1"));
 
 
-    /*
-    String body = "{ player : Pedersen, from : e2, to : e4 }";
-    JsonNode postBody = new JsonNode(body);
-    reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/0").
+    // === Make a SECOND move by FINDUS
+    body = "{ player : Findus, from : e7, to : e5 }";
+    postBody = new JsonNode(body);
+    reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/1").
             body(postBody).
             asJson();
 
-    assertThat(reply.getBody().getObject().getString("from"), is("e2"));
+    assertThat(reply.getBody().getObject().getString("from"), is("e7"));
 
-    // READ the game resource again and test that Findus is in turn
+    // READ the game resource again and test that Pedersen is in turn
     reply = Unirest.get(ROOT_URI + "/lobby/game/77").
             asJson();
 
-    assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Findus");
-    assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(1));
+    assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Pedersen");
+    assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(2));
 
     // And that the next pointer is now pointing to the next move resource
-    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/1"));*/
+    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/2"));
   }
 
   private void assertThatReplyIsGameResourceWithGivenPlayerInTurn(HttpResponse<JsonNode> reply, String playerInTurn) {
