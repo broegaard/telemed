@@ -2,6 +2,9 @@ package gamelobby.server;
 
 import java.util.StringJoiner;
 
+/** Resource to represent a move:
+ * Player p is moving from f to t.
+ */
 public class MoveResource {
   private final String player;
   private final String from;

@@ -234,7 +234,10 @@ public class GameLobbyRestServer {
   }
 
   private void debugOutput(String s) {
-    System.out.println(s);
+    // Enable the printing below to review the request/reply
+    // of the GameLobby REST server.
+
+    // System.out.println(s);
   }
 
   private void debugOutput(Request request) {

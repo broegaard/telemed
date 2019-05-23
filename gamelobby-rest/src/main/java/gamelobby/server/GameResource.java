@@ -2,6 +2,15 @@ package gamelobby.server;
 
 import java.util.StringJoiner;
 
+/** Resource to represent a game: names of
+ * players, player in turn, no of moves made,
+ * and 'next' link to the next move resource to
+ * update in order to advance the game's state.
+ *
+ * Note: Proper modeling of the GameResource is not
+ * the issue here, so a lot of hardcoded URI paths
+ * and other fake-it code is present.
+ */
 public class GameResource {
   private final String playerOne;
   private final String playerTwo;
