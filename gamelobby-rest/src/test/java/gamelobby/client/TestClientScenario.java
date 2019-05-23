@@ -102,12 +102,17 @@ public class TestClientScenario {
     assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Pedersen");
     assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(0));
     // And that a move resource has been returned as 'next' link
-    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/0"));
+    String nextLink = reply.getBody().getObject().getString("next");
+    assertThat(nextLink, is("/lobby/game/77/move/0"));
 
-    System.out.println("================A");
+    // GET the move resource - which as it does not represent a move in the game - is all null values
+    reply = Unirest.get(ROOT_URI + nextLink).asJson();
 
-    // Make a Game Move by updating/PUT this resource
-    String body = "{ player : Petersen, from : e2, to : e4 }";
+    assertThat(reply.getStatus(), is(HttpServletResponse.SC_OK));
+    assertThat(reply.getBody().getObject().getString("from"), is("null"));
+
+    // === Make a Second Game Move by updating/PUT this resource
+    String body = "{ player : Pedersen, from : e2, to : e4 }";
     JsonNode postBody = new JsonNode(body);
     reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/0").
             body(postBody).
@@ -115,7 +120,6 @@ public class TestClientScenario {
 
     assertThat(reply.getBody().getObject().getString("from"), is("e2"));
 
-    System.out.println("================B");
     // READ the game resource again and test that Findus is in turn
     reply = Unirest.get(ROOT_URI + "/lobby/game/77").
             asJson();
@@ -126,6 +130,25 @@ public class TestClientScenario {
     // And that the next pointer is now pointing to the next move resource
     assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/1"));
 
+
+    /*
+    String body = "{ player : Pedersen, from : e2, to : e4 }";
+    JsonNode postBody = new JsonNode(body);
+    reply = Unirest.put(ROOT_URI + "/lobby/game/77/move/0").
+            body(postBody).
+            asJson();
+
+    assertThat(reply.getBody().getObject().getString("from"), is("e2"));
+
+    // READ the game resource again and test that Findus is in turn
+    reply = Unirest.get(ROOT_URI + "/lobby/game/77").
+            asJson();
+
+    assertThatReplyIsGameResourceWithGivenPlayerInTurn(reply, "Findus");
+    assertThat(reply.getBody().getObject().getInt("noOfMovesMade"), is(1));
+
+    // And that the next pointer is now pointing to the next move resource
+    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/1"));*/
   }
 
   private void assertThatReplyIsGameResourceWithGivenPlayerInTurn(HttpResponse<JsonNode> reply, String playerInTurn) {
@@ -136,7 +159,7 @@ public class TestClientScenario {
     assertThat(json.getObject().getString("playerTwo"), is("Findus"));
     assertThat(reply.getBody().getObject().getInt("level"), is(0));
     assertThat(reply.getBody().getObject().getString("playerInTurn"), is(playerInTurn));
-    assertThat(reply.getBody().getObject().getString("next"), is("/lobby/game/77/move/0"));
+    assertThat(reply.getBody().getObject().getString("next"), containsString("/lobby/game/77/move/"));
   }
 
   private void assertThatReplyIsInitalizedFutureGameWithStatus(HttpResponse<JsonNode> reply, int statusCode) {

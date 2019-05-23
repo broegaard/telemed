@@ -13,13 +13,20 @@ import java.util.Map;
 import static spark.Spark.*;
 
 /** A DEMONSTRATION ONLY game lobby server using REST
- * to make state changes in a game system.
+ * to make state changes in a game system using the
+ * HATEOAS paradigm.
  *
- * NO ERROR CHECKING at all is implemented.
+ * NO ERROR CHECKING at all is implemented. Only
+ * HAPPY PATH is supported, that is, no handling of
+ * invalid moves, retrieving non-existing resources, etc.
  *
  * ONLY ONE FutureGame resource and ONE Game resource
  * is handled. No real domain code is implemented,
  * all are Fake-It code within the server.
+ *
+ * If you want to follow the interaction between
+ * client and server, enable the println statement
+ * in the debugOutput method and run the test case.
  */
 
 public class GameLobbyRestServer {
@@ -123,11 +130,30 @@ public class GameLobbyRestServer {
       return gson.toJson(game);
     });
 
+    // GET on a move resource
+    get( "/lobby/game/:gameId/move/:moveId", (request, response) -> {
+      debugOutput(request);
+      String gameIdAsString = request.params(":gameId");
+      // TODO: Handle non-integer provided as gameId
+      Integer gameId = Integer.parseInt(gameIdAsString);
+
+      String moveIdAsString = request.params(":moveId");
+      // TODO: Handle non-integer provided as moveId
+      Integer moveId = Integer.parseInt(moveIdAsString);
+
+      // TODO: handle out of bounds and null values
+      List<MoveResource> theMoveList = getMoveListForGame(gameId);
+      MoveResource move = theMoveList.get(moveId);
+
+      debugOutput("-< Reply: " + gson.toJson(move));
+
+      response.status(HttpServletResponse.SC_OK);
+      return gson.toJson(move);
+    });
+
     // Update the move resource, i.e. making a transition in the game's state
     put( "/lobby/game/:gameId/move/:moveId", (request, response) -> {
-      debugOutput("/// A");
       debugOutput(request);
-      debugOutput("/// B");
 
       String gameIdAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
@@ -135,23 +161,19 @@ public class GameLobbyRestServer {
 
       // Demarshall body
       String payload = request.body();
-      JsonNode asNode = new JsonNode(payload);
+      MoveResource move = gson.fromJson(payload, MoveResource.class);
 
-      debugOutput("/// C");
-
-      // Update game resource
+      // Update game resource with the new move
       GameResource game = getGameFromDatabase(gameId);
-      debugOutput("/// D");
-      MoveResource nextMove = makeAMove(game);
-      debugOutput("/// E");
+      MoveResource nextMove = makeAMove(game, move);
 
+      // TODO: Implement logic to handle an invalid move
       // Simply return the same object as PUT
-      debugOutput("-< Reply: " + asNode.getObject());
-      return asNode.getObject();
+      debugOutput("-< Reply: " + gson.toJson(nextMove));
+      return gson.toJson(nextMove);
     });
 
   }
-
 
   // === Domain handling of FutureGame resources
   private int futureGameId = 42;
@@ -172,7 +194,7 @@ public class GameLobbyRestServer {
     database.put(id, fgame);
   }
 
-  // === Domain handling of Game resources
+  // === Domain handling of Game and Move resources
   private GameResource theOneGameOurServerHandles;
   private List<MoveResource> moveResourceList;
   private int createGameResourceAndInsertIntoDatabase(FutureGameResource fgame) {
@@ -184,20 +206,27 @@ public class GameLobbyRestServer {
 
     // Create first move resource
     moveResourceList = new ArrayList<>();
-    MoveResource move = new MoveResource("(unknown name)", "xx", "yy");
+    MoveResource move = new MoveResource("null", "null", "null");
+    moveResourceList.add(move);
     return theId;
   }
 
   private GameResource getGameFromDatabase(int id) {
+    // Fake-it - only one game instance handled
     return theOneGameOurServerHandles;
   }
 
-  private MoveResource makeAMove(GameResource game) {
-    int idOfMoveResource = game.makeAMove();
-    assert idOfMoveResource == moveResourceList.size();
 
-    return null;
+  private MoveResource makeAMove(GameResource game, MoveResource move) {
+    MoveResource moveResource = game.makeAMove(move);
+    return moveResource;
   }
+
+  private List<MoveResource> getMoveListForGame(Integer id) {
+    // Fake-it - only one move list implemented
+    return moveResourceList;
+  }
+
 
 
   public void stop() {

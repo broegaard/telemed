@@ -9,16 +9,11 @@ public class GameResource {
   private final int id;
   private String playerInTurn;
   private int noOfMovesMade;
+  private String next;
 
   // Not used in our demonstation code, represents
   // a real game's internal board state...
   private final String board;
-
-  public String getNext() {
-    return next;
-  }
-
-  private final String next;
 
   public GameResource(String playerOne, String playerTwo,
                       int level, int theId) {
@@ -48,6 +43,10 @@ public class GameResource {
     return level;
   }
 
+  public String getNext() {
+    return next;
+  }
+
   public int getId() {
     return id;
   }
@@ -57,14 +56,18 @@ public class GameResource {
   }
 
   // make a move, and return ID of next move resource
-  public int makeAMove() {
+  public MoveResource makeAMove(MoveResource move) {
+    // TODO: Handle invalid moves by returning a move resource
+    // that is nullified or in other ways show an illegal move.
     if (playerInTurn.equals(playerOne)) {
       playerInTurn = playerTwo;
     } else {
       playerInTurn = playerOne;
     }
     noOfMovesMade++;
-    return noOfMovesMade;
+    this.next = computeNextLink();
+
+    return move;
   }
 
   public int getNoOfMovesMade() {
