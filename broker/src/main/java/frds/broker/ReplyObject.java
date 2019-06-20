@@ -18,6 +18,8 @@
 
 package frds.broker;
 
+import java.util.StringJoiner;
+
 /**
  * Reply object encapsulates the reply from the server - a status code (we reuse
  * the HTTP status codes as they already define a standardized set of codes), a
@@ -74,12 +76,15 @@ public class ReplyObject {
   public int getStatusCode() {
     return statusCode;
   }
-  
+
   @Override
   public String toString() {
-    return "ReplyObject [payload=" + payload + ", errorDescription="
-            + errorDescription + ", responseCode="
-            + statusCode + "]";
+    return new StringJoiner(", ", ReplyObject.class.getSimpleName() + "[", "]")
+            .add("payload='" + payload + "'")
+            .add("errorDescription='" + errorDescription + "'")
+            .add("statusCode=" + statusCode)
+            .add("versionIdentity=" + versionIdentity)
+            .toString();
   }
 
   public int getVersionIdentity() {

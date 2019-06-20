@@ -83,11 +83,12 @@ public class UriTunnelServerRequestHandler
       
       // The incoming body is a full request
       // object to be demarshalled
-      RequestObject p = gson.fromJson(body, RequestObject.class);
-      logger.info("--> Received request: " + p);
+      RequestObject requestObject = gson.fromJson(body, RequestObject.class);
+      //logger.info("--> Received request: " + requestObject);
+      logger.info("action=request, requestObject=\"{}\"", requestObject);
 
-      ReplyObject reply = invoker.handleRequest(p.getObjectId(),
-              p.getOperationName(), p.getPayload());
+      ReplyObject reply = invoker.handleRequest(requestObject.getObjectId(),
+              requestObject.getOperationName(), requestObject.getPayload());
 
       // Store the last verb and status code to allow spying during test
       lastVerb = req.requestMethod();
@@ -96,7 +97,7 @@ public class UriTunnelServerRequestHandler
       res.status(reply.getStatusCode());
       res.type(MimeMediaType.APPLICATION_JSON);
 
-      logger.info("--< Reply: " + reply);
+      logger.info("action=reply, replyObject=\"{}\"", reply);
 
       return gson.toJson(reply);
     });

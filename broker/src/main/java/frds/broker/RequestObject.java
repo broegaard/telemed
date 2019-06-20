@@ -18,6 +18,8 @@
 
 package frds.broker;
 
+import java.util.StringJoiner;
+
 /**
  * Request object, a record type that defines the data defining a request. As
  * this format is close to the on-the-wire format, marshalling and demarshalling
@@ -54,12 +56,12 @@ public class RequestObject {
 
   @Override
   public String toString() {
-    return "RequestObject{" +
-            "operationName='" + operationName + '\'' +
-            ", payload='" + payload + '\'' +
-            ", objectId='" + objectId + '\'' +
-            ", versionIdentity=" + versionIdentity +
-            '}';
+    return new StringJoiner(", ", RequestObject.class.getSimpleName() + "[", "]")
+            .add("operationName='" + operationName + "'")
+            .add("payload='" + payload + "'")
+            .add("objectId='" + objectId + "'")
+            .add("versionIdentity=" + versionIdentity)
+            .toString();
   }
 
   public int getVersionIdentity() {

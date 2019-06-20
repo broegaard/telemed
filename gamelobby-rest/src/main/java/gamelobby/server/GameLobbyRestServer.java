@@ -227,8 +227,6 @@ public class GameLobbyRestServer {
     return moveResourceList;
   }
 
-
-
   public void stop() {
     spark.Spark.stop();
   }
