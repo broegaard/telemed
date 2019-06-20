@@ -85,8 +85,11 @@ public class UriTunnelServerRequestHandler
       // The incoming body is a full request
       // object to be demarshalled
       RequestObject requestObject = gson.fromJson(body, RequestObject.class);
-      //logger.info("--> Received request: " + requestObject);
-      logger.info("action=request, requestObject=\"{}\"", requestObject);
+      // Log the request, using a key-value format
+      logger.info("method=handleRequest, context=request, objectId={}, operationName={}, payload='{}'",
+              requestObject.getObjectId(),
+              requestObject.getOperationName(),
+              requestObject.getPayload());
 
       ReplyObject reply = invoker.handleRequest(requestObject.getObjectId(),
               requestObject.getOperationName(), requestObject.getPayload());
@@ -99,8 +102,8 @@ public class UriTunnelServerRequestHandler
       res.type(MimeMediaType.APPLICATION_JSON);
 
       long reponseTime = System.currentTimeMillis() - startTime;
-      logger.info("action=reply, replyObject=\"{}\", responseTime_ms={}",
-              reply, reponseTime);
+      logger.info("method=handleRequest, context=reply, statusCode={}, payload='{}', responseTime_ms={}",
+              reply.getStatusCode(), reply.getPayload(), reponseTime);
 
       return gson.toJson(reply);
     });
