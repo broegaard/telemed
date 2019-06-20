@@ -79,6 +79,7 @@ public class UriTunnelServerRequestHandler
 
     // POST is for all incoming requests
     post(tunnelRoute, (req,res) -> {
+      long startTime = System.currentTimeMillis();
       String body = req.body();
       
       // The incoming body is a full request
@@ -97,7 +98,9 @@ public class UriTunnelServerRequestHandler
       res.status(reply.getStatusCode());
       res.type(MimeMediaType.APPLICATION_JSON);
 
-      logger.info("action=reply, replyObject=\"{}\"", reply);
+      long reponseTime = System.currentTimeMillis() - startTime;
+      logger.info("action=reply, replyObject=\"{}\", responseTime_ms={}",
+              reply, reponseTime);
 
       return gson.toJson(reply);
     });

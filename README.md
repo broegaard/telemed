@@ -28,8 +28,22 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '1.4'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '1.6'
     }
+
+### Which IPC implementation shall I use?
+
+The FRDS.Broker library provides implementations of a socket based and
+a HTTP based InterProcess Communication (IPC) layer.
+
+The socket implementation is *single-threaded* and produces output to
+stdout and is appropriate in the main context of the library, namely a
+teaching and educational setting.
+
+The HTTP (Uri Tunneling) implementation uses UniRest on the client
+side and Spark-Java on the server side. The server side is
+*thread-pooled* and uses SLF4J logging output, and is thus much more
+suited for a "near-production" setting.
 
 What is this repository for?
 -----------
