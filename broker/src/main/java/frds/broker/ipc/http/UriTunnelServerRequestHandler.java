@@ -36,8 +36,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-// Note - the logging level for incoming/outgoing messages is set to INFO
-// which is too talkative; but set so for teaching purposes
 public class UriTunnelServerRequestHandler
         implements ServerRequestHandler {
 
@@ -86,10 +84,12 @@ public class UriTunnelServerRequestHandler
       // object to be demarshalled
       RequestObject requestObject = gson.fromJson(body, RequestObject.class);
       // Log the request, using a key-value format
-      logger.info("method=handleRequest, context=request, objectId={}, operationName={}, payload='{}'",
+      logger.info("method=handleRequest, context=request, objectId={}, "
+                      + "operationName={}, payload='{}', version={}",
               requestObject.getObjectId(),
               requestObject.getOperationName(),
-              requestObject.getPayload());
+              requestObject.getPayload(),
+              requestObject.getVersionIdentity());
 
       ReplyObject reply = invoker.handleRequest(requestObject.getObjectId(),
               requestObject.getOperationName(), requestObject.getPayload());
@@ -101,9 +101,12 @@ public class UriTunnelServerRequestHandler
       res.status(reply.getStatusCode());
       res.type(MimeMediaType.APPLICATION_JSON);
 
+      // response time in milliseconds for invoker upload is calculated
       long reponseTime = System.currentTimeMillis() - startTime;
-      logger.info("method=handleRequest, context=reply, statusCode={}, payload='{}', responseTime_ms={}",
-              reply.getStatusCode(), reply.getPayload(), reponseTime);
+      logger.info("method=handleRequest, context=reply, statusCode={}, "
+                      + "payload='{}', version={}, responseTime_ms={}",
+              reply.getStatusCode(), reply.getPayload(),
+              reply.getVersionIdentity(), reponseTime);
 
       return gson.toJson(reply);
     });
