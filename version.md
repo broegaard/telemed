@@ -15,3 +15,6 @@ FRDS.Broker Library Version History
                  
   * Version 1.6: Added response time calculations in
                  URITunnelServerRequestHandler, and output it in logs.
+
+  * Version 1.7: Changed log output format to key-value in 
+                 URITunnelServerRequestHandler
