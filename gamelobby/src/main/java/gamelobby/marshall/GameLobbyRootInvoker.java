@@ -72,7 +72,7 @@ public class GameLobbyRootInvoker implements Invoker {
     ReplyObject reply = null;
 
     // Identify the invoker to use
-    String type = operationName.substring(0, operationName.indexOf('_'));
+    String type = operationName.substring(0, operationName.indexOf(MarshallingConstant.SEPARATOR));
     Invoker subInvoker = invokerMap.get(type);
 
     // And do the upcall

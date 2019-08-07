@@ -33,6 +33,7 @@ public class TeleObservation {
   private final String patientId;
   private final ClinicalQuantity systolic;
   private final ClinicalQuantity diastolic;
+
   /* One unfortunate implementation detail sneaks into this domain object,
     namely that Gson cannot correctly deserialize OffsetDateTime objects.
     Therefore, we choose a ISO 8601 string representation to avoid the

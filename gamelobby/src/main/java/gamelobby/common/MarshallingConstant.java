@@ -23,7 +23,7 @@ package gamelobby.common;
  * names.
  *
  * NOTE: method names / operations names MUST be formatted
- * with an underscore between the type prefix and the
+ * with an underscore (SEPARATOR constant) between the type prefix and the
  * method name as this convention is used by the
  * invoker.
  *
@@ -31,20 +31,22 @@ package gamelobby.common;
  */
 public class MarshallingConstant {
 
+  public static final char SEPARATOR = '_';
+
   // Type prefixes
   public static final String GAME_LOBBY_PREFIX = "gamelobby";
   public static final String FUTUREGAME_PREFIX = "futuregame";
   public static final String GAME_PREFIX = "game";
 
   // Method ids for marshalling
-  public static final String GAMELOBBY_CREATE_GAME_METHOD = GAME_LOBBY_PREFIX + "_create_game_method";
-  public static final String GAMELOBBY_JOIN_GAME_METHOD = GAME_LOBBY_PREFIX + "_join_game_method";
+  public static final String GAMELOBBY_CREATE_GAME_METHOD = GAME_LOBBY_PREFIX + SEPARATOR + "create-game-method";
+  public static final String GAMELOBBY_JOIN_GAME_METHOD = GAME_LOBBY_PREFIX + SEPARATOR + "join-game-method";
 
-  public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = FUTUREGAME_PREFIX + "_get_join_token_method";
-  public static final String FUTUREGAME_IS_AVAILABLE_METHOD = FUTUREGAME_PREFIX + "_is_available_method";
-  public static final String FUTUREGAME_GET_GAME_METHOD = FUTUREGAME_PREFIX + "_get_game_method";
+  public static final String FUTUREGAME_GET_JOIN_TOKEN_METHOD = FUTUREGAME_PREFIX + SEPARATOR + "get-join-token-method";
+  public static final String FUTUREGAME_IS_AVAILABLE_METHOD = FUTUREGAME_PREFIX + SEPARATOR + "is-available-method";
+  public static final String FUTUREGAME_GET_GAME_METHOD = FUTUREGAME_PREFIX + SEPARATOR + "get-game-method";
 
-  public static final String GAME_GET_PLAYER_NAME = GAME_PREFIX + "_get_player_name_method";
-  public static final String GAME_GET_PLAYER_IN_TURN = GAME_PREFIX + "_get_player_in_turn_method";
-  public static final String GAME_MOVE = GAME_PREFIX + "_move_method";
+  public static final String GAME_GET_PLAYER_NAME = GAME_PREFIX + SEPARATOR + "get-player-name-method";
+  public static final String GAME_GET_PLAYER_IN_TURN = GAME_PREFIX + SEPARATOR + "get-player-in-turn-method";
+  public static final String GAME_MOVE = GAME_PREFIX + SEPARATOR + "move-method";
 }
