@@ -25,6 +25,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,33 +45,29 @@ import telemed.marshall.json.TeleMedJSONInvoker;
  * using the HTTP URI Tunneling variants of the Client- and
  * ServerRequestHandlers.
  *
- * Note that this test is ignored as I have experienced
- * Linux not handling the fast start/stop of the web
- * server correctly, and the test is therefore 'flaky'
- * (Sam Newman). Run it manually in your IDE.
  *
  * @author Henrik Baerbak Christensen, Aarhus University.
  *
  */
-@Ignore
 public class TestUriTunnel {
 
-  static final int PORT_NUMBER = 4567;
-  
   TeleMedProxy teleMed;
   UriTunnelServerRequestHandler serverRequestHandler;
 
   @Before
-  public void setup() {
-    // Server side roles
+  public void setup() throws InterruptedException {
+    // The 'trick' to get random port number each time the
+    // test case is run, to avoid OS slow connection release trouble.
+    final int PORT_NUMBER = ThreadLocalRandom.current().nextInt(10000, 30000);
+
+    // Given the Server side roles on a UriTunnel IPC
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
     TeleMed tsServant = new TeleMedServant(xds);
     TeleMedJSONInvoker invoker = new TeleMedJSONInvoker(tsServant);
-
     serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER, xds);
     serverRequestHandler.start();
 
-    // Client side roles
+    // Given the Client side roles
     ClientRequestHandler restCRH =
             new UriTunnelClientRequestHandler("localhost",
                     PORT_NUMBER, Constants.BLOODPRESSURE_PATH);
@@ -86,20 +83,22 @@ public class TestUriTunnel {
   
   @Test
   public void shouldHandleScenario() {
+    // Given a tele observation
     TeleObservation teleObs1 = new TeleObservation(HelperMethods.NANCY_ID, 127.3, 93);
     
-    // Upload
+    // When the observation is uploaded
     String id2 = teleMed.processAndStore(teleObs1);
-    // Verify that CREATED code was returned
+
+    // Then verify that CREATED code was returned
     assertThat(serverRequestHandler.lastStatusCode(), is(HttpServletResponse.SC_CREATED));
     assertThat(serverRequestHandler.lastHTTPVerb(), is("POST"));
     
     assertThat(id2, is(notNullValue()));
     
-    // Download
+    // When we get all observations
     List<TeleObservation> l = teleMed.getObservationsFor(HelperMethods.NANCY_ID, TimeInterval.LAST_DAY);
 
-    // Verify it is correctly fetched
+    // Then verify it is correctly fetched
     assertThat(l, is(notNullValue()));
     assertThat(l.size(), is(1));
     assertThat(l.get(0).getSystolic().getValue(), is(127.3));
