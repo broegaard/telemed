@@ -143,8 +143,7 @@ public class GameLobbyRestServer {
       Integer moveId = Integer.parseInt(moveIdAsString);
 
       // TODO: handle out of bounds and null values
-      GameResource game = getGameFromDatabase(gameId);
-      MoveResource move = game.getMove(moveId);
+      MoveResource move = getMoveResourceFor( gameId, moveId);
 
       debugOutput("-< Reply: " + gson.toJson(move));
 
@@ -166,7 +165,7 @@ public class GameLobbyRestServer {
 
       // Update game resource with the new move
       GameResource game = getGameFromDatabase(gameId);
-      MoveResource nextMove = game.makeAMove(move);
+      MoveResource nextMove = makeTheMove(game, move);
 
       // TODO: Implement logic to handle an invalid move
       // Simply return the same object as PUT
@@ -202,6 +201,9 @@ public class GameLobbyRestServer {
     // Fake it code - we only handle a single game instance with id = 77;
     int theGameId = 77;
 
+    // Create the move resource storage
+    createMoveResourceListForGame(theGameId);
+
     // Create the game resource
     theOneGameOurServerHandles =
             new GameResource(fgame.getPlayerOne(), fgame.getPlayerTwo(),
@@ -214,6 +216,30 @@ public class GameLobbyRestServer {
     // Fake-it - only one game instance handled
     return theOneGameOurServerHandles;
   }
+
+  // MOVE Domain code
+  private ArrayList<MoveResource> moveResourceList;
+  private void createMoveResourceListForGame(int theGameId) {
+    moveResourceList = new ArrayList<>();
+    // Create first move
+    MoveResource move = new MoveResource("null","null", "null");
+    moveResourceList.add(move);
+  }
+
+  private MoveResource makeTheMove(GameResource game, MoveResource move) {
+    moveResourceList.set(moveResourceList.size()-1, move);
+    game.makeAMove(move);
+    MoveResource nextMove = new MoveResource("null","null", "null");
+    moveResourceList.add(nextMove);
+    // Return the original made move, as defined by PUT
+    return move;
+  }
+
+  private MoveResource getMoveResourceFor(Integer gameId, Integer moveId) {
+    return moveResourceList.get(moveId);
+  }
+
+
 
   public void stop() {
     spark.Spark.stop();

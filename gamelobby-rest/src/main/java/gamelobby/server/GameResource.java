@@ -22,8 +22,6 @@ public class GameResource {
   private int noOfMovesMade;
   private String next;
 
-  private List<MoveResource> moveResourceList;
-
   // Not used in our demonstration code, represents
   // a real game's internal board state...
   private final String board;
@@ -38,16 +36,11 @@ public class GameResource {
     this.noOfMovesMade = 0;
     this.board = "[...]";
 
-    // Create move resource list and first move resource
-    moveResourceList = new ArrayList<>();
-    MoveResource move = new MoveResource("null", "null", "null");
-    moveResourceList.add(move);
-
     this.next = computeNextLink();
   }
 
   private String computeNextLink() {
-    return "/lobby/game/" + getId() + "/move/" + getNoOfMovesMade();
+    return "/lobby/game/" + id + "/move/" + getNoOfMovesMade();
   }
 
   public String getPlayerOne() {
@@ -85,12 +78,7 @@ public class GameResource {
     } else {
       playerInTurn = playerOne;
     }
-    // and store it
-    moveResourceList.set(noOfMovesMade, move);
 
-    // Create next move
-    MoveResource nextMove = new MoveResource("null", "null", "null");
-    moveResourceList.add(nextMove);
     noOfMovesMade++;
     this.next = computeNextLink();
 
@@ -101,9 +89,6 @@ public class GameResource {
     return noOfMovesMade;
   }
 
-  public MoveResource getMove(int moveId) {
-    return moveResourceList.get(moveId);
-  }
   public String getBoard() {
     return board;
   }
