@@ -74,6 +74,10 @@ This repository serves multiple purposes.
   5. It has the source code of a rudimentary REST server, *PasteBin*,
      used in the FRDS book to illustrate the POST and GET verbs of
      HTTP. Folder: *pastebin*.
+     
+  6. It has the source code for a HATEAOS REST server used in the 
+     FRDS book to illustrate state changes using REST resources.
+     Folder: *gamelobby-rest*.
   
 ### TeleMed 
 

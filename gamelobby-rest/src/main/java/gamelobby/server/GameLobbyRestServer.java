@@ -165,12 +165,12 @@ public class GameLobbyRestServer {
 
       // Update game resource with the new move
       GameResource game = getGameFromDatabase(gameId);
-      MoveResource nextMove = makeTheMove(game, move);
+      makeTheMove(game, move);
 
       // TODO: Implement logic to handle an invalid move
       // Simply return the same object as PUT
-      debugOutput("-< Reply: " + gson.toJson(nextMove));
-      return gson.toJson(nextMove);
+      debugOutput("-< Reply: " + gson.toJson(move));
+      return gson.toJson(move);
     });
 
   }
@@ -252,6 +252,6 @@ public class GameLobbyRestServer {
   private void debugOutput(String s) {
     // Enable the printing below to review the request/reply
     // of the GameLobby REST server.
-    System.out.println(s);
+    // System.out.println(s);
   }
 }
