@@ -1,6 +1,7 @@
 package gamelobby.server;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.mashape.unirest.http.*;
 import spark.Request;
 
@@ -142,8 +143,8 @@ public class GameLobbyRestServer {
       Integer moveId = Integer.parseInt(moveIdAsString);
 
       // TODO: handle out of bounds and null values
-      List<MoveResource> theMoveList = getMoveListForGame(gameId);
-      MoveResource move = theMoveList.get(moveId);
+      GameResource game = getGameFromDatabase(gameId);
+      MoveResource move = game.getMove(moveId);
 
       debugOutput("-< Reply: " + gson.toJson(move));
 
@@ -165,7 +166,7 @@ public class GameLobbyRestServer {
 
       // Update game resource with the new move
       GameResource game = getGameFromDatabase(gameId);
-      MoveResource nextMove = makeAMove(game, move);
+      MoveResource nextMove = game.makeAMove(move);
 
       // TODO: Implement logic to handle an invalid move
       // Simply return the same object as PUT
@@ -175,7 +176,7 @@ public class GameLobbyRestServer {
 
   }
 
-  // === Domain handling of FutureGame resources
+  // === Domain handling of FutureGame resources, all FAKE-OBJECT code
   private int futureGameId = 42;
   private Map<Integer, FutureGameResource> database
           = new HashMap<>();
@@ -196,19 +197,17 @@ public class GameLobbyRestServer {
 
   // === Domain handling of Game and Move resources
   private GameResource theOneGameOurServerHandles;
-  private List<MoveResource> moveResourceList;
+
   private int createGameResourceAndInsertIntoDatabase(FutureGameResource fgame) {
     // Fake it code - we only handle a single game instance with id = 77;
-    int theId = 77;
-    theOneGameOurServerHandles =
-            new GameResource( fgame.getPlayerOne(), fgame.getPlayerTwo(),
-                    fgame.getLevel(), theId);
+    int theGameId = 77;
 
-    // Create first move resource
-    moveResourceList = new ArrayList<>();
-    MoveResource move = new MoveResource("null", "null", "null");
-    moveResourceList.add(move);
-    return theId;
+    // Create the game resource
+    theOneGameOurServerHandles =
+            new GameResource(fgame.getPlayerOne(), fgame.getPlayerTwo(),
+                    fgame.getLevel(), theGameId);
+
+    return theGameId;
   }
 
   private GameResource getGameFromDatabase(int id) {
@@ -216,31 +215,17 @@ public class GameLobbyRestServer {
     return theOneGameOurServerHandles;
   }
 
-
-  private MoveResource makeAMove(GameResource game, MoveResource move) {
-    MoveResource moveResource = game.makeAMove(move);
-    return moveResource;
-  }
-
-  private List<MoveResource> getMoveListForGame(Integer id) {
-    // Fake-it - only one move list implemented
-    return moveResourceList;
-  }
-
   public void stop() {
     spark.Spark.stop();
-  }
-
-  private void debugOutput(String s) {
-    // Enable the printing below to review the request/reply
-    // of the GameLobby REST server.
-
-    // System.out.println(s);
   }
 
   private void debugOutput(Request request) {
     debugOutput("-> " + request.requestMethod() + " " + request.pathInfo()
             + ": " + request.body().toString());
   }
-
+  private void debugOutput(String s) {
+    // Enable the printing below to review the request/reply
+    // of the GameLobby REST server.
+    System.out.println(s);
+  }
 }

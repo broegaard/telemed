@@ -1,5 +1,7 @@
 package gamelobby.server;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringJoiner;
 
 /** Resource to represent a game: names of
@@ -20,7 +22,9 @@ public class GameResource {
   private int noOfMovesMade;
   private String next;
 
-  // Not used in our demonstation code, represents
+  private List<MoveResource> moveResourceList;
+
+  // Not used in our demonstration code, represents
   // a real game's internal board state...
   private final String board;
 
@@ -33,6 +37,12 @@ public class GameResource {
     this.playerInTurn = playerOne;
     this.noOfMovesMade = 0;
     this.board = "[...]";
+
+    // Create move resource list and first move resource
+    moveResourceList = new ArrayList<>();
+    MoveResource move = new MoveResource("null", "null", "null");
+    moveResourceList.add(move);
+
     this.next = computeNextLink();
   }
 
@@ -68,11 +78,19 @@ public class GameResource {
   public MoveResource makeAMove(MoveResource move) {
     // TODO: Handle invalid moves by returning a move resource
     // that is nullified or in other ways show an illegal move.
+
+    // Otherwise 'make the move'
     if (playerInTurn.equals(playerOne)) {
       playerInTurn = playerTwo;
     } else {
       playerInTurn = playerOne;
     }
+    // and store it
+    moveResourceList.set(noOfMovesMade, move);
+
+    // Create next move
+    MoveResource nextMove = new MoveResource("null", "null", "null");
+    moveResourceList.add(nextMove);
     noOfMovesMade++;
     this.next = computeNextLink();
 
@@ -83,6 +101,9 @@ public class GameResource {
     return noOfMovesMade;
   }
 
+  public MoveResource getMove(int moveId) {
+    return moveResourceList.get(moveId);
+  }
   public String getBoard() {
     return board;
   }
@@ -100,4 +121,5 @@ public class GameResource {
             .add("next='" + next + "'")
             .toString();
   }
+
 }
