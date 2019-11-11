@@ -16,6 +16,6 @@
  *
  */
 
-task wrapper(type: Wrapper) {
+wrapper {
     gradleVersion = '4.6'
 }
