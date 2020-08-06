@@ -58,7 +58,7 @@ public class TestTeleMedProxy {
     // Validate the requestor's state is correctly set by the proxy
     assertThat(requestor.lastOperationName, 
         is(OperationNames.PROCESS_AND_STORE_OPERATION));
-    assertThat(requestor.lastObjectId, is(teleObs1.getPatientId()));
+    assertThat(requestor.lastObjectId, is(TeleMedProxy.TELEMED_OBJECTID));
     // Testing the arguments and the type is tricky, but they will be
     // covered intensively by other tests later
 
@@ -67,8 +67,9 @@ public class TestTeleMedProxy {
     // Validate
     assertThat(requestor.lastOperationName, 
         is(OperationNames.GET_OBSERVATIONS_FOR_OPERATION));
-    assertThat(requestor.lastObjectId, is("pid01"));
-    assertThat(requestor.lastArgument[0], is(TimeInterval.LAST_DAY));
+    assertThat(requestor.lastObjectId, is(TeleMedProxy.TELEMED_OBJECTID));
+    assertThat(requestor.lastArgument[0], is("pid01"));
+    assertThat(requestor.lastArgument[1], is(TimeInterval.LAST_DAY));
 
     // 'correct' and 'delete' are left as an exercise :-)
   }

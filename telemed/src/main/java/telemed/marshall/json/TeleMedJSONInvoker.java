@@ -50,6 +50,10 @@ public class TeleMedJSONInvoker implements Invoker {
                                    String operationName,
                                    String payloadJSONArray) {
     ReplyObject reply = null;
+    /* As there is only one TeleMed instance (a singleton)
+       the objectId is not used for anything in our case.
+     */
+
 
     /*
      * To support multiple argument methods the parameters are
@@ -83,12 +87,14 @@ public class TeleMedJSONInvoker implements Invoker {
 
       } else if (operationName.equals(OperationNames.
               GET_OBSERVATIONS_FOR_OPERATION)) {
-        // Parameter convention: [0] = time interval
-        TimeInterval interval = gson.fromJson(array.get(0),
+        // Parameter convention: [0] = patientId
+        String patientId = gson.fromJson(array.get(0), String.class);
+        // Parameter convention: [1] = time interval
+        TimeInterval interval = gson.fromJson(array.get(1),
                 TimeInterval.class);
 
         List<TeleObservation> tol =
-                teleMed.getObservationsFor(objectId, interval);
+                teleMed.getObservationsFor(patientId, interval);
         int statusCode =
                 (tol == null || tol.size() == 0) ?
                         HttpServletResponse.SC_NOT_FOUND :
@@ -97,19 +103,22 @@ public class TeleMedJSONInvoker implements Invoker {
 
       } else if (operationName.equals(OperationNames.
               CORRECT_OPERATION)) {
-        // Parameter convention: [0] = tele observation
-        TeleObservation to = gson.fromJson(array.get(0),
+        // Parameter convention: [0] = patientId
+        String patientId = gson.fromJson(array.get(0), String.class);
+        // Parameter convention: [1] = tele observation
+        TeleObservation to = gson.fromJson(array.get(1),
                 TeleObservation.class);
 
-        boolean isValid = teleMed.correct(objectId, to);
+        boolean isValid = teleMed.correct(patientId, to);
         reply = new ReplyObject(HttpServletResponse.SC_OK,
                 gson.toJson(isValid));
 
       } else if (operationName.equals(OperationNames.
               GET_OBSERVATION_OPERATION)) {
-        // Parameter: none
+        // Parameter convention: [0] = patientId
+        String patientId = gson.fromJson(array.get(0), String.class);
 
-        TeleObservation to = teleMed.getObservation(objectId);
+        TeleObservation to = teleMed.getObservation(patientId);
         // If there are no teleobservation to get, make
         // the proper error code
         if (to == null) {
@@ -122,9 +131,10 @@ public class TeleMedJSONInvoker implements Invoker {
 
       } else if (operationName.equals(OperationNames.
               DELETE_OPERATION)) {
-        // Parameter: none
+        // Parameter convention: [0] = patientId
+        String patientId = gson.fromJson(array.get(0), String.class);
 
-        boolean isValid = teleMed.delete(objectId);
+        boolean isValid = teleMed.delete(patientId);
         reply = new ReplyObject(HttpServletResponse.SC_OK,
                 gson.toJson(isValid));
         // More correctly, it should be 204: no contents, but most

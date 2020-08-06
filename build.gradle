@@ -17,5 +17,5 @@
  */
 
 wrapper {
-    gradleVersion = '4.6'
+    gradleVersion = '6.5'
 }

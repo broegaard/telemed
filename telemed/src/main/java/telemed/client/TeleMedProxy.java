@@ -39,6 +39,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class TeleMedProxy implements TeleMed, ClientProxy {
 
+  /* As there is only ONE telemed servant object, the
+  objectId is really not used in the TeleMed case, so
+  we just provide a 'dummy' string.
+   */
+  public static final String TELEMED_OBJECTID = "singleton";
+
   private final Requestor requestor;
 
   public TeleMedProxy(Requestor crh) {
@@ -48,7 +54,7 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
   @Override
   public String processAndStore(TeleObservation teleObs) {
     String uid = 
-      requestor.sendRequestAndAwaitReply(teleObs.getPatientId(), 
+      requestor.sendRequestAndAwaitReply(TELEMED_OBJECTID,
         OperationNames.PROCESS_AND_STORE_OPERATION, 
 	    String.class, teleObs);
     return uid; 
@@ -63,9 +69,9 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
     // Handle empty return values (404 error code)
     List<TeleObservation> returnedList;
     try {
-      returnedList = requestor.sendRequestAndAwaitReply(patientId,
+      returnedList = requestor.sendRequestAndAwaitReply(TELEMED_OBJECTID,
               OperationNames.GET_OBSERVATIONS_FOR_OPERATION,
-              collectionType, interval);
+              collectionType, patientId, interval);
     } catch(IPCException e) {
       if (e.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
         throw e;
@@ -78,8 +84,8 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
 
   @Override
   public boolean correct(String uniqueId, TeleObservation to) {
-    return requestor.sendRequestAndAwaitReply(uniqueId, 
-        OperationNames.CORRECT_OPERATION, boolean.class, to);
+    return requestor.sendRequestAndAwaitReply(TELEMED_OBJECTID,
+        OperationNames.CORRECT_OPERATION, boolean.class, uniqueId, to);
   }
 
   @Override
@@ -87,8 +93,8 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
     TeleObservation to;
     // Handle empty return values (404 error code)
     try {
-      to = requestor.sendRequestAndAwaitReply(uniqueId,
-              OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class);
+      to = requestor.sendRequestAndAwaitReply(TELEMED_OBJECTID,
+              OperationNames.GET_OBSERVATION_OPERATION, TeleObservation.class, uniqueId);
     } catch (IPCException e) {
       if (e.getStatusCode() != HttpServletResponse.SC_NOT_FOUND) {
         throw e;
@@ -100,7 +106,7 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
 
   @Override
   public boolean delete(String uniqueId) {
-    return requestor.sendRequestAndAwaitReply(uniqueId, 
-        OperationNames.DELETE_OPERATION, boolean.class);
+    return requestor.sendRequestAndAwaitReply(TELEMED_OBJECTID,
+        OperationNames.DELETE_OPERATION, boolean.class, uniqueId);
   }
 }

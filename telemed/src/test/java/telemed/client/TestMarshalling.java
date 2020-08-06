@@ -83,7 +83,7 @@ public class TestMarshalling {
 
     // 'smoke testing' the request and reply
     RequestObject req = clientRequestHandler.getLastRequest();
-    assertThat(req.getObjectId(), is(HelperMethods.NANCY_ID));
+    assertThat(req.getObjectId(), is(TeleMedProxy.TELEMED_OBJECTID));
     assertThat(req.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
 
     // some 'smoke testing' of the payload
