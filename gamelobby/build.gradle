@@ -17,11 +17,10 @@
  */
 
 /*
- * Build file for Broker Demo 2 applications, by Henrik Baerbak Christensen.
+ * Build file for Broker GameLobby applications, by Henrik Baerbak Christensen.
  */
 
 apply plugin: 'java'
-apply plugin: 'jacoco'
 
 repositories {
     jcenter()

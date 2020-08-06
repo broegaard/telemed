@@ -48,12 +48,11 @@ public class TeleMedJSONInvoker implements Invoker {
   @Override
   public ReplyObject handleRequest(String objectId,
                                    String operationName,
-                                   String payloadJSONArray) {
+                                   String argumentsJSONArray) {
     ReplyObject reply = null;
     /* As there is only one TeleMed instance (a singleton)
        the objectId is not used for anything in our case.
      */
-
 
     /*
      * To support multiple argument methods the parameters are
@@ -64,9 +63,8 @@ public class TeleMedJSONInvoker implements Invoker {
      */
 
     // Demarshall parameters into a JsonArray
-    JsonParser parser = new JsonParser();
     JsonArray array =
-            parser.parse(payloadJSONArray).getAsJsonArray();
+            JsonParser.parseString(argumentsJSONArray).getAsJsonArray();
     
     try {
       // Dispatching on all known operations

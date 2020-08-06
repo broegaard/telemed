@@ -49,22 +49,23 @@ public class StandardJSONRequestor implements Requestor {
             new RequestObject(objectId, operationName, asJson);
 
     // Do the IPC to the server using my client request handler
-    ReplyObject replyFrom =
+    ReplyObject reply =
             clientRequestHandler.sendToServer(request);
 
     // First, verify that the request succeeded
-    if (!replyFrom.isSuccess()) {
-      throw new IPCException(replyFrom.getStatusCode(),
+    if (!reply.isSuccess()) {
+      throw new IPCException(reply.getStatusCode(),
           "Failure during client requesting operation '"
                   + operationName
                   + "'. ErrorMessage is: "
-                  + replyFrom.errorDescription());
+                  + reply.errorDescription());
     }
     // Demarshall the reply from the server
-    String payload = replyFrom.getPayload();
+    String payload = reply.getPayload();
 
     // Construct the return value by asking Gson to interpret JSON
-    // and make the cast into the generic type T
+    // and make the cast into the generic type T, otherwise it is
+    // a void method
     if (typeOfReturnValue != null)
       returnValue = gson.fromJson(payload, typeOfReturnValue);
     return returnValue;
