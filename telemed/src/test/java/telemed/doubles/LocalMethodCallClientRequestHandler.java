@@ -60,6 +60,13 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   }
 
   @Override
+  public String sendToServerAndAwaitReply(String request) {
+    // TODO: Change
+    System.out.printf("MAR: " + request);
+    return null;
+  }
+
+  @Override
   public void setServer(String hostname, int port) {
     // not used
   }

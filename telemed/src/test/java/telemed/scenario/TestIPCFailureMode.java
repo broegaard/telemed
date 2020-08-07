@@ -86,6 +86,14 @@ public class TestIPCFailureMode {
     }
 
     @Override
+    public String sendToServerAndAwaitReply(String request) {
+      // TODO: CHANGE
+      System.out.printf("MAR: " + request);
+      return null;
+
+    }
+
+    @Override
     public void setServer(String hostname, int port) {
       // not used
     }

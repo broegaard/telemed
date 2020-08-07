@@ -73,7 +73,6 @@ public class UriTunnelClientRequestHandler
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
-    HttpResponse<JsonNode> jsonResponse = null;
     ReplyObject reply = null;
 
     // The request object's payload does NOT include operationName
@@ -82,21 +81,37 @@ public class UriTunnelClientRequestHandler
     // the full set of data required
     String requestAsJson = gson.toJson(requestObject);
     
+    String body = sendToServerAndAwaitReply(requestAsJson);
+
+    reply = gson.fromJson(body, ReplyObject.class);
+    return reply;
+  }
+
+  @Override
+  public String sendToServerAndAwaitReply(String request) {
+    System.out.printf("MAR: " + request);
+    HttpResponse<JsonNode> jsonResponse = null;
+    ReplyObject reply = null;
+
+    // The request object's payload does NOT include operationName
+    // and as we use HTTP as a pure transport protocol, we need
+    // to create a more complete request object which includes
+    // the full set of data required
+    String requestAsJson = request;
+
     // All calls are URI tunneled through a POST message
     try {
       jsonResponse = Unirest.post(baseURL + path)
-          .header("Accept", MimeMediaType.APPLICATION_JSON)
-          .header("Content-Type", MimeMediaType.APPLICATION_JSON)
-          .body(requestAsJson).asJson();
+              .header("Accept", MimeMediaType.APPLICATION_JSON)
+              .header("Content-Type", MimeMediaType.APPLICATION_JSON)
+              .body(requestAsJson).asJson();
     } catch (UnirestException e) {
-      throw new IPCException("UniRest POST request failed on objId="
-          + requestObject.getObjectId() + ", operationName="
-              + requestObject.getOperationName(), e);
+      throw new IPCException("UniRest POST request failed on request="
+              + request, e);
     }
-    
+
     String body = jsonResponse.getBody().toString();
-    reply = gson.fromJson(body, ReplyObject.class);
-    return reply;
+    return body;
   }
 
   @Override

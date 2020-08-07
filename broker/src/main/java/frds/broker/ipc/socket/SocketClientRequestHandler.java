@@ -68,22 +68,36 @@ public class SocketClientRequestHandler
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
-    Socket clientSocket = null;
     ReplyObject replyObj = null;
-    
+
+    // Create and marshal the request object
+    String onthewireRequestObject = gson.toJson(requestObject);
+
+    String reply = sendToServerAndAwaitReply(onthewireRequestObject);
+
+    // and demarshall it into a reply object
+    replyObj = gson.fromJson(reply, ReplyObject.class);
+
+    return replyObj;
+  }
+
+  @Override
+  public String sendToServerAndAwaitReply(String request) {
+    System.out.printf("MAR: " + request);
+    Socket clientSocket = null;
+
+    String onthewireRequestObject = request;
+
     // Create the socket connection to the host
     try {
       clientSocket = new Socket(hostname, port);
       out = new PrintWriter(clientSocket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(
-          clientSocket.getInputStream()));
+              clientSocket.getInputStream()));
     } catch (IOException e ) {
       throw new IPCException("Socket creation problems", e);
     }
 
-    // Create and marshal the request object 
-    String onthewireRequestObject = gson.toJson(requestObject);
-    
     // Send it to the server (= write it to the socket stream)
     out.println(onthewireRequestObject);
 
@@ -91,9 +105,7 @@ public class SocketClientRequestHandler
     String reply;
     try {
       reply = in.readLine();
-      
-      // and demarshall it into a reply object
-      replyObj = gson.fromJson(reply, ReplyObject.class);
+
     } catch (IOException e) {
       throw new IPCException("Socket read problems", e);
     } finally {
@@ -109,7 +121,8 @@ public class SocketClientRequestHandler
     } catch (IOException e) {
       throw new IPCException("Socket close problems (2)", e);
     }
-    return replyObj;
+
+    return reply;
   }
 
   @Override

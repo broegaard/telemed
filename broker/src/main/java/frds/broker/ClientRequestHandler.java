@@ -45,6 +45,8 @@ public interface ClientRequestHandler {
    */
   ReplyObject sendToServer(RequestObject requestObject);
 
+  String sendToServerAndAwaitReply(String request);
+
   /**
    * Set the hostname/port of the server that holds the
    * corresponding server request handler.
