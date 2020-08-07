@@ -18,3 +18,10 @@ FRDS.Broker Library Version History
 
   * Version 1.7: Changed log output format to key-value in 
                  URITunnelServerRequestHandler
+
+  * Version 2.0: Major overhaul of internal broker role interfaces,
+                 to clean up the issue that marshalling was partially
+                 done in the CRH and SRH. From this version on, marshalling
+                 and demarshalling is only made in the Requestor and
+                 Invoker layer of the pattern, while CRH and SRH handles
+                 Strings only. Should not effect client code, though.
