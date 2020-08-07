@@ -44,12 +44,12 @@ public interface Requestor {
    *          the operation (=method) to invoke
    * @param typeOfReturnValue
    *          the java reflection type of the returned type
-   * @param argument
+   * @param arguments
    *          the arguments to the method call
    * @return the return value of the type given by typeOfReturnValue
    */
   <T> T sendRequestAndAwaitReply(String objectId, String operationName,
-                                 Type typeOfReturnValue, Object... argument);
+                                 Type typeOfReturnValue, Object... arguments);
 
   /**
    * Close the underlying ClientRequestHandler connection.
