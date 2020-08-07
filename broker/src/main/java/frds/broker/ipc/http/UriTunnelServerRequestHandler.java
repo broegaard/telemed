@@ -98,9 +98,9 @@ public class UriTunnelServerRequestHandler
       res.type(MimeMediaType.TEXT_PLAIN);
 
       // response time in milliseconds for invoker upload is calculated
-      long reponseTime = System.currentTimeMillis() - startTime;
+      long responseTime = System.currentTimeMillis() - startTime;
       logger.info("method=handleRequest, context=reply, reply={}, responseTime_ms={}",
-              reply, reponseTime);
+              reply, responseTime);
 
       return reply;
     });

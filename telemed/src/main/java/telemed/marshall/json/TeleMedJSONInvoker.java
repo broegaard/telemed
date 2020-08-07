@@ -48,27 +48,17 @@ public class TeleMedJSONInvoker implements Invoker {
 
   @Override
   public String handleRequest(String request) {
-    System.out.printf("MAR Invoker: " + request);
+    // Do the demarshalling
     RequestObject requestObject =
             gson.fromJson(request, RequestObject.class);
-
-    ReplyObject reply = null;
-    /* As there is only one TeleMed instance (a singleton)
-       the objectId is not used for anything in our case.
-     */
-
-    /*
-     * To support multiple argument methods the parameters are
-     * marshalled into a JSONArray of potentially mixed types.
-     * This is a bit complex to demarshall, please review the
-     * Gson docs + example (RawCollectionsExample) which is
-     * the method used here.
-     */
-
-    // Demarshall parameters into a JsonArray
     JsonArray array =
             JsonParser.parseString(requestObject.getPayload()).getAsJsonArray();
 
+    ReplyObject reply;
+
+    /* As there is only one TeleMed instance (a singleton)
+       the objectId is not used for anything in our case.
+     */
     try {
       // Dispatching on all known operations
       // Each dispatch follows the same algorithm
@@ -157,7 +147,7 @@ public class TeleMedJSONInvoker implements Invoker {
                       e.getMessage());
     }
 
-
+    // And marshall the reply
     return gson.toJson(reply);
   }
 

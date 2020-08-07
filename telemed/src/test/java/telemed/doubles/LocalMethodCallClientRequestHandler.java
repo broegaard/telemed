@@ -42,9 +42,6 @@ import frds.broker.RequestObject;
 public class LocalMethodCallClientRequestHandler implements ClientRequestHandler {
 
   private final Invoker invoker;
-  private ReplyObject lastReplyDR;
-  private RequestObject lastRequestDR;
-
   private String lastRequest;
   private String lastReply;
 
@@ -54,13 +51,10 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
 
   @Override
   public String sendToServerAndAwaitReply(String request) {
-    System.out.println("LOCAL MAR 1: " + request);
     lastRequest = request;
-    String replyAsString = invoker.handleRequest(request);
-    lastReply = replyAsString;
-    System.out.println("LOCAL MAR 2: " + replyAsString);
-
-    return replyAsString;
+    String reply = invoker.handleRequest(request);
+    lastReply = reply;
+    return reply;
   }
 
   @Override
@@ -73,22 +67,12 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
 
   }
 
-  public ReplyObject getLastReplyDR() {
-    return lastReplyDR;
-  }
-
-  public RequestObject getLastRequestDR() {
-    return lastRequestDR;
-  }
-
+  // Methods below are 'test retrieval' methods, used
+  // to validate request/replies going through the CRH
   public String getLastRequest() {
     return lastRequest;
   }
-
   public String getLastReply() {
     return lastReply;
   }
-
-
-
 }

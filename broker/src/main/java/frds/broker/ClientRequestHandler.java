@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2018 Henrik Bærbak Christensen, baerbak.com
  *
@@ -26,13 +24,12 @@ package frds.broker;
  * (IPC) on behalf of client objects. It is called by the Requestor role. It
  * communicates over the network with an associated ServerRequestHandler on the
  * server side.
- * 
  */
 public interface ClientRequestHandler {
 
   /**
-   * Send a (marshalled) request to the server's server request handler; await an answer
-   * and return a valid marshalled reply.
+   * Send a (marshalled) request to the server's server request handler;
+   * await an answer, and return a valid marshalled reply.
    * 
    * @param request
    *          the request to send
