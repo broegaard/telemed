@@ -176,12 +176,12 @@ public class RESTServerRequestHandlerInvoker
 
 
   @Override
-  public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
     throw new UnsupportedOperationException("The REST based invoker does NOT use the handleRequest method!");
   }
 
   @Override
-  public String handleRequestRAW(String request) {
+  public String handleRequest(String request) {
     throw new UnsupportedOperationException("The REST based invoker does NOT use the handleRequest method!");
   }
 }

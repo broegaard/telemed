@@ -90,8 +90,7 @@ public class TestUriTunnel {
     // When the observation is uploaded
     String id2 = teleMed.processAndStore(teleObs1);
 
-    // Then verify that CREATED code was returned
-    assertThat(serverRequestHandler.lastStatusCode(), is(HttpServletResponse.SC_CREATED));
+    // Then verify that a POST was sent
     assertThat(serverRequestHandler.lastHTTPVerb(), is("POST"));
     
     assertThat(id2, is(notNullValue()));

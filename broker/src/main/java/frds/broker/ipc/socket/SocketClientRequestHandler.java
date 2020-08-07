@@ -68,22 +68,12 @@ public class SocketClientRequestHandler
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
-    ReplyObject replyObj = null;
-
-    // Create and marshal the request object
-    String onthewireRequestObject = gson.toJson(requestObject);
-
-    String reply = sendToServerAndAwaitReply(onthewireRequestObject);
-
-    // and demarshall it into a reply object
-    replyObj = gson.fromJson(reply, ReplyObject.class);
-
-    return replyObj;
+    throw new RuntimeException("NO SUPPORTED");
   }
 
   @Override
   public String sendToServerAndAwaitReply(String request) {
-    System.out.printf("MAR: " + request);
+    System.out.println("MAR: " + request);
     Socket clientSocket = null;
 
     String onthewireRequestObject = request;

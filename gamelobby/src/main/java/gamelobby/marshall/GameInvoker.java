@@ -45,7 +45,7 @@ public class GameInvoker implements Invoker {
   }
 
   @Override
-  public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
     // Demarshall parameters into a JsonArray
     JsonParser parser = new JsonParser();
@@ -71,7 +71,7 @@ public class GameInvoker implements Invoker {
   }
 
   @Override
-  public String handleRequestRAW(String request) {
+  public String handleRequest(String request) {
     // TODO: MAR
     return null;
   }

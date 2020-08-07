@@ -105,7 +105,7 @@ public class SocketServerRequestHandler
         clientSocket.getInputStream()));
 
     String inputLine;
-    ReplyObject reply = null;
+    String replyAsString = null;
 
     inputLine = in.readLine();
     System.out.println("--> Received " + inputLine);
@@ -113,14 +113,10 @@ public class SocketServerRequestHandler
       System.err.println(
               "Server read a null string from the socket???");
     } else {
-      RequestObject p =
-              gson.fromJson(inputLine, RequestObject.class);
-      reply = invoker.handleRequest(p.getObjectId(),
-              p.getOperationName(), p.getPayload());
+       replyAsString = invoker.handleRequest(inputLine);
 
-      System.out.println("--< replied: " + reply);
+      System.out.println("--< replied: " + replyAsString);
     }
-    String replyAsString = gson.toJson(reply);
     out.println(replyAsString);
 
     System.out.println("Closing socket...");

@@ -30,6 +30,8 @@ import frds.broker.ServerRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletResponse;
+
 /** ServerRequestHandler implementation using HTTP and URI Tunneling.
  * <p>
  * Implementation based on the Spark-Java framework.
@@ -44,7 +46,6 @@ public class UriTunnelServerRequestHandler
   protected final Gson gson;
   protected Invoker invoker;
   protected int port;
-  protected int lastStatusCode;
   protected String lastVerb;
   protected String tunnelRoute;
   protected final Logger logger;
@@ -78,37 +79,30 @@ public class UriTunnelServerRequestHandler
     // POST is for all incoming requests
     post(tunnelRoute, (req,res) -> {
       long startTime = System.currentTimeMillis();
-      String body = req.body();
+      String marshalledRequest = req.body();
       
-      // The incoming body is a full request
-      // object to be demarshalled
-      RequestObject requestObject = gson.fromJson(body, RequestObject.class);
+      // The incoming marshalledRequest is the marshalled request to the invoker
       // Log the request, using a key-value format
-      logger.info("method=handleRequest, context=request, objectId={}, "
-                      + "operationName={}, payload='{}', version={}",
-              requestObject.getObjectId(),
-              requestObject.getOperationName(),
-              requestObject.getPayload(),
-              requestObject.getVersionIdentity());
+      logger.info("method=POST, context=request, request={}", marshalledRequest);
 
-      ReplyObject reply = invoker.handleRequest(requestObject.getObjectId(),
-              requestObject.getOperationName(), requestObject.getPayload());
+      String reply = invoker.handleRequest(marshalledRequest);
 
       // Store the last verb and status code to allow spying during test
       lastVerb = req.requestMethod();
-      lastStatusCode = reply.getStatusCode();
-      
-      res.status(reply.getStatusCode());
-      res.type(MimeMediaType.APPLICATION_JSON);
+
+      // The reply is opaque - so we have no real chance of setting a proper
+      // status code.
+      res.status(HttpServletResponse.SC_OK);
+      // Hmm, we also do not know the actual marshalling format but
+      // just know it is textual
+      res.type(MimeMediaType.TEXT_PLAIN);
 
       // response time in milliseconds for invoker upload is calculated
       long reponseTime = System.currentTimeMillis() - startTime;
-      logger.info("method=handleRequest, context=reply, statusCode={}, "
-                      + "payload='{}', version={}, responseTime_ms={}",
-              reply.getStatusCode(), reply.getPayload(),
-              reply.getVersionIdentity(), reponseTime);
+      logger.info("method=handleRequest, context=reply, reply={}, responseTime_ms={}",
+              reply, reponseTime);
 
-      return gson.toJson(reply);
+      return reply;
     });
   }
 
@@ -121,15 +115,6 @@ public class UriTunnelServerRequestHandler
   public String toString() {
     return getClass().getCanonicalName() + ", port " + port +
         ", root path: '" + tunnelRoute + "'";
-  }
-
-  /**
-   * Return status code of last operation. A test retrieval interface.
-   * 
-   * @return last status code
-   */
-  public int lastStatusCode() {
-    return lastStatusCode;
   }
 
   public String lastHTTPVerb() {

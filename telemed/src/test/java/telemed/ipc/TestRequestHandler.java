@@ -1,5 +1,6 @@
 package telemed.ipc;
 
+import com.google.gson.Gson;
 import frds.broker.*;
 import frds.broker.ipc.http.UriTunnelClientRequestHandler;
 import frds.broker.ipc.http.UriTunnelServerRequestHandler;
@@ -8,6 +9,8 @@ import frds.broker.ipc.socket.SocketServerRequestHandler;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.Reader;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
@@ -39,6 +42,8 @@ public class TestRequestHandler implements Invoker {
   private String lastOperationName;
   private String lastPayLoad;
 
+  private Gson gson = new Gson();
+
   // Integration testing: verifying the IPC implementation of the
   // Socket based SRH and CRH
   @Test
@@ -58,7 +63,9 @@ public class TestRequestHandler implements Invoker {
 
     // When we use the CRH to send a request object to the external socket handler
     RequestObject req = new RequestObject(OBJECT_ID, CLASS_FOO_METHOD, MARSHALLED_PAYLOAD);
-    ReplyObject reply = crh.sendToServer(req);
+    ReplyObject reply =
+            gson.fromJson(crh.sendToServerAndAwaitReply(gson.toJson(req)),
+                    ReplyObject.class);
 
     // Then our test spy has indeed recorded the request
     assertThat(lastObjectId, is(OBJECT_ID));
@@ -92,7 +99,9 @@ public class TestRequestHandler implements Invoker {
 
     // When we send a request
     RequestObject req = new RequestObject(OBJECT_ID, CLASS_FOO_METHOD, MARSHALLED_PAYLOAD);
-    ReplyObject reply = crh.sendToServer(req);
+    ReplyObject reply =
+            gson.fromJson(crh.sendToServerAndAwaitReply(gson.toJson(req)),
+                    ReplyObject.class);
 
     // Then the spy has recorded the upcall
     assertThat(lastObjectId, is(OBJECT_ID));
@@ -136,16 +145,17 @@ public class TestRequestHandler implements Invoker {
   // Use the test case itself as the test spy, a self-shunt
   // (http://xunitpatterns.com/Test%20Spy.html)
   @Override
-  public ReplyObject handleRequest(String objectId, String operationName, String payload) {
-    this.lastObjectId = objectId;
-    this.lastOperationName = operationName;
-    this.lastPayLoad = payload;
-    return new ReplyObject(HttpServletResponse.SC_ACCEPTED, MARSHALLED_REPLY_OBJECT);
+  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
+    throw new RuntimeException("DEATHROW");
   }
 
   @Override
-  public String handleRequestRAW(String request) {
-    // TODO: MAR
-    return null;
+  public String handleRequest(String request) {
+    RequestObject requestObj = gson.fromJson(request, RequestObject.class);
+    this.lastObjectId = requestObj.getObjectId();
+    this.lastOperationName = requestObj.getOperationName();
+    this.lastPayLoad = requestObj.getPayload();
+    ReplyObject reply = new ReplyObject(HttpServletResponse.SC_ACCEPTED, MARSHALLED_REPLY_OBJECT);
+    return gson.toJson(reply);
   }
 }

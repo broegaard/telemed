@@ -68,7 +68,7 @@ public class GameLobbyRootInvoker implements Invoker {
   }
 
   @Override
-  public ReplyObject handleRequest(String objectId, String operationName, String payload) {
+  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
 
     // Identify the invoker to use
@@ -77,7 +77,7 @@ public class GameLobbyRootInvoker implements Invoker {
 
     // And do the upcall
     try {
-      reply = subInvoker.handleRequest(objectId, operationName, payload);
+      reply = subInvoker.handleRequestDEATHROW(objectId, operationName, payload);
 
     } catch (UnknownServantException e) {
       reply =
@@ -90,7 +90,7 @@ public class GameLobbyRootInvoker implements Invoker {
   }
 
   @Override
-  public String handleRequestRAW(String request) {
+  public String handleRequest(String request) {
     // TODO: MAR
     return null;
   }

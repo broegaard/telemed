@@ -47,9 +47,9 @@ public class TeleMedJSONInvoker implements Invoker {
   }
 
   @Override
-  public ReplyObject handleRequest(String objectId,
-                                   String operationName,
-                                   String argumentsJSONArray) {
+  public ReplyObject handleRequestDEATHROW(String objectId,
+                                           String operationName,
+                                           String argumentsJSONArray) {
     ReplyObject reply = null;
     /* As there is only one TeleMed instance (a singleton)
        the objectId is not used for anything in our case.
@@ -158,11 +158,11 @@ public class TeleMedJSONInvoker implements Invoker {
   }
 
   @Override
-  public String handleRequestRAW(String request) {
+  public String handleRequest(String request) {
     System.out.printf("MAR Invoker: " + request);
     RequestObject p =
             gson.fromJson(request, RequestObject.class);
-    ReplyObject replyObject = handleRequest(p.getObjectId(), p.getOperationName(), p.getPayload());
+    ReplyObject replyObject = handleRequestDEATHROW(p.getObjectId(), p.getOperationName(), p.getPayload());
     return gson.toJson(replyObject);
   }
 
