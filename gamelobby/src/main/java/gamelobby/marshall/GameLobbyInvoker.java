@@ -49,9 +49,8 @@ public class GameLobbyInvoker implements Invoker {
 
   @Override
   public String handleRequest(String request) {
-    // TODO: MAR
     RequestObject requestObject = gson.fromJson(request, RequestObject.class);
-    String objectId = requestObject.getObjectId();
+    // lobby is singleton, no use for the objectId
     String operationName = requestObject.getOperationName();
     String payload = requestObject.getPayload();
 

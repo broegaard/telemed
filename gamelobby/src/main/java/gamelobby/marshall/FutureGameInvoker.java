@@ -55,7 +55,6 @@ public class FutureGameInvoker implements Invoker {
 
     ReplyObject reply = null;
 
-
     if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
       FutureGame futureGame = nameService.getFutureGame(objectId);
       String token = futureGame.getJoinToken();
