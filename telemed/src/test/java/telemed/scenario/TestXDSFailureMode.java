@@ -21,7 +21,6 @@ package telemed.scenario;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -71,12 +70,11 @@ public class TestXDSFailureMode {
     
     try {
       telemed.processAndStore(teleObs1);
-      fail("Should throw TeleMedExcpetion");
+      fail("Should throw TeleMedException");
     } catch (IPCException e) {
-      ReplyObject lastReply = clientRequestHandler.getLastReply();
-      assertThat(lastReply.isSuccess(), is(false));
-      assertThat(lastReply.errorDescription(), containsString("XDS Failure"));
-      assertThat(lastReply.getStatusCode(), is(500)); // HTTP 500 internal server error
+      String lastReply = clientRequestHandler.getLastReply();
+      assertThat(lastReply, containsString("\"statusCode\":500")); // HTTP 500 internal server error */
+      assertThat(lastReply, containsString("XDS Failure"));
     }
   }
 

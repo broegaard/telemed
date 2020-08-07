@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 
+import frds.broker.RequestObject;
 import telemed.common.OperationNames;
 import telemed.domain.*;
 import telemed.storage.XDSException;
@@ -154,6 +155,15 @@ public class TeleMedJSONInvoker implements Invoker {
               e.getMessage());
     }
     return reply;
+  }
+
+  @Override
+  public String handleRequestRAW(String request) {
+    System.out.printf("MAR Invoker: " + request);
+    RequestObject p =
+            gson.fromJson(request, RequestObject.class);
+    ReplyObject replyObject = handleRequest(p.getObjectId(), p.getOperationName(), p.getPayload());
+    return gson.toJson(replyObject);
   }
 
 }

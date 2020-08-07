@@ -142,4 +142,10 @@ public class TestRequestHandler implements Invoker {
     this.lastPayLoad = payload;
     return new ReplyObject(HttpServletResponse.SC_ACCEPTED, MARSHALLED_REPLY_OBJECT);
   }
+
+  @Override
+  public String handleRequestRAW(String request) {
+    // TODO: MAR
+    return null;
+  }
 }

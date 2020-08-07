@@ -43,6 +43,7 @@ public interface ClientRequestHandler {
    * @throws IPCException
    *           in case some error happened in the IPC
    */
+  @Deprecated
   ReplyObject sendToServer(RequestObject requestObject);
 
   String sendToServerAndAwaitReply(String request);

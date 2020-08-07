@@ -70,6 +70,12 @@ public class GameInvoker implements Invoker {
     return reply;
   }
 
+  @Override
+  public String handleRequestRAW(String request) {
+    // TODO: MAR
+    return null;
+  }
+
   private Game getGameOrThrowUnknownException(String objectId) {
     Game game = nameService.getGame(objectId);
     if (game == null) {

@@ -42,8 +42,11 @@ import frds.broker.RequestObject;
 public class LocalMethodCallClientRequestHandler implements ClientRequestHandler {
 
   private final Invoker invoker;
-  private ReplyObject lastReply;
-  private RequestObject lastRequest;
+  private ReplyObject lastReplyDR;
+  private RequestObject lastRequestDR;
+
+  private String lastRequest;
+  private String lastReply;
 
   public LocalMethodCallClientRequestHandler(Invoker invoker) {
     this.invoker = invoker;
@@ -51,19 +54,24 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
 
   @Override
   public ReplyObject sendToServer(RequestObject requestObject) {
-    lastRequest = requestObject;
+    lastRequestDR = requestObject;
     // The send to the server can be mimicked by a direct method call
-    lastReply = invoker.handleRequest(requestObject.getObjectId(), 
+    lastReplyDR = invoker.handleRequest(requestObject.getObjectId(),
         requestObject.getOperationName(), 
         requestObject.getPayload());
-    return lastReply;
+    return lastReplyDR;
   }
 
   @Override
   public String sendToServerAndAwaitReply(String request) {
     // TODO: Change
-    System.out.printf("MAR: " + request);
-    return null;
+    System.out.println("LOCAL MAR 1: " + request);
+    lastRequest = request;
+    String replyAsString = invoker.handleRequestRAW(request);
+    lastReply = replyAsString;
+    System.out.println("LOCAL MAR 2: " + replyAsString);
+
+    return replyAsString;
   }
 
   @Override
@@ -76,12 +84,22 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
 
   }
 
-  public ReplyObject getLastReply() {
+  public ReplyObject getLastReplyDR() {
+    return lastReplyDR;
+  }
+
+  public RequestObject getLastRequestDR() {
+    return lastRequestDR;
+  }
+
+  public String getLastRequest() {
+    return lastRequest;
+  }
+
+  public String getLastReply() {
     return lastReply;
   }
 
-  public RequestObject getLastRequest() {
-    return lastRequest;
-  }
+
 
 }

@@ -49,9 +49,12 @@ public class StandardJSONRequestor implements Requestor {
     RequestObject request =
             new RequestObject(objectId, operationName, asJson);
 
+    String requestAsString = gson.toJson(request);
+    String replyAsString = clientRequestHandler.sendToServerAndAwaitReply(requestAsString);
+    ReplyObject reply = gson.fromJson(replyAsString, ReplyObject.class);
+
     // Do the IPC to the server using my client request handler
-    ReplyObject reply =
-            clientRequestHandler.sendToServer(request);
+    // ReplyObject reply = clientRequestHandler.sendToServer(request);
 
     // First, verify that the request succeeded
     if (!reply.isSuccess()) {

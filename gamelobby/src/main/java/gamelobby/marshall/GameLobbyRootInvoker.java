@@ -88,4 +88,10 @@ public class GameLobbyRootInvoker implements Invoker {
 
     return reply;
   }
+
+  @Override
+  public String handleRequestRAW(String request) {
+    // TODO: MAR
+    return null;
+  }
 }

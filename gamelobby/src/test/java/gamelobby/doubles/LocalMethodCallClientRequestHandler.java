@@ -62,6 +62,11 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   }
 
   @Override
+  public String sendToServerAndAwaitReply(String request) {
+    return invoker.handleRequestRAW(request);
+  }
+
+  @Override
   public void setServer(String hostname, int port) {
     // not used
   }

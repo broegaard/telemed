@@ -46,4 +46,6 @@ public interface Invoker {
    * @return a reply object representing the outcome of the invocation
    */
   ReplyObject handleRequest(String objectId, String operationName, String payload);
+
+  String handleRequestRAW(String request);
 }

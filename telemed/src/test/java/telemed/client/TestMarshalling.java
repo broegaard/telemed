@@ -21,7 +21,6 @@ package telemed.client;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-import com.google.gson.Gson;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
 import frds.broker.RequestObject;
@@ -30,6 +29,7 @@ import frds.broker.marshall.json.StandardJSONRequestor;
 import org.junit.Before;
 import org.junit.Test;
 import frds.broker.Versioning;
+import telemed.common.OperationNames;
 import telemed.domain.TeleMed;
 import telemed.domain.TeleObservation;
 import telemed.doubles.FakeObjectXDSDatabase;
@@ -39,7 +39,6 @@ import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.server.TeleMedServant;
 
 import javax.servlet.http.HttpServletResponse;
-import java.time.OffsetDateTime;
 
 
 /**
@@ -82,16 +81,16 @@ public class TestMarshalling {
     teleMed.processAndStore(teleObs1);
 
     // 'smoke testing' the request and reply
-    RequestObject req = clientRequestHandler.getLastRequest();
-    assertThat(req.getObjectId(), is(TeleMedProxy.TELEMED_OBJECTID));
-    assertThat(req.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
+    String request = clientRequestHandler.getLastRequest();
+    assertThat(request, containsString("\"versionIdentity\":" + Versioning.MARSHALLING_VERSION));
+    assertThat(request, containsString("\"operationName\":\"" + OperationNames.PROCESS_AND_STORE_OPERATION));
 
     // some 'smoke testing' of the payload
-    assertThat(req.getPayload(), containsString("\"systolic\":{\"value\":120.0,"));
+    assertThat(request, containsString("systolic"));
 
-    ReplyObject rep = clientRequestHandler.getLastReply();
-    assertThat(rep.getStatusCode(), is(HttpServletResponse.SC_CREATED));
-    assertThat(rep.getVersionIdentity(), is(Versioning.MARSHALLING_VERSION));
-    assertThat(rep.getPayload(), is("\"uid-1\""));
+    String reply = clientRequestHandler.getLastReply();
+    assertThat(reply, containsString(":"+HttpServletResponse.SC_CREATED));
+    assertThat(reply, containsString("versionIdentity\":"+Versioning.MARSHALLING_VERSION));
+    assertThat(reply, containsString("uid-1"));
   }
 }

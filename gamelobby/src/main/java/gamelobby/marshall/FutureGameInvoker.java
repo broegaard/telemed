@@ -71,4 +71,10 @@ public class FutureGameInvoker implements Invoker {
 
     return reply;
   }
+
+  @Override
+  public String handleRequestRAW(String request) {
+    // TODO: MAR
+    return null;
+  }
 }

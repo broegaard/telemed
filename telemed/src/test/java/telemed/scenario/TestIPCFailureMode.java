@@ -87,10 +87,7 @@ public class TestIPCFailureMode {
 
     @Override
     public String sendToServerAndAwaitReply(String request) {
-      // TODO: CHANGE
-      System.out.printf("MAR: " + request);
-      return null;
-
+      throw new IPCException("Send failed due to nasty communication error");
     }
 
     @Override
