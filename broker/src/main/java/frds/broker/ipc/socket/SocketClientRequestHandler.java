@@ -42,9 +42,6 @@ public class SocketClientRequestHandler
 
   private String hostname;
   private int port;
-  private PrintWriter out;
-  private BufferedReader in;
-  private final Gson gson;
 
   /** Create the CRH. Remember to use
    * 'setServer' before any sendToServer
@@ -52,7 +49,7 @@ public class SocketClientRequestHandler
    */
 
   public SocketClientRequestHandler() {
-    gson = new Gson();
+    Gson gson = new Gson();
   }
 
   @Override
@@ -68,12 +65,11 @@ public class SocketClientRequestHandler
 
   @Override
   public String sendToServerAndAwaitReply(String request) {
-    System.out.println("MAR: " + request);
     Socket clientSocket = null;
 
-    String onthewireRequestObject = request;
-
     // Create the socket connection to the host
+    PrintWriter out;
+    BufferedReader in;
     try {
       clientSocket = new Socket(hostname, port);
       out = new PrintWriter(clientSocket.getOutputStream(), true);
@@ -84,7 +80,7 @@ public class SocketClientRequestHandler
     }
 
     // Send it to the server (= write it to the socket stream)
-    out.println(onthewireRequestObject);
+    out.println(request);
 
     // Block until a reply is received
     String reply;

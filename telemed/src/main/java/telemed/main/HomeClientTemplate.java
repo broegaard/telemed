@@ -58,7 +58,7 @@ public abstract class HomeClientTemplate {
       ts.processAndStore(to);
     } else {
       List<TeleObservation> teleObsList = ts.getObservationsFor(patientId, TimeInterval.LAST_WEEK);
-      teleObsList.stream().forEach( (to) -> {
+      teleObsList.forEach( (to) -> {
         System.out.println(to);
       });
     }

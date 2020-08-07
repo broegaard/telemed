@@ -46,16 +46,15 @@ public class FutureGameInvoker implements Invoker {
 
   @Override
   public String handleRequest(String request) {
-    // TODO: MAR
+    // Do demarshalling
     RequestObject requestObject = gson.fromJson(request, RequestObject.class);
     String objectId = requestObject.getObjectId();
     String operationName = requestObject.getOperationName();
     String payload = requestObject.getPayload();
+    JsonArray array = JsonParser.parseString(payload).getAsJsonArray();
 
     ReplyObject reply = null;
 
-    // Demarshall parameters into a JsonArray
-    JsonArray array = JsonParser.parseString(payload).getAsJsonArray();
 
     if (operationName.equals(MarshallingConstant.FUTUREGAME_GET_JOIN_TOKEN_METHOD)) {
       FutureGame futureGame = nameService.getFutureGame(objectId);

@@ -45,16 +45,13 @@ import java.util.Map;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class GameLobbyRootInvoker implements Invoker {
-  private final GameLobby lobby;
-  private final NameService nameService;
   private final Map<String, Invoker> invokerMap;
   private Gson gson;
 
   public GameLobbyRootInvoker(GameLobby lobby) {
-    this.lobby = lobby;
     gson = new Gson();
 
-    nameService = new InMemoryNameService();
+    NameService nameService = new InMemoryNameService();
     invokerMap = new HashMap<>();
 
     // Create an invoker for each handled type/class
@@ -67,13 +64,13 @@ public class GameLobbyRootInvoker implements Invoker {
     Invoker gameInvoker = new GameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
   }
+
   @Override
   public String handleRequest(String request) {
-    // TODO: MAR
     RequestObject requestObject = gson.fromJson(request, RequestObject.class);
     String operationName = requestObject.getOperationName();
 
-    String reply = null;
+    String reply;
 
     // Identify the invoker to use
     String type = operationName.substring(0, operationName.indexOf(MarshallingConstant.SEPARATOR));

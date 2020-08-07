@@ -120,7 +120,7 @@ public class GameLobbyRestServer {
       debugOutput(request);
       String idAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
-      Integer id = Integer.parseInt(idAsString);
+      int id = Integer.parseInt(idAsString);
 
       response.status(HttpServletResponse.SC_OK);
 
@@ -157,7 +157,7 @@ public class GameLobbyRestServer {
 
       String gameIdAsString = request.params(":gameId");
       // TODO: Handle non-integer provided as path
-      Integer gameId = Integer.parseInt(gameIdAsString);
+      int gameId = Integer.parseInt(gameIdAsString);
 
       // Demarshall body
       String payload = request.body();
@@ -177,7 +177,7 @@ public class GameLobbyRestServer {
 
   // === Domain handling of FutureGame resources, all FAKE-OBJECT code
   private int futureGameId = 42;
-  private Map<Integer, FutureGameResource> database
+  private final Map<Integer, FutureGameResource> database
           = new HashMap<>();
 
   private int createFutureGameAndInsertIntoDatabase(String playerName, Integer level) {
@@ -247,7 +247,7 @@ public class GameLobbyRestServer {
 
   private void debugOutput(Request request) {
     debugOutput("-> " + request.requestMethod() + " " + request.pathInfo()
-            + ": " + request.body().toString());
+            + ": " + request.body());
   }
   private void debugOutput(String s) {
     // Enable the printing below to review the request/reply

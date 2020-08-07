@@ -33,15 +33,15 @@ public class FutureGameServant implements FutureGame, Servant {
   private final String joinToken;
 
   private Game theGame;
-  private String firstPlayer;
-  private String id;
+  private final String firstPlayer;
+  private final String id;
 
   // Make a global thread safe counter for the join token
   // Note: This will ONLY work in a single-server solution;
   // you cannot load-balance multiple servers using this technique
   // as server-1 may create the same 'unique' token
   // as server-2
-  private static AtomicInteger gameCounter = new AtomicInteger();
+  private static final AtomicInteger gameCounter = new AtomicInteger();
 
   public FutureGameServant(String playerName, int playerLevel) {
     // ignore the player level for now

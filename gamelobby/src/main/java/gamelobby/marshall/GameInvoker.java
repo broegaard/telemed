@@ -45,12 +45,16 @@ public class GameInvoker implements Invoker {
     this.gson = gson;
   }
 
-  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
+  @Override
+  public String handleRequest(String request) {
+    // Perform demarshalling
+    RequestObject requestObject = gson.fromJson(request, RequestObject.class);
+    String objectId = requestObject.getObjectId();
+    String operationName = requestObject.getOperationName();
+    String arguments = requestObject.getPayload();
+    JsonArray array = JsonParser.parseString(arguments).getAsJsonArray();
+
     ReplyObject reply = null;
-    // Demarshall parameters into a JsonArray
-    JsonParser parser = new JsonParser();
-    JsonArray array =
-            parser.parse(payload).getAsJsonArray();
 
     Game game = getGameOrThrowUnknownException(objectId);
 
@@ -67,15 +71,7 @@ public class GameInvoker implements Invoker {
       game.move();
       reply = new ReplyObject(HttpServletResponse.SC_OK, null);
     }
-    return reply;
-  }
-
-  @Override
-  public String handleRequest(String request) {
-    // TODO: MAR
-    RequestObject ro = gson.fromJson(request, RequestObject.class);
-    ReplyObject rep = handleRequestDEATHROW(ro.getObjectId(), ro.getOperationName(), ro.getPayload());
-    return gson.toJson(rep);
+    return gson.toJson(reply);
   }
 
   private Game getGameOrThrowUnknownException(String objectId) {
