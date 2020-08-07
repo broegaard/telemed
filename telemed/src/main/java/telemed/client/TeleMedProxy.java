@@ -47,8 +47,8 @@ public class TeleMedProxy implements TeleMed, ClientProxy {
 
   private final Requestor requestor;
 
-  public TeleMedProxy(Requestor crh) {
-    this.requestor = crh;
+  public TeleMedProxy(Requestor requestor) {
+    this.requestor = requestor;
   }
 
   @Override

@@ -39,7 +39,8 @@ public class StandardJSONRequestor implements Requestor {
   @Override
   public <T> T sendRequestAndAwaitReply(String objectId,
                                         String operationName,
-      Type typeOfReturnValue, Object... argument) {
+                                        Type typeOfReturnValue,
+                                        Object... argument) {
     // Marshal all parameters into a JSONArray of
     // potentially mixed types
     String asJson = gson.toJson(argument);
