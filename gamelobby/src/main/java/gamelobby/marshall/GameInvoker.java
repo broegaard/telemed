@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.Game;
 import gamelobby.domain.UnknownServantException;
@@ -44,7 +45,6 @@ public class GameInvoker implements Invoker {
     this.gson = gson;
   }
 
-  @Override
   public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
     ReplyObject reply = null;
     // Demarshall parameters into a JsonArray
@@ -73,7 +73,9 @@ public class GameInvoker implements Invoker {
   @Override
   public String handleRequest(String request) {
     // TODO: MAR
-    return null;
+    RequestObject ro = gson.fromJson(request, RequestObject.class);
+    ReplyObject rep = handleRequestDEATHROW(ro.getObjectId(), ro.getOperationName(), ro.getPayload());
+    return gson.toJson(rep);
   }
 
   private Game getGameOrThrowUnknownException(String objectId) {

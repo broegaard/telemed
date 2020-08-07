@@ -53,18 +53,7 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   }
 
   @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
-    lastRequestDR = requestObject;
-    // The send to the server can be mimicked by a direct method call
-    lastReplyDR = invoker.handleRequestDEATHROW(requestObject.getObjectId(),
-        requestObject.getOperationName(), 
-        requestObject.getPayload());
-    return lastReplyDR;
-  }
-
-  @Override
   public String sendToServerAndAwaitReply(String request) {
-    // TODO: Change
     System.out.println("LOCAL MAR 1: " + request);
     lastRequest = request;
     String replyAsString = invoker.handleRequest(request);

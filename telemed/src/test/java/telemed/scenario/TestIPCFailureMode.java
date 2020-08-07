@@ -81,11 +81,6 @@ public class TestIPCFailureMode {
     }
 
     @Override
-    public ReplyObject sendToServer(RequestObject requestObject) {
-      throw new IPCException("Send failed due to nasty communication error");
-    }
-
-    @Override
     public String sendToServerAndAwaitReply(String request) {
       throw new IPCException("Send failed due to nasty communication error");
     }

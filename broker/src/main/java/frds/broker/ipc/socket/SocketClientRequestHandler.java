@@ -67,11 +67,6 @@ public class SocketClientRequestHandler
   }
 
   @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
-    throw new RuntimeException("NO SUPPORTED");
-  }
-
-  @Override
   public String sendToServerAndAwaitReply(String request) {
     System.out.println("MAR: " + request);
     Socket clientSocket = null;

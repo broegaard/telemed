@@ -41,7 +41,4 @@ public interface Invoker {
    */
 
   String handleRequest(String request);
-
-  @Deprecated
-  ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload);
 }

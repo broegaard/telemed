@@ -23,6 +23,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.FutureGame;
 import gamelobby.domain.GameLobby;
@@ -47,13 +48,17 @@ public class GameLobbyInvoker implements Invoker {
   }
 
   @Override
-  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
+  public String handleRequest(String request) {
+    // TODO: MAR
+    RequestObject requestObject = gson.fromJson(request, RequestObject.class);
+    String objectId = requestObject.getObjectId();
+    String operationName = requestObject.getOperationName();
+    String payload = requestObject.getPayload();
+
     ReplyObject reply = null;
 
     // Demarshall parameters into a JsonArray
-    JsonParser parser = new JsonParser();
-    JsonArray array =
-            parser.parse(payload).getAsJsonArray();
+    JsonArray array = JsonParser.parseString(payload).getAsJsonArray();
 
     if (operationName.equals(MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD)) {
       String playerName = gson.fromJson(array.get(0), String.class);
@@ -85,12 +90,6 @@ public class GameLobbyInvoker implements Invoker {
       reply = new ReplyObject(HttpServletResponse.SC_OK,
               gson.toJson(futureGameId));
     }
-    return reply;
-  }
-
-  @Override
-  public String handleRequest(String request) {
-    // TODO: MAR
-    return null;
+    return gson.toJson(reply);
   }
 }

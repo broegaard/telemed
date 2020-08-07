@@ -47,9 +47,11 @@ public class TeleMedJSONInvoker implements Invoker {
   }
 
   @Override
-  public ReplyObject handleRequestDEATHROW(String objectId,
-                                           String operationName,
-                                           String argumentsJSONArray) {
+  public String handleRequest(String request) {
+    System.out.printf("MAR Invoker: " + request);
+    RequestObject requestObject =
+            gson.fromJson(request, RequestObject.class);
+
     ReplyObject reply = null;
     /* As there is only one TeleMed instance (a singleton)
        the objectId is not used for anything in our case.
@@ -65,8 +67,8 @@ public class TeleMedJSONInvoker implements Invoker {
 
     // Demarshall parameters into a JsonArray
     JsonArray array =
-            JsonParser.parseString(argumentsJSONArray).getAsJsonArray();
-    
+            JsonParser.parseString(requestObject.getPayload()).getAsJsonArray();
+
     try {
       // Dispatching on all known operations
       // Each dispatch follows the same algorithm
@@ -74,7 +76,7 @@ public class TeleMedJSONInvoker implements Invoker {
       // b) invoke servant method
       // c) populate a reply object with return values
 
-      if (operationName.equals(OperationNames.
+      if (requestObject.getOperationName().equals(OperationNames.
               PROCESS_AND_STORE_OPERATION)) {
         // Parameter convention: [0] = TeleObservation
         TeleObservation ts = gson.fromJson(array.get(0),
@@ -84,7 +86,7 @@ public class TeleMedJSONInvoker implements Invoker {
         reply = new ReplyObject(HttpServletResponse.SC_CREATED,
                 gson.toJson(uid));
 
-      } else if (operationName.equals(OperationNames.
+      } else if (requestObject.getOperationName().equals(OperationNames.
               GET_OBSERVATIONS_FOR_OPERATION)) {
         // Parameter convention: [0] = patientId
         String patientId = gson.fromJson(array.get(0), String.class);
@@ -100,7 +102,7 @@ public class TeleMedJSONInvoker implements Invoker {
                         HttpServletResponse.SC_OK;
         reply = new ReplyObject(statusCode, gson.toJson(tol));
 
-      } else if (operationName.equals(OperationNames.
+      } else if (requestObject.getOperationName().equals(OperationNames.
               CORRECT_OPERATION)) {
         // Parameter convention: [0] = patientId
         String patientId = gson.fromJson(array.get(0), String.class);
@@ -112,7 +114,7 @@ public class TeleMedJSONInvoker implements Invoker {
         reply = new ReplyObject(HttpServletResponse.SC_OK,
                 gson.toJson(isValid));
 
-      } else if (operationName.equals(OperationNames.
+      } else if (requestObject.getOperationName().equals(OperationNames.
               GET_OBSERVATION_OPERATION)) {
         // Parameter convention: [0] = patientId
         String patientId = gson.fromJson(array.get(0), String.class);
@@ -122,13 +124,13 @@ public class TeleMedJSONInvoker implements Invoker {
         // the proper error code
         if (to == null) {
           reply = new ReplyObject(HttpServletResponse.SC_NOT_FOUND,
-                  "No teleobservation is stored for object with id: "
-                          + objectId);
+                  "No teleobservation is stored for patient with id: "
+                          + patientId);
         } else {
           reply = new ReplyObject(HttpServletResponse.SC_OK, gson.toJson(to));
         }
 
-      } else if (operationName.equals(OperationNames.
+      } else if (requestObject.getOperationName().equals(OperationNames.
               DELETE_OPERATION)) {
         // Parameter convention: [0] = patientId
         String patientId = gson.fromJson(array.get(0), String.class);
@@ -145,25 +147,18 @@ public class TeleMedJSONInvoker implements Invoker {
         reply = new ReplyObject(HttpServletResponse.
                 SC_NOT_IMPLEMENTED,
                 "Server received unknown operation name: '"
-                        + operationName + "'.");
+                        + requestObject.getOperationName() + "'.");
       }
 
     } catch( XDSException e ) {
       reply =
-          new ReplyObject(
-              HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-              e.getMessage());
+              new ReplyObject(
+                      HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                      e.getMessage());
     }
-    return reply;
-  }
 
-  @Override
-  public String handleRequest(String request) {
-    System.out.printf("MAR Invoker: " + request);
-    RequestObject p =
-            gson.fromJson(request, RequestObject.class);
-    ReplyObject replyObject = handleRequestDEATHROW(p.getObjectId(), p.getOperationName(), p.getPayload());
-    return gson.toJson(replyObject);
+
+    return gson.toJson(reply);
   }
 
 }

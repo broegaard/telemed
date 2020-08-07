@@ -21,6 +21,7 @@ package gamelobby.marshall;
 import com.google.gson.Gson;
 import frds.broker.Invoker;
 import frds.broker.ReplyObject;
+import frds.broker.RequestObject;
 import gamelobby.common.MarshallingConstant;
 import gamelobby.domain.GameLobby;
 import gamelobby.domain.UnknownServantException;
@@ -66,32 +67,29 @@ public class GameLobbyRootInvoker implements Invoker {
     Invoker gameInvoker = new GameInvoker(nameService, gson);
     invokerMap.put(MarshallingConstant.GAME_PREFIX, gameInvoker);
   }
-
   @Override
-  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
-    ReplyObject reply = null;
+  public String handleRequest(String request) {
+    // TODO: MAR
+    RequestObject requestObject = gson.fromJson(request, RequestObject.class);
+    String operationName = requestObject.getOperationName();
+
+    String reply = null;
 
     // Identify the invoker to use
     String type = operationName.substring(0, operationName.indexOf(MarshallingConstant.SEPARATOR));
     Invoker subInvoker = invokerMap.get(type);
 
-    // And do the upcall
+    // And do the upcall on the subInvoker
     try {
-      reply = subInvoker.handleRequestDEATHROW(objectId, operationName, payload);
+      reply = subInvoker.handleRequest(request);
 
     } catch (UnknownServantException e) {
-      reply =
+      reply = gson.toJson(
               new ReplyObject(
                       HttpServletResponse.SC_NOT_FOUND,
-                      e.getMessage());
+                      e.getMessage()));
     }
 
     return reply;
-  }
-
-  @Override
-  public String handleRequest(String request) {
-    // TODO: MAR
-    return null;
   }
 }

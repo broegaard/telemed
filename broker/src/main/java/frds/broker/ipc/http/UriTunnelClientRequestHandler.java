@@ -72,22 +72,6 @@ public class UriTunnelClientRequestHandler
 }
 
   @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
-    ReplyObject reply = null;
-
-    // The request object's payload does NOT include operationName
-    // and as we use HTTP as a pure transport protocol, we need
-    // to create a more complete request object which includes
-    // the full set of data required
-    String requestAsJson = gson.toJson(requestObject);
-    
-    String body = sendToServerAndAwaitReply(requestAsJson);
-
-    reply = gson.fromJson(body, ReplyObject.class);
-    return reply;
-  }
-
-  @Override
   public String sendToServerAndAwaitReply(String request) {
     System.out.printf("MAR: " + request);
     HttpResponse<JsonNode> jsonResponse = null;

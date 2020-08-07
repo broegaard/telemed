@@ -42,23 +42,9 @@ import frds.broker.RequestObject;
 public class LocalMethodCallClientRequestHandler implements ClientRequestHandler {
 
   private final Invoker invoker;
-  private ReplyObject lastReply;
-  private RequestObject lastRequest;
 
   public LocalMethodCallClientRequestHandler(Invoker invoker) {
     this.invoker = invoker;
-  }
-
-  @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
-    lastRequest = requestObject;
-    // System.out.println("--> "+ requestObject);
-    // The send to the server can be mimicked by a direct method call
-    lastReply = invoker.handleRequestDEATHROW(requestObject.getObjectId(),
-        requestObject.getOperationName(), 
-        requestObject.getPayload());
-    // System.out.println("--< "+ lastReply);
-    return lastReply;
   }
 
   @Override
@@ -75,13 +61,4 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   public void close() {
 
   }
-
-  public ReplyObject getLastReply() {
-    return lastReply;
-  }
-
-  public RequestObject getLastRequest() {
-    return lastRequest;
-  }
-
 }

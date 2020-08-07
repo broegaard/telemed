@@ -145,11 +145,6 @@ public class TestRequestHandler implements Invoker {
   // Use the test case itself as the test spy, a self-shunt
   // (http://xunitpatterns.com/Test%20Spy.html)
   @Override
-  public ReplyObject handleRequestDEATHROW(String objectId, String operationName, String payload) {
-    throw new RuntimeException("DEATHROW");
-  }
-
-  @Override
   public String handleRequest(String request) {
     RequestObject requestObj = gson.fromJson(request, RequestObject.class);
     this.lastObjectId = requestObj.getObjectId();
