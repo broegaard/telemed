@@ -104,7 +104,7 @@ public class SocketServerRequestHandler
         clientSocket.getInputStream()));
 
     String inputLine;
-    String replyAsString = null;
+    String marshalledReply = null;
 
     inputLine = in.readLine();
     System.out.println("--> Received " + inputLine);
@@ -112,11 +112,11 @@ public class SocketServerRequestHandler
       System.err.println(
               "Server read a null string from the socket???");
     } else {
-       replyAsString = invoker.handleRequest(inputLine);
+       marshalledReply = invoker.handleRequest(inputLine);
 
-      System.out.println("--< replied: " + replyAsString);
+      System.out.println("--< replied: " + marshalledReply);
     }
-    out.println(replyAsString);
+    out.println(marshalledReply);
 
     System.out.println("Closing socket...");
     in.close();

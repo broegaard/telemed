@@ -48,10 +48,11 @@ public class StandardJSONRequestor implements Requestor {
     String marshalledRequest = gson.toJson(request);
 
     // Ask CRH to do the network call
-    String replyAsString = clientRequestHandler.sendToServerAndAwaitReply(marshalledRequest);
+    String marshalledReply =
+            clientRequestHandler.sendToServerAndAwaitReply(marshalledRequest);
 
     // Demarshall reply
-    ReplyObject reply = gson.fromJson(replyAsString, ReplyObject.class);
+    ReplyObject reply = gson.fromJson(marshalledReply, ReplyObject.class);
 
     // First, verify that the request succeeded
     if (!reply.isSuccess()) {
