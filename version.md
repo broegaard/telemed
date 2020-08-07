@@ -24,4 +24,6 @@ FRDS.Broker Library Version History
                  done in the CRH and SRH. From this version on, marshalling
                  and demarshalling is only made in the Requestor and
                  Invoker layer of the pattern, while CRH and SRH handles
-                 Strings only. Should not effect client code, though.
+                 Strings only. 
+                 THIS VERSION BREAKS THE CRH and INVOKER API. Therefore
+                 client code must be rewritten to utilize this version.
