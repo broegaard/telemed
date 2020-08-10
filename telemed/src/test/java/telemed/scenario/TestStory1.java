@@ -61,22 +61,23 @@ public class TestStory1 {
 
   @Before 
   public void setup() {
+    // Given a tele observation
     teleObs1 = HelperMethods.createObservation120over70forNancy();
-    // Create server side implementations
+    // Given a TeleMed servant
     xds = new FakeObjectXDSDatabase();
     TeleMed teleMedServant = new TeleMedServant(xds);
-
-    // Server side broker implementations
+    // Given a server side invoker associated with the servant object
     Invoker invoker = new TeleMedJSONInvoker(teleMedServant);
     
-    // Create client side broker implementations, using the local 
+    // And given the client side broker implementations, using the local
     // method client request handler to avoid any real IPC layer.
     ClientRequestHandler clientRequestHandler =
         new LocalMethodCallClientRequestHandler(invoker);
     Requestor requestor =
         new StandardJSONRequestor(clientRequestHandler);
     
-    // Finally, create the client proxy for the TeleMed
+    // Then it is Given that we can create a client proxy
+    // that voids any real IPC communication
     teleMed = new TeleMedProxy(requestor);
   }
   
