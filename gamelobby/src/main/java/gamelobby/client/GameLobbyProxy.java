@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Henrik Baerbak Christensen, CS @ AU
  */
 public class GameLobbyProxy implements GameLobby, ClientProxy {
+  public static final String GAMELOBBY_OBJECTID = "gamelobby-singleton";
   private final Requestor requestor;
 
   public GameLobbyProxy(Requestor requestor) {
@@ -43,7 +44,7 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
   @Override
   public FutureGame createGame(String playerName, int playerLevel) {
     String id =
-      requestor.sendRequestAndAwaitReply("none",
+      requestor.sendRequestAndAwaitReply(GAMELOBBY_OBJECTID,
               MarshallingConstant.GAMELOBBY_CREATE_GAME_METHOD,
               String.class, playerName, playerLevel);
     FutureGame proxy = new FutureGameProxy(id, requestor);
@@ -55,7 +56,7 @@ public class GameLobbyProxy implements GameLobby, ClientProxy {
     FutureGame proxy = null;
     try {
       String id =
-              requestor.sendRequestAndAwaitReply("none",
+              requestor.sendRequestAndAwaitReply(GAMELOBBY_OBJECTID,
                       MarshallingConstant.GAMELOBBY_JOIN_GAME_METHOD,
                       String.class, playerName, joinToken);
       proxy = new FutureGameProxy(id, requestor);
