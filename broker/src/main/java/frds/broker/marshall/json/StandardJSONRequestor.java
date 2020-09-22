@@ -39,7 +39,8 @@ public class StandardJSONRequestor implements Requestor {
   @Override
   public <T> T sendRequestAndAwaitReply(String objectId,
                                         String operationName,
-      Type typeOfReturnValue, Object... argument) {
+                                        Type typeOfReturnValue,
+                                        Object... argument) {
     // Marshal all parameters into a JSONArray of
     // potentially mixed types
     String asJson = gson.toJson(argument);
@@ -48,23 +49,27 @@ public class StandardJSONRequestor implements Requestor {
     RequestObject request =
             new RequestObject(objectId, operationName, asJson);
 
+    String requestAsString = gson.toJson(request);
+    String replyAsString = clientRequestHandler.sendToServerAndAwaitReply(requestAsString);
+    ReplyObject reply = gson.fromJson(replyAsString, ReplyObject.class);
+
     // Do the IPC to the server using my client request handler
-    ReplyObject replyFrom =
-            clientRequestHandler.sendToServer(request);
+    // ReplyObject reply = clientRequestHandler.sendToServer(request);
 
     // First, verify that the request succeeded
-    if (!replyFrom.isSuccess()) {
-      throw new IPCException(replyFrom.getStatusCode(),
+    if (!reply.isSuccess()) {
+      throw new IPCException(reply.getStatusCode(),
           "Failure during client requesting operation '"
                   + operationName
                   + "'. ErrorMessage is: "
-                  + replyFrom.errorDescription());
+                  + reply.errorDescription());
     }
     // Demarshall the reply from the server
-    String payload = replyFrom.getPayload();
+    String payload = reply.getPayload();
 
     // Construct the return value by asking Gson to interpret JSON
-    // and make the cast into the generic type T
+    // and make the cast into the generic type T, otherwise it is
+    // a void method
     if (typeOfReturnValue != null)
       returnValue = gson.fromJson(payload, typeOfReturnValue);
     return returnValue;

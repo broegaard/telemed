@@ -17,6 +17,7 @@
  */
 
 include 'broker'
-include 'demo'
-include 'demo2'
-include 'demo-rest'
+include 'telemed'
+include 'gamelobby'
+include 'telemed-rest'
+include 'gamelobby-rest'

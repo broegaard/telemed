@@ -1,5 +1,3 @@
-
-
 /*
  * Copyright (C) 2018 Henrik Bærbak Christensen, baerbak.com
  *
@@ -26,24 +24,20 @@ package frds.broker;
  * (IPC) on behalf of client objects. It is called by the Requestor role. It
  * communicates over the network with an associated ServerRequestHandler on the
  * server side.
- * 
  */
 public interface ClientRequestHandler {
 
   /**
-   * Send a request, defined by an operation name and a payload (in the chosen
-   * marshaling format), to the server's server request handler; await an answer
-   * and return a valid reply object. The objectId can be interpreted in a broad
-   * sense (not necessarily as the id of 'obj' in 'obj.operation(params)'),
-   * depending upon the invoker at the server side.
+   * Send a (marshalled) request to the server's server request handler;
+   * await an answer, and return a valid marshalled reply.
    * 
-   * @param requestObject
+   * @param request
    *          the request to send
    * @return a reply from the remote component
    * @throws IPCException
    *           in case some error happened in the IPC
    */
-  ReplyObject sendToServer(RequestObject requestObject);
+  String sendToServerAndAwaitReply(String request);
 
   /**
    * Set the hostname/port of the server that holds the

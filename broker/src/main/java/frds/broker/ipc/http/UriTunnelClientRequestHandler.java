@@ -41,7 +41,7 @@ public class UriTunnelClientRequestHandler
   protected final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
-   * using POST messages over ipc://(hostname):(port)/(pathForPost)
+   * using POST messages over http://(hostname):(port)/(pathForPost)
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
@@ -72,31 +72,20 @@ public class UriTunnelClientRequestHandler
 }
 
   @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
-    HttpResponse<JsonNode> jsonResponse = null;
-    ReplyObject reply = null;
+  public String sendToServerAndAwaitReply(String request) {
+    HttpResponse<String> reply;
 
-    // The request object's payload does NOT include operationName
-    // and as we use HTTP as a pure transport protocol, we need
-    // to create a more complete request object which includes
-    // the full set of data required
-    String requestAsJson = gson.toJson(requestObject);
-    
     // All calls are URI tunneled through a POST message
     try {
-      jsonResponse = Unirest.post(baseURL + path)
-          .header("Accept", MimeMediaType.APPLICATION_JSON)
-          .header("Content-Type", MimeMediaType.APPLICATION_JSON)
-          .body(requestAsJson).asJson();
+      reply = Unirest.post(baseURL + path)
+              .header("Accept", MimeMediaType.TEXT_PLAIN)
+              .header("Content-Type", MimeMediaType.TEXT_PLAIN)
+              .body(request).asString();
     } catch (UnirestException e) {
-      throw new IPCException("UniRest POST request failed on objId="
-          + requestObject.getObjectId() + ", operationName="
-              + requestObject.getOperationName(), e);
+      throw new IPCException("UniRest POST request failed on request="
+              + request, e);
     }
-    
-    String body = jsonResponse.getBody().toString();
-    reply = gson.fromJson(body, ReplyObject.class);
-    return reply;
+    return reply.getBody();
   }
 
   @Override

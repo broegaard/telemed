@@ -8,7 +8,7 @@ implementations of those roles that are not domain/use case
 specific. It provides a JSON based (GSon library) *Requestor*
 implementation, and implementations of the *ClientRequestHandler* and
 *ServerRequestHandler* roles in both a Java socket based and a
-Http/URI tunneling based variants. The latter us based upon the
+Http/URI tunneling based variants. The latter is based upon the
 UniRest and Spark-Java libraries.
 
 The **Broker** pattern and the source code is explained in detail in
@@ -28,13 +28,27 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '1.4'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '2.0'
     }
+
+### Which IPC implementation shall I use?
+
+The FRDS.Broker library provides implementations of a socket based and
+a HTTP based InterProcess Communication (IPC) layer.
+
+The socket implementation is *single-threaded* and produces output to
+stdout and is appropriate in the main context of the library, namely a
+teaching and educational setting.
+
+The HTTP (Uri Tunneling) implementation uses UniRest on the client
+side and Spark-Java on the server side. The server side is
+*thread-pooled* and uses SLF4J logging output, and is thus much more
+suited for a "near-production" setting.
 
 What is this repository for?
 -----------
 
-The Broker library used in teaching context based on
+The Broker library used in a teaching context based on
 the book *Flexible, Reliable, Distributed Software*.
 
 This repository serves multiple purposes.
@@ -46,18 +60,26 @@ This repository serves multiple purposes.
   2. It has the source code of the TeleMed system, which is used in
        the FRDS book to show the Broker pattern in action, and
        contains tests of both the Broker and TeleMed implementation.
-       Folder: *demo*. Note that his project also contains core test
+       Folder: *telemed*. Note that his project also contains core test
        code for the broker library.
        
   3. It has the source code (and development diary) of the GameLobby
      system, which is used in FRDS to show how to create remote
      objects on the server, and handle multi-object method
-     dispatch. Folder: *demo2*.
+     dispatch. Folder: *gamelobby*.
   
   4. It has the source code of an implementation of TeleMed that uses
-     REST instead of Broker for communication. Folder: *demo-rest*.
+     REST instead of Broker for communication. Folder: *telemed-rest*.
+     
+  5. It has the source code of a rudimentary REST server, *PasteBin*,
+     used in the FRDS book to illustrate the POST and GET verbs of
+     HTTP. Folder: *pastebin*.
+     
+  6. It has the source code for a HATEAOS REST server used in the 
+     FRDS book to illustrate state changes using REST resources.
+     Folder: *gamelobby-rest*.
   
-### TeleMed
+### TeleMed 
 
 The TeleMed system is a small distributed system in which patients
 may upload blood pressure measurements to a central medical server.
@@ -72,7 +94,7 @@ two limitations (more detail in FRDS):
      invoke methods on client side objects (no Observer pattern
      possible).
 
-Two variants of the Broker is provided
+Two variants of the Broker are provided
 
   * Socket: Socket based Client- and ServerRequestHandler implementations.
 
@@ -80,12 +102,12 @@ Two variants of the Broker is provided
     implementations similar to what most WebService frameworks will
     produce.
 
-### GameLobby
+### GameLobby 
 
 The GameLobby is a more complex distributed system. The domain is
 players that want to create remote games, that friends can join so
-distributed play is possible. The game itself is not interesting here,
-as the learning goal is to demonstrate code that
+play over the internet is possible. The game itself is not interesting
+here, as the learning goal is to demonstrate code that:
 
   * Create objects on the server side, new servants, and allows the
     clients to bind client proxies to them for remote method calls.
@@ -94,9 +116,16 @@ as the learning goal is to demonstrate code that
     avoids 'blob' invokers, by creating sub-invokers, one for each
     type of role/servant type in the system.
     
-  * Also my [test-driven development diary](demo2/diary.md) is
+  * Also my [test-driven development diary](gamelobby/diary.md) is
     included in which I develop the system from scratch in about 14
     hours, including the documentation effort.
+    
+### PasteBin
+
+PasteBin is a rudimentary web server that allows storing and
+retrieving simple text, similar to a server based clipboard.
+
+PasteBin is explained in the separate [README](pastebin/README.md).
 
 How do I run TeleMed?
 ---
@@ -106,16 +135,16 @@ multiple times to upload or fetch blood pressure measurements.
 
 To start the TeleMed server, open a shell and issue
 
-    gradle serverSocket
+    gradle :telemed:serverSocket
 
 To upload blood pressure (123,99) for patient with id=241248 to the
 server located at IP localhost, open another shell and issue
 
-    gradle -q homeSocket -Pid=241248 -Psys=123 -Pdia=99 -Phost=localhost
+    gradle -q :telemed:homeSocket -Pid=241248 -Psys=123 -Pdia=99 -Phost=localhost
 
 To fetch the last week's data for patient with id=87, issue
 
-    gradle -q homeSocket -Pop=fetch -Pid=87
+    gradle -q :telemed:homeSocket -Pop=fetch -Pid=87
     
 If you want to use a HTTP URI Tunnel protocol instead, just replace
 `serverSocket` by `serverHttp`, and `homeSocket` with `homeHttp`. The
@@ -129,23 +158,25 @@ How do I run GameLobby?
 ---
 
 The GameLobby system is primarily intended to be reviewed through the
-test cases, but manual tests can be made using the command line.
+test cases, but manual tests can be made using the command line. The
+focus is on the creation of a shared game instance, so no usefull game
+behavior is implemented.
 
 Start server
 
-    gradle lobbyServer
+    gradle :gamelobby:lobbyServer
     
 Note the IP of the running server (I use `10.11.96.127` below).
 
 Let user 'Pedersen' create a game
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=create -Phost=10.11.96.127 -Pplayer=Pedersen
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=create -Pplayer=Pedersen -Phost=10.11.96.127 
     LobbyClient: Asked to do operation create for player Pedersen
      Future created, the join token is game-1
 
 And let 'Findus' join the game, using the provided game token `game-1` as id:
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=join -Pid=game-1 -Pplayer=Findus -Phost=10.11.96.127
     LobbyClient: Asked to do operation join for player Findus
      Future joined, available is true
      The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
@@ -155,13 +186,13 @@ And let 'Findus' join the game, using the provided game token `game-1` as id:
 Finally, once the game is created clients can make 'moves' (here id is
 assigned to the real game id that was provided in the join output):
 
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e -Phost=10.11.96.127
     LobbyClient: Asked to do operation move for player Pedersen
     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
     The Game's PLAYER IN TURN is Pedersen
     A move was made, and now PLAYER IN TURN is Findus
     
-    csdev@m31:~/proj/broker$ gradle -q lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e
+    csdev@m31:~/proj/broker$ gradle -q :gamelobby:lobbyClient -Pop=move -Pid=63dfc101-29e2-414b-b8a1-3c0bf777eb7e -Phost=10.11.96.127
     LobbyClient: Asked to do operation move for player Pedersen
     The Game id is 63dfc101-29e2-414b-b8a1-3c0bf777eb7e
     The Game's PLAYER IN TURN is Findus
@@ -172,21 +203,21 @@ client identity. Ideally, two clients ought to be running, one
 handling Pedersen, and the other Findus, and the server should be able
 to tell which is which. This is left as an exercise for the reader :).
 
-How do I run REST based TeleMed?
+How do I run the REST based TeleMed?
 ---
 
 Start the REST server
 
-    gradle serverRest
+    gradle :telemed-rest:serverRest
     
 The client just executes a CRUD scenario, most of the data is
 hardwired.
 
-    gradle demoRest
+    gradle :telemed-rest:demoRest
     
 You can avoid the delete by
 
-    gradle demoRest -Pdelete=false
+    gradle :telemed-rest:demoRest -Pdelete=false
     
 In addition you can review uploaded observations for a patient, for instance [localhost:4666/bp/for/251248-1234/](localhost:4666/bp/for/251248-1234/).
 

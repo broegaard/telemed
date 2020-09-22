@@ -42,14 +42,13 @@ public class SocketServerRequestHandler
   private int port;
   private ServerSocket serverSocket = null;
   private Invoker invoker = null;
-  private final Gson gson;
 
   /** Construct a socket based server request handler.
    * Remember to set the invoker delegate and port before
    * starting the process.
    */
   public SocketServerRequestHandler() {
-    gson = new Gson();
+    Gson gson = new Gson();
   }
 
   @Override
@@ -75,7 +74,7 @@ public class SocketServerRequestHandler
     while (!isStopped) {
 
       System.out.println("--> Accepting...");
-      Socket clientSocket = null;
+      Socket clientSocket;
       try {
         clientSocket = serverSocket.accept();
       } catch(IOException e) {
@@ -105,7 +104,7 @@ public class SocketServerRequestHandler
         clientSocket.getInputStream()));
 
     String inputLine;
-    ReplyObject reply = null;
+    String replyAsString = null;
 
     inputLine = in.readLine();
     System.out.println("--> Received " + inputLine);
@@ -113,14 +112,10 @@ public class SocketServerRequestHandler
       System.err.println(
               "Server read a null string from the socket???");
     } else {
-      RequestObject p =
-              gson.fromJson(inputLine, RequestObject.class);
-      reply = invoker.handleRequest(p.getObjectId(),
-              p.getOperationName(), p.getPayload());
+       replyAsString = invoker.handleRequest(inputLine);
 
-      System.out.println("--< replied: " + reply);
+      System.out.println("--< replied: " + replyAsString);
     }
-    String replyAsString = gson.toJson(reply);
     out.println(replyAsString);
 
     System.out.println("Closing socket...");
@@ -140,10 +135,9 @@ public class SocketServerRequestHandler
     } 
   }
 
-  private Thread daemon;
   @Override
   public void start() {
-    daemon = new Thread(this);
+    Thread daemon = new Thread(this);
     daemon.start();
   }
 

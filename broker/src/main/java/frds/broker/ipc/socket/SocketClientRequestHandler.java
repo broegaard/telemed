@@ -42,9 +42,6 @@ public class SocketClientRequestHandler
 
   private String hostname;
   private int port;
-  private PrintWriter out;
-  private BufferedReader in;
-  private final Gson gson;
 
   /** Create the CRH. Remember to use
    * 'setServer' before any sendToServer
@@ -52,7 +49,7 @@ public class SocketClientRequestHandler
    */
 
   public SocketClientRequestHandler() {
-    gson = new Gson();
+    Gson gson = new Gson();
   }
 
   @Override
@@ -67,33 +64,29 @@ public class SocketClientRequestHandler
   }
 
   @Override
-  public ReplyObject sendToServer(RequestObject requestObject) {
+  public String sendToServerAndAwaitReply(String request) {
     Socket clientSocket = null;
-    ReplyObject replyObj = null;
-    
+
     // Create the socket connection to the host
+    PrintWriter out;
+    BufferedReader in;
     try {
       clientSocket = new Socket(hostname, port);
       out = new PrintWriter(clientSocket.getOutputStream(), true);
       in = new BufferedReader(new InputStreamReader(
-          clientSocket.getInputStream()));
+              clientSocket.getInputStream()));
     } catch (IOException e ) {
       throw new IPCException("Socket creation problems", e);
     }
 
-    // Create and marshal the request object 
-    String onthewireRequestObject = gson.toJson(requestObject);
-    
     // Send it to the server (= write it to the socket stream)
-    out.println(onthewireRequestObject);
+    out.println(request);
 
     // Block until a reply is received
     String reply;
     try {
       reply = in.readLine();
-      
-      // and demarshall it into a reply object
-      replyObj = gson.fromJson(reply, ReplyObject.class);
+
     } catch (IOException e) {
       throw new IPCException("Socket read problems", e);
     } finally {
@@ -109,7 +102,8 @@ public class SocketClientRequestHandler
     } catch (IOException e) {
       throw new IPCException("Socket close problems (2)", e);
     }
-    return replyObj;
+
+    return reply;
   }
 
   @Override

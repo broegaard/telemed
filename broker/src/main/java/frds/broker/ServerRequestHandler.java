@@ -23,7 +23,7 @@ package frds.broker;
  * <p>
  * Responsibility: To define a specific IPC protocol and listen to any incoming
  * network messages, and forward them to an associated Invoker instance, and
- * return any ReplyObjects from the Invoker to reply messages on the network.
+ * return Invoker reply messages on the network.
  * It is associated with a ClientRequestHandler on the client side of the
  * network.
  * <p>

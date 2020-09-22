@@ -1,7 +1,7 @@
-TM16 - Case study for 'Software Architecture in Practice'
+TeleMed - Case study for 'Software Architecture in Practice'
 ===
 
-*by Henrik Bærbak Christensen, 2016 - 2018*
+*by Henrik Bærbak Christensen, 2016 - 2020*
 
 Goal
 ===
@@ -14,29 +14,29 @@ Goal
 Overview
 ===
 
-TM16 is a scaled down tele medicine system, inspired by
-the [Net4Care research project](www.net4care.org) . 
+TeleMed is a scaled down tele medicine system, inspired by
+the Net4Care research project. 
 
 Please consult resources on the SAiP web page for more detail.
 
 How to I use it?
 ===
 
-You need Gradle installed and thus Java8 or later.
+You need Gradle installed and Java8 or later.
 
 Start the telemed server in a shell (in-memory database)
 
-    gradle serverHttp
+    ./gradlew serverHttp
     
 Scenario 1: Next upload a single blood pressure measurement of
 (127,76) for patient with id=123456 to the server running on
 'localhost' (in another shell)
 
-    gradle homeHttp -Pid=123456 -Psys=127 -Pdia=76 -Phost=localhost
+    ./gradlew homeHttp -Pid=123456 -Psys=127 -Pdia=76 -Phost=localhost
     
 To fetch all uploaded measurements for the last week for id=123456
 
-    gradle homeHttp -Pid=123456 -Pop=fetch
+    ./gradlew homeHttp -Pid=123456 -Pop=fetch
     
 Scenario 2: As physician, browse all measurements made by patient
 id=123456 by pointing your web browser at
@@ -55,21 +55,29 @@ server to it.
 
 Ensure you have docker installed and then start a mongodb container
 
-    docker run -d --name db0 -p 27017:27017 mongo --noprealloc --smallfiles
+    docker run -d --name db0 -p 27017:27017 mongo:4.4 
 
-(The default MongoDB port '27017' is mapped into the host computer's
-port 27017, so you can access MongoDB on 'hostname:27017'. The
-switches --noprealloc and --smallfiles ensure that MongoDB does not eat
-up all your disk space at once.)
+(The default MongoDB port '27017' is mapped into the host.)
     
 Next start the server with a connection to it
 
-    gradle serverHttp -Pdb=localhost
+    ./gradlew serverHttp -Pdb=localhost
 
 If you run the MongoDB on another host, then tell the server using
-the -Pdb=(hostname) switch.
+the -Pdb=(hostname) switch. The portnumber is hardwired, sorry.
 
+You can inspect the contents of the mongodb by
 
+    docker exec -ti db0 mongo
+    
+which will bring you into the running database's shell
+
+Then use this weird syntax to switch to the xds database and view collections
+
+    use xds
+    db.tm16.find().pretty()
+    exit
+    
 Performance Testing
 ===
 
@@ -77,9 +85,12 @@ First, you need to ensure the 'pe hack' is enabled in the TeleMed
 server! You do this by providing setting the switch 'pehack' to
 'true' (all lowercase!), like
 
-    gradle serverHttp -Ppehack=true
+    ./gradlew serverHttp -Ppehack=true
 
 This switch works both in the in-memory and in the MongoDB variant.
+It will ensure that the *server* and not the client will assign
+timestamps to recorded, which is important because JMeter will
+send measurements with identical timestamps.
 
 Next, you can find a JMeter sample test plan in
 'TeleMed-Test-Plan.jmx'. Start JMeter and open it.
@@ -87,9 +98,7 @@ Next, you can find a JMeter sample test plan in
 Digging into the Code base
 ===
 
-The TM16 code base is located in the /broker/demo/ folder for
-obscure historical reasons. Sorry... But you only really need
-to look there...
+The TeleMed code base is located in the /broker/telemed/ folder.
 
 I advice you start by taking a look at the learning test
 
@@ -98,7 +107,7 @@ I advice you start by taking a look at the learning test
 In this JUnit test case, the `setup()` method initializes the
 Broker pattern, using an in-memory fake object implementation of
 the networking layer, and the test cases demonstrates the Story one
-scenario from the slides on TM16.
+scenario from the slides on TeleMed.
 
 Next, have a look at HTTP based distribution case
 
