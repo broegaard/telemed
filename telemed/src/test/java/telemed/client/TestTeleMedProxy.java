@@ -49,13 +49,14 @@ public class TestTeleMedProxy {
 
   @Test
   public void shouldValidateRequestObjectCreated() {
-    // Create an observation
+    // Given a tele observation
     TeleObservation teleObs1 = 
         HelperMethods.createObservation120over70forNancy();
-    // and store it through the client proxy
+    // When the client stores it
     telemed.processAndStore(teleObs1);
 
-    // Validate the requestor's state is correctly set by the proxy
+    // Then validate that the proper operation and object id was
+    // provided to the requestor
     assertThat(requestor.lastOperationName, 
         is(OperationNames.PROCESS_AND_STORE_OPERATION));
     assertThat(requestor.lastObjectId, is(TeleMedProxy.TELEMED_OBJECTID));

@@ -40,21 +40,19 @@ public class StandardJSONRequestor implements Requestor {
   public <T> T sendRequestAndAwaitReply(String objectId,
                                         String operationName,
                                         Type typeOfReturnValue,
-                                        Object... argument) {
-    // Marshal all parameters into a JSONArray of
-    // potentially mixed types
-    String asJson = gson.toJson(argument);
-
-    T returnValue = null;
+                                        Object... arguments) {
+    // Perform marshalling
+    String marshalledArgumentList = gson.toJson(arguments);
     RequestObject request =
-            new RequestObject(objectId, operationName, asJson);
+            new RequestObject(objectId, operationName, marshalledArgumentList);
+    String marshalledRequest = gson.toJson(request);
 
-    String requestAsString = gson.toJson(request);
-    String replyAsString = clientRequestHandler.sendToServerAndAwaitReply(requestAsString);
-    ReplyObject reply = gson.fromJson(replyAsString, ReplyObject.class);
+    // Ask CRH to do the network call
+    String marshalledReply =
+            clientRequestHandler.sendToServerAndAwaitReply(marshalledRequest);
 
-    // Do the IPC to the server using my client request handler
-    // ReplyObject reply = clientRequestHandler.sendToServer(request);
+    // Demarshall reply
+    ReplyObject reply = gson.fromJson(marshalledReply, ReplyObject.class);
 
     // First, verify that the request succeeded
     if (!reply.isSuccess()) {
@@ -64,12 +62,11 @@ public class StandardJSONRequestor implements Requestor {
                   + "'. ErrorMessage is: "
                   + reply.errorDescription());
     }
-    // Demarshall the reply from the server
+    // No errors - so get the payload of the reply
     String payload = reply.getPayload();
 
-    // Construct the return value by asking Gson to interpret JSON
-    // and make the cast into the generic type T, otherwise it is
-    // a void method
+    // and demarshall the returned value
+    T returnValue = null;
     if (typeOfReturnValue != null)
       returnValue = gson.fromJson(payload, typeOfReturnValue);
     return returnValue;

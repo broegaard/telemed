@@ -79,9 +79,16 @@ public class TestClientScenario {
     FutureGame player1Future = lobbyProxy.createGame("Pedersen", 0);
     assertThat(player1Future, is(not(nullValue())));
 
+    // Get the token for my fellow players to enter when wanting
+    // to join my game. The token may appear on a web site
+    // next to player 1's name so player 2 can see it; or
+    // some other mechanism must be employed by the two players
+    // for player 2 to get hold of the token.
     String joinToken = player1Future.getJoinToken();
     assertThat(joinToken, is(not(nullValue())));
 
+    // As a second player has not yet joined, the game
+    // is not yet created
     assertThat(player1Future.isAvailable(), is(false));
 
     // Second player - wants to join the game using the token

@@ -923,3 +923,12 @@ name, originally it was named ObjectStorage in the code base and in
 this diary. Thus the diary here is not completely true to the
 development process, but I considered it better to adjust the diary to
 the current state of the code.
+
+Summer 2020 update:
+----
+During summer 2020 I worked on edition 2 of the FRDS book which 
+included improving the *separation of concerns* betwen the
+marshalling and IPC layer of the code base. Thus the
+invoker code has been updated to reflect that *all*
+marshalling is now made in the **Invoker**, which was
+not the case in FRDS.Broker Library prior to release 2.0.
