@@ -6,16 +6,13 @@ TeleMed - Case study for 'Software Architecture in Practice'
 Goal
 ===
 
-  * To define a small but realistic case of a client server system for
-    tele medicine
-
   * To serve as starting point for mandatory exercises in SAiP course
 
 Overview
 ===
 
-TeleMed is a scaled down tele medicine system, inspired by
-the Net4Care research project. 
+TeleMed is a scaled down tele medicine system, inspired by the
+Net4Care research project.
 
 Please consult resources on the SAiP web page for more detail.
 
@@ -72,7 +69,8 @@ You can inspect the contents of the mongodb by
     
 which will bring you into the running database's shell
 
-Then use this weird syntax to switch to the xds database and view collections
+Then use this weird syntax to switch to the xds database and view the
+collection of measurements (named 'tm16' for historical reasons):
 
     use xds
     db.tm16.find().pretty()
