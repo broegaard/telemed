@@ -30,6 +30,6 @@ dependencies {
   // Get marker interfaces from Broker
   compile project(':broker')
 
-  testCompile 'junit:junit:4.12'
+  testCompile 'junit:junit:4.13.1'
 }
 

@@ -33,7 +33,7 @@ dependencies {
   // Bind SLF4J it to the Log4J logging framework
   compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
-  testCompile 'junit:junit:4.13'
+  testCompile 'junit:junit:4.13.1'
   testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
 
