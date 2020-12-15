@@ -8,6 +8,8 @@ repositories {
 }
     
 dependencies {
+  // Bind SLF4J it to the Log4J logging framework
+  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.25'
   // Use the SparkJava web server framework
   compile group: 'com.sparkjava', name: 'spark-core', version: '2.7.1'
   // Use GSON for JSON handling
