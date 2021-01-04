@@ -2,8 +2,9 @@
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="TeleMed Test Plan" enabled="true">
-      <stringProp name="TestPlan.comments">An initial TeleMed Test plan</stringProp>
+      <stringProp name="TestPlan.comments">This testplan is a template for defining a work load model.</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
+      <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
         <collectionProp name="Arguments.arguments"/>
@@ -12,7 +13,7 @@
     </TestPlan>
     <hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Readers" enabled="true">
-        <stringProp name="TestPlan.comments">Presents the GB scenario - read data from the TeleMed server</stringProp>
+        <stringProp name="TestPlan.comments">Defines the GP that read data from the Telemed Server</stringProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -20,8 +21,6 @@
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">10</stringProp>
         <stringProp name="ThreadGroup.ramp_time">5</stringProp>
-        <longProp name="ThreadGroup.start_time">1347993596000</longProp>
-        <longProp name="ThreadGroup.end_time">1347993596000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
@@ -37,12 +36,13 @@
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
-          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+          <stringProp name="TestPlan.comments">Set server to be localhost</stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </ConfigTestElement>
         <hashTree/>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Story 2: GP browses web page with Inger&apos;s blood pressure measurements" enabled="true">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Story 2: GP browses Inger&apos;s blood pressure" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
@@ -59,23 +59,20 @@
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          <stringProp name="TestPlan.comments">GET of web page for path /bp/pid01</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert that BP results are returned" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="-2132030856">There are</stringProp>
-              <stringProp name="-502256185">observations</stringProp>
+              <stringProp name="49586">200</stringProp>
             </collectionProp>
-            <stringProp name="TestPlan.comments">We just validate that the &apos;There are ... observations&apos; appears in the returned HTML</stringProp>
             <stringProp name="Assertion.custom_message"></stringProp>
-            <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
             <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
           <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="true">
-            <stringProp name="TestPlan.comments">Think time</stringProp>
+            <stringProp name="TestPlan.comments">Think Time</stringProp>
             <stringProp name="ConstantTimer.delay">1000</stringProp>
             <stringProp name="RandomTimer.range">500</stringProp>
           </GaussianRandomTimer>
@@ -83,7 +80,7 @@
         </hashTree>
       </hashTree>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="Writers" enabled="true">
-        <stringProp name="TestPlan.comments">Presents the patient upload scenario</stringProp>
+        <stringProp name="TestPlan.comments">Defines Scenario 1: Patient upload</stringProp>
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
@@ -91,24 +88,12 @@
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time">1</stringProp>
-        <longProp name="ThreadGroup.start_time">1347996215000</longProp>
-        <longProp name="ThreadGroup.end_time">1347996215000</longProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
         <stringProp name="ThreadGroup.delay"></stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
-        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
-          <collectionProp name="HeaderManager.headers">
-            <elementProp name="" elementType="Header">
-              <stringProp name="Header.name">Content-Type</stringProp>
-              <stringProp name="Header.value">application/json</stringProp>
-            </elementProp>
-          </collectionProp>
-          <stringProp name="TestPlan.comments">This header defines the contents type for the POST as JSON</stringProp>
-        </HeaderManager>
-        <hashTree/>
         <ConfigTestElement guiclass="HttpDefaultsGui" testclass="ConfigTestElement" testname="HTTP Request Defaults" enabled="true">
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
@@ -118,10 +103,21 @@
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
           <stringProp name="HTTPSampler.path"></stringProp>
-          <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
+          <stringProp name="TestPlan.comments">Set server to localhost</stringProp>
+          <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
         </ConfigTestElement>
+        <hashTree/>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header Manager" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+          <stringProp name="TestPlan.comments">The header defines JSON as body contents</stringProp>
+        </HeaderManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Story 1: Inger uploads a blood pressure measurement" enabled="true">
           <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -129,11 +125,7 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&#xd;
-  operationName : &quot;telemed-process-and-store&quot;,&#xd;
-  payload : &quot;[{\&quot;patientId\&quot;:\&quot;pid01\&quot;,\&quot;systolic\&quot;:{\&quot;value\&quot;:120.0,\&quot;unit\&quot;:\&quot;mm(Hg)\&quot;,\&quot;code\&quot;:\&quot;MSC88019\&quot;,\&quot;displayName\&quot;:\&quot;Systolisk BT\&quot;},\&quot;diastolic\&quot;:{\&quot;value\&quot;:70.0,\&quot;unit\&quot;:\&quot;mm(Hg)\&quot;,\&quot;code\&quot;:\&quot;MSC88020\&quot;,\&quot;displayName\&quot;:\&quot;Diastolisk BT\&quot;},\&quot;time\&quot;:{\&quot;date\&quot;:{\&quot;year\&quot;:2018,\&quot;month\&quot;:4,\&quot;day\&quot;:6},\&quot;time\&quot;:{\&quot;hour\&quot;:12,\&quot;minute\&quot;:6,\&quot;second\&quot;:44,\&quot;nano\&quot;:0}}}]&quot;,&#xd;
-  objectId : &quot;singleton&quot;, versionIdentity=1&#xd;
-}</stringProp>
+                <stringProp name="Argument.value">{&quot;operationName&quot;:&quot;telemed-process-and-store&quot;,&quot;payload&quot;:&quot;[{\&quot;patientId\&quot;:\&quot;pid01\&quot;,\&quot;systolic\&quot;:{\&quot;value\&quot;:120.0,\&quot;unit\&quot;:\&quot;mm(Hg)\&quot;,\&quot;code\&quot;:\&quot;MSC88019\&quot;,\&quot;displayName\&quot;:\&quot;Systolic BP\&quot;},\&quot;diastolic\&quot;:{\&quot;value\&quot;:70.0,\&quot;unit\&quot;:\&quot;mm(Hg)\&quot;,\&quot;code\&quot;:\&quot;MSC88020\&quot;,\&quot;displayName\&quot;:\&quot;Diastolic BP\&quot;},\&quot;timeAsISO8601\&quot;:\&quot;2021-01-04T14:26:27+01:00\&quot;}]&quot;,&quot;objectId&quot;:&quot;singleton&quot;,&quot;versionIdentity&quot;:1}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -151,17 +143,16 @@
           <stringProp name="HTTPSampler.embedded_url_re"></stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
-          <stringProp name="TestPlan.comments">We make a POST of a fixed body data.</stringProp>
         </HTTPSamplerProxy>
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Assert that 200 OK is returned" enabled="true">
             <collectionProp name="Asserion.test_strings">
               <stringProp name="49586">200</stringProp>
             </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
             <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
             <boolProp name="Assertion.assume_success">false</boolProp>
-            <intProp name="Assertion.test_type">2</intProp>
-            <stringProp name="Assertion.custom_message"></stringProp>
+            <intProp name="Assertion.test_type">16</intProp>
           </ResponseAssertion>
           <hashTree/>
           <GaussianRandomTimer guiclass="GaussianRandomTimerGui" testclass="GaussianRandomTimer" testname="Gaussian Random Timer" enabled="true">
@@ -172,40 +163,7 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ResultCollector guiclass="StatGraphVisualizer" testclass="ResultCollector" testname="Aggregate Graph" enabled="true">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
-        <objProp>
-          <name>saveConfig</name>
-          <value class="SampleSaveConfiguration">
-            <time>true</time>
-            <latency>true</latency>
-            <timestamp>true</timestamp>
-            <success>true</success>
-            <label>true</label>
-            <code>true</code>
-            <message>true</message>
-            <threadName>true</threadName>
-            <dataType>true</dataType>
-            <encoding>false</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
-            <responseData>false</responseData>
-            <samplerData>false</samplerData>
-            <xml>true</xml>
-            <fieldNames>false</fieldNames>
-            <responseHeaders>false</responseHeaders>
-            <requestHeaders>false</requestHeaders>
-            <responseDataOnError>false</responseDataOnError>
-            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
-            <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
-            <threadCounts>true</threadCounts>
-          </value>
-        </objProp>
-        <stringProp name="filename"></stringProp>
-      </ResultCollector>
-      <hashTree/>
-      <kg.apc.jmeter.perfmon.PerfMonCollector guiclass="kg.apc.jmeter.vizualizers.PerfMonGui" testclass="kg.apc.jmeter.perfmon.PerfMonCollector" testname="jp@gc - PerfMon Metrics Collector" enabled="true">
+      <ResultCollector guiclass="StatVisualizer" testclass="ResultCollector" testname="Aggregate Report of both Scenarios" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -229,50 +187,18 @@
             <responseHeaders>false</responseHeaders>
             <requestHeaders>false</requestHeaders>
             <responseDataOnError>false</responseDataOnError>
-            <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
             <assertionsResultsToSave>0</assertionsResultsToSave>
             <bytes>true</bytes>
-            <hostname>true</hostname>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
             <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
           </value>
         </objProp>
-        <stringProp name="filename">/tmp/telemed-result.csv</stringProp>
-        <longProp name="interval_grouping">1000</longProp>
-        <boolProp name="graph_aggregated">false</boolProp>
-        <stringProp name="include_sample_labels"></stringProp>
-        <stringProp name="exclude_sample_labels"></stringProp>
-        <collectionProp name="metricConnections">
-          <collectionProp name="-248045898">
-            <stringProp name="-1204607085">localhost</stringProp>
-            <stringProp name="1600768">4444</stringProp>
-            <stringProp name="66952">CPU</stringProp>
-            <stringProp name="-712555598">ptql=State.Name.eq=java,Args.*.ct=saip.main.ServerMainHTTP:label=ServerMain:percent</stringProp>
-          </collectionProp>
-          <collectionProp name="8046114">
-            <stringProp name="-1204607085">localhost</stringProp>
-            <stringProp name="1600768">4444</stringProp>
-            <stringProp name="66952">CPU</stringProp>
-            <stringProp name="-457141898">ptql=State.Name.eq=java,Args.*.ct=JMeter:label=JMeter:percent</stringProp>
-          </collectionProp>
-          <collectionProp name="-498397359">
-            <stringProp reference="../../collectionProp[2]/stringProp"/>
-            <stringProp name="1600768">4444</stringProp>
-            <stringProp name="66952">CPU</stringProp>
-            <stringProp name="-395390966">ptql=State.Name.ct=mongod:label=mongod:percent</stringProp>
-          </collectionProp>
-          <collectionProp name="-219773223">
-            <stringProp name="-1204607085">localhost</stringProp>
-            <stringProp name="1600768">4444</stringProp>
-            <stringProp name="66952">CPU</stringProp>
-            <stringProp name="1340261028">label=TOTAL:combined</stringProp>
-          </collectionProp>
-        </collectionProp>
-        <stringProp name="start_offset"></stringProp>
-        <stringProp name="end_offset"></stringProp>
-        <boolProp name="include_checkbox_state">false</boolProp>
-        <boolProp name="exclude_checkbox_state">false</boolProp>
-        <stringProp name="TestPlan.comments">Collect CPU statistics from a running Server Agent. Hardwired to localhost and port 4444.</stringProp>
-      </kg.apc.jmeter.perfmon.PerfMonCollector>
+        <stringProp name="filename"></stringProp>
+      </ResultCollector>
       <hashTree/>
     </hashTree>
   </hashTree>
