@@ -84,7 +84,7 @@ public class ServerMainHTTP {
 
     // Welcome
     System.out.println("=== TeleMed Spark based Server Request Handler (port:"
-            + port + ") ===");
+            + port + ", pehack: "+ PEHackEnabled+ ") ===");
     System.out.println(" Use ctrl-c to terminate!"); 
   }
 }
