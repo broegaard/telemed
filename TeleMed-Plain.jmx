@@ -200,6 +200,63 @@
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
+      <nz.co.breakpoint.jmeter.vizualizers.sshmon.SSHMonCollector guiclass="nz.co.breakpoint.jmeter.vizualizers.sshmon.SSHMonGui" testclass="nz.co.breakpoint.jmeter.vizualizers.sshmon.SSHMonCollector" testname="SSHMon Samples Collector" enabled="true">
+        <boolProp name="ResultCollector.error_logging">false</boolProp>
+        <objProp>
+          <name>saveConfig</name>
+          <value class="SampleSaveConfiguration">
+            <time>true</time>
+            <latency>true</latency>
+            <timestamp>true</timestamp>
+            <success>true</success>
+            <label>true</label>
+            <code>true</code>
+            <message>true</message>
+            <threadName>true</threadName>
+            <dataType>true</dataType>
+            <encoding>false</encoding>
+            <assertions>true</assertions>
+            <subresults>true</subresults>
+            <responseData>false</responseData>
+            <samplerData>false</samplerData>
+            <xml>false</xml>
+            <fieldNames>true</fieldNames>
+            <responseHeaders>false</responseHeaders>
+            <requestHeaders>false</requestHeaders>
+            <responseDataOnError>false</responseDataOnError>
+            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
+            <assertionsResultsToSave>0</assertionsResultsToSave>
+            <bytes>true</bytes>
+            <sentBytes>true</sentBytes>
+            <url>true</url>
+            <threadCounts>true</threadCounts>
+            <idleTime>true</idleTime>
+            <connectTime>true</connectTime>
+          </value>
+        </objProp>
+        <stringProp name="filename"></stringProp>
+        <longProp name="interval_grouping">1000</longProp>
+        <boolProp name="graph_aggregated">false</boolProp>
+        <stringProp name="include_sample_labels"></stringProp>
+        <stringProp name="exclude_sample_labels"></stringProp>
+        <stringProp name="start_offset"></stringProp>
+        <stringProp name="end_offset"></stringProp>
+        <boolProp name="include_checkbox_state">false</boolProp>
+        <boolProp name="exclude_checkbox_state">false</boolProp>
+        <collectionProp name="samplers">
+          <collectionProp name="-2125647311">
+            <stringProp name="-635319715">CPU-TeleMed</stringProp>
+            <stringProp name="-1204607085">localhost</stringProp>
+            <stringProp name="22">22</stringProp>
+            <stringProp name="94953893">csdev</stringProp>
+            <stringProp name="0"></stringProp>
+            <stringProp name="3062948">csau</stringProp>
+            <stringProp name="-966163869">sar -u 1 1 | awk &apos;/^Average:/{print 100-$8}&apos;</stringProp>
+            <stringProp name="1237">false</stringProp>
+          </collectionProp>
+        </collectionProp>
+      </nz.co.breakpoint.jmeter.vizualizers.sshmon.SSHMonCollector>
+      <hashTree/>
     </hashTree>
   </hashTree>
 </jmeterTestPlan>
