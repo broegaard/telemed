@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,7 @@ public class TestRequestHandler implements Invoker {
   @Test
   public void shouldVerifyHttpIPC() throws InterruptedException {
     // Given SRH and CRH using the UriTunnel variants
-    final int portToUse = 32111;
+    final int portToUse = 32117;
     Invoker invoker = this; // A self-shunt spy
     ServerRequestHandler srh = new UriTunnelServerRequestHandler();
     srh.setPortAndInvoker(portToUse, invoker);

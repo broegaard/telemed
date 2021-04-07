@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,6 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import frds.broker.ClientRequestHandler;
 import frds.broker.IPCException;
-import frds.broker.ReplyObject;
-import frds.broker.RequestObject;
 
 /**
  * ClientRequestHandler implementation using HTTP as pure IPC
@@ -33,24 +31,40 @@ import frds.broker.RequestObject;
 public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
-  public static final String PROTOCOL = "http";
+  // the protocol - either http or https
+  public String protocol;
 
   private final Gson gson;
   protected String baseURL;
   protected final String path;
 
   /** Construct a URI Tunnel based CRH. Will communicate
-   * using POST messages over http://(hostname):(port)/(pathForPost)
+   * using POST messages over http(s)://(hostname):(port)/(pathForPost)
+   *
+   * @param hostname name of the machine that hosts the HTTP server
+   * @param port port number of the HTTP server
+   * @param protocol which protocol to use, must be either 'http' or 'https'
+   * @param pathForPost the path for the POST messages
+   */
+  public UriTunnelClientRequestHandler(String hostname, int port, String protocol, String pathForPost) {
+    this.protocol = protocol;
+    baseURL = protocol + "://" + hostname + ":" + port + "/";
+    path = pathForPost;
+    gson = new Gson();
+  }
+
+  /** Construct a URI Tunnel based CRH. Will communicate
+   * using POST messages over http://(hostname):(port)/(pathForPost),
+   * that is default to HTTPS communication
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
    * @param pathForPost the path for the POST messages
    */
   public UriTunnelClientRequestHandler(String hostname, int port, String pathForPost) {
-    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
-    path = pathForPost;
-    gson = new Gson();
+    this(hostname, port, "http", pathForPost);
   }
+
 
   /**
    * Construct a URI Tunnel based CRH. Will communicate
@@ -60,14 +74,12 @@ public class UriTunnelClientRequestHandler
    */
 
   public UriTunnelClientRequestHandler() {
-    baseURL = PROTOCOL + "://localhost:4567/";
-    path = "tunnel";
-    gson = new Gson();
+    this("localhost", 4567, "http", "tunnel");
   }
 
   @Override
   public void setServer(String hostname, int port) {
-    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
+    baseURL = protocol + "://" + hostname + ":" + port + "/";
 }
 
   @Override
@@ -97,5 +109,4 @@ public class UriTunnelClientRequestHandler
     return getClass().getCanonicalName() +
         ", " + baseURL + ", root path: '" + path + "'";
   }
-
 }

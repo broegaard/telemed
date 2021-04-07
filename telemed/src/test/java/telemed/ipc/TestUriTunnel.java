@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class TestUriTunnel {
     // Given the Client side roles
     ClientRequestHandler restCRH =
             new UriTunnelClientRequestHandler("localhost",
-                    PORT_NUMBER, Constants.BLOODPRESSURE_PATH);
+                    PORT_NUMBER, "http", Constants.BLOODPRESSURE_PATH);
 
     Requestor requestor = new StandardJSONRequestor(restCRH);
     teleMed = new TeleMedProxy(requestor);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import static spark.Spark.*;
 
 /** ServerRequestHandler implementation using HTTP and URI Tunneling,
  * as well as web server for General Practitioner overview of
- * measurements for a given patient. The latter circumwent
+ * measurements for a given patient. The latter circumvent
  * the Broker and fetch stored HL7 XML directly from the
  * storage tier. This is not ideal from a perspective of
  * Layered Architecture (it is 'layer-bridging') nor

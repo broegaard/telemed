@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ task homeSocket(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.HomeClientSocket'
-  args op, id, sys, dia, host
+  args op, id, sys, dia, host, protocol
 }
 
 // === Demo of HTTP/URI Tunnel based TeleMed system
@@ -72,5 +72,5 @@ task homeHttp(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.HomeClientHTTP'
-  args op, id, sys, dia, host
+  args op, id, sys, dia, host, protocol
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,10 @@ public class HomeClientSocket extends HomeClientTemplate {
   }
 
   @Override
-  public ClientRequestHandler createClientRequestHandler(String hostname, int port) {
+  public ClientRequestHandler createClientRequestHandler(String hostname, int port, String protocol) {
     ClientRequestHandler crh = new SocketClientRequestHandler();
     crh.setServer(hostname, port);
+    // protocol is ignored in the socket variant, no secure communication possible currently
     return new SocketClientRequestHandler(hostname, port);
   }
 
