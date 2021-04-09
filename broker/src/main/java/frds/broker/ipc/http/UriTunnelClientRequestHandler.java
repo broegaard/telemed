@@ -17,12 +17,14 @@
 
 package frds.broker.ipc.http;
 
-import com.google.gson.Gson;
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
-
 import frds.broker.ClientRequestHandler;
 import frds.broker.IPCException;
+
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
+import kong.unirest.HttpResponse;
+import com.google.gson.Gson;
+
 
 /**
  * ClientRequestHandler implementation using HTTP as pure IPC

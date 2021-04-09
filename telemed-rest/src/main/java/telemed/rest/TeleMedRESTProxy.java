@@ -20,6 +20,10 @@ package telemed.rest;
 import frds.broker.ClientProxy;
 import frds.broker.IPCException;
 import frds.broker.ipc.http.MimeMediaType;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import telemed.domain.TeleMed;
 
 import java.util.List;
@@ -27,8 +31,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import telemed.domain.TeleObservation;
 import telemed.domain.TimeInterval;
 import telemed.ipc.http.Constants;

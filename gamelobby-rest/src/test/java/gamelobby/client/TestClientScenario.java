@@ -19,6 +19,10 @@ package gamelobby.client;
 
 
 import gamelobby.server.GameLobbyRestServer;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,9 +30,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
 
 /** Test the GameLobby system using a REST based architectural pattern.
  * The test cases expressed reflect those of Section 7.10 in the
