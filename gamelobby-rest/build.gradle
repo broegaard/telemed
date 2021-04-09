@@ -22,13 +22,13 @@
 apply plugin: 'java'
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
   // Get marker interfaces from Broker
   compile project(':broker')
 
-  testCompile 'junit:junit:4.13.1'
+  testImplementation 'junit:junit:4.13.1'
 }
 
