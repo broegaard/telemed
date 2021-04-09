@@ -18,19 +18,13 @@
 package telemed.scenario;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.time.OffsetDateTime;
 import java.util.*;
 
 import frds.broker.ClientRequestHandler;
 import frds.broker.Invoker;
 import frds.broker.Requestor;
-import frds.broker.ServerRequestHandler;
-import frds.broker.ipc.http.UriTunnelClientRequestHandler;
-import frds.broker.ipc.http.UriTunnelServerRequestHandler;
-import frds.broker.ipc.socket.SocketClientRequestHandler;
-import frds.broker.ipc.socket.SocketServerRequestHandler;
 import frds.broker.marshall.json.StandardJSONRequestor;
 
 import org.junit.*;

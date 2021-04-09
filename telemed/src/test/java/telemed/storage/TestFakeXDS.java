@@ -18,7 +18,7 @@
 package telemed.storage;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.Test;
 import org.w3c.dom.Document;

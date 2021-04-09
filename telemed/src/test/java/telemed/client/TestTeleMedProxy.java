@@ -23,7 +23,7 @@ import telemed.domain.TeleObservation;
 import telemed.domain.TimeInterval;
 import telemed.helper.HelperMethods;
 
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
 import org.junit.Before;
 import org.junit.Test;

@@ -17,19 +17,19 @@
 
 package telemed.scenario;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.CoreMatchers.*;
+import static org.junit.Assert.fail;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
 import frds.broker.IPCException;
 import frds.broker.Invoker;
-import frds.broker.ReplyObject;
 import frds.broker.Requestor;
 import frds.broker.marshall.json.StandardJSONRequestor;
 
-import org.junit.Test;
 import org.w3c.dom.Document;
 
 import telemed.server.*;

@@ -21,12 +21,10 @@ import frds.broker.ClientRequestHandler;
 import frds.broker.Requestor;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.servlet.http.HttpServletResponse;
 
 import frds.broker.marshall.json.StandardJSONRequestor;
 import frds.broker.ipc.http.UriTunnelClientRequestHandler;
