@@ -19,16 +19,18 @@
  * Build file for Broker Demo applications, by Henrik Baerbak Christensen.
  */
 
-apply plugin: 'java'
+plugins {
+    id 'java-library'
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-  compile project(':broker')
+  implementation project(':broker')
   // Bind SLF4J it to the Log4J logging framework
-  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+  implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
   testImplementation 'junit:junit:4.13.1'
   testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'

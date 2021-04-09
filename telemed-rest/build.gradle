@@ -19,7 +19,10 @@
  * Build file for REST TeleMed applications, by Henrik Baerbak Christensen.
  */
 
-apply plugin: 'java'
+plugins {
+    id 'java-library'
+}
+
 
 repositories {
     mavenCentral()
@@ -27,12 +30,12 @@ repositories {
 
 dependencies {
   // Get marker interfaces from Broker
-  compile project(':broker')
+  implementation project(':broker')
   // Get domain code from TeleMed in demo subproject
-  compile project(':telemed')
+  implementation project(':telemed')
   
   // Bind SLF4J it to the Log4J logging framework
-  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+  implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
   testImplementation 'junit:junit:4.13.1'
   testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'

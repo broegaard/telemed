@@ -19,7 +19,9 @@
  * Build file for REST based GameLobby.
  */
 
-apply plugin: 'java'
+plugins {
+    id 'java-library'
+}
 
 repositories {
     mavenCentral()
@@ -27,7 +29,7 @@ repositories {
 
 dependencies {
   // Get marker interfaces from Broker
-  compile project(':broker')
+  implementation project(':broker')
 
   testImplementation 'junit:junit:4.13.1'
 }
