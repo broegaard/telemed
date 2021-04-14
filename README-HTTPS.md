@@ -5,9 +5,12 @@ The **FRDS.Broker** is a teaching-oriented framework, emphasizing
 fundamental concepts rather than a production quality
 focus. One aspect of this focus is ignoring security.
 
-However, the broker *can* be configured to support TLS/HTTPS connections
-for the HTTP based requesthandlers (URI Tunnel Client- and
-ServerRequestHandler). 
+However, the broker *can* be configured to support TLS/HTTPS
+connections for the HTTP based requesthandlers (URI Tunnel Client- and
+ServerRequestHandler). (No such option currently exists for the Socket
+based request handlers.)
+
+The guide briefly explains how.
 
 Securing server-side connection / ServerRequestHandler
 ------------------------------------------------------
@@ -21,12 +24,32 @@ topic.
 For now, assume we have a keystore named `/home/csdev/.keystore` with
 password `my-password`.
 
-To configure the FRDS.Broker server side to secure the connection you
-just assign two environment variables to contain information about
-these. On Linux
+The default way for the FRDS.Broker to get information about the
+keyStore is also the official Java way - through the two system
+properties
 
-    export FRDS_BROKER_KEYSTORE=/home/csdev/.keystore
-    export FRDS_BROKER_KEYSTORE_PASSWORD=my-password
+  * javax.net.ssl.keyStore
+  * javax.net.ssl.keyStorePassword
+
+Remember that when using the Gradle build system, running an
+application is done in *another thread* so assigning system properties
+for the gradle build file as a whole will not work; you will have to
+include as systemProperty() call inside the gradle task, like this one
+below:
+
+    task serverHttp(type: JavaExec) {
+      group 'demo'
+      description 'Run Http/URI Tunnel based TeleMed server'
+
+      classpath sourceSets.test.runtimeClasspath
+      main = 'telemed.main.ServerMainHTTP'
+      args db
+
+      systemProperty("javax.net.ssl.keyStore",
+                       "/home/csdev/.keystore")
+      systemProperty("javax.net.ssl.keyStorePassword",
+                       "my-password
+    }
 
 If any of these are invalid (wrong file or password) the server will
 terminate immediately with an exception.
@@ -74,6 +97,10 @@ system properties
 
   * javax.net.ssl.trustStore
   * javax.net.ssl.trustStorePassword
+
+**Do not confuse with the similar looking properties for the server!**
+The server expose a certificate in the **keyStore** while the client
+trusts certificates in the **trustStore**.
 
 In gradle this boils down to using `systemProperty` in the JavaExec
 task, as outlined in this modified task to execute homeHttp:

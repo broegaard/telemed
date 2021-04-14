@@ -17,7 +17,10 @@
 
 package frds.broker.ipc;
 
-public class Constants {
-  public static final String FRDS_BROKER_KEYSTORE = "FRDS_BROKER_KEYSTORE";
-  public static final String FRDS_BROKER_KEYSTORE_PASSWORD = "FRDS_BROKER_KEYSTORE_PASSWORD";
+/** Security system properties, just mimicking the official property names. */
+public class SSLPropertyConstants {
+  public static final String JAVAX_NET_SSL_KEYSTORE = "javax.net.ssl.keyStore";
+  public static final String JAVAX_NET_SSL_KEYSTORE_PASSWORD = "javax.net.ssl.keyStorePassword";
+  public static final String JAVAX_NET_SSL_TRUSTSTORE = "javax.net.ssl.trustStore";
+  public static final String JAVAX_NET_SSL_TRUSTSTORE_PASSWORD = "javax.net.ssl.trustStorePassword";
 }

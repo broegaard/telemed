@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 import frds.broker.Invoker;
 import frds.broker.ServerRequestHandler;
 
-import frds.broker.ipc.Constants;
+import frds.broker.ipc.SSLPropertyConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,12 +74,12 @@ public class UriTunnelServerRequestHandler
     // Set the port to listen to
     port(port);
 
-    // Check if FRDS_BROKER_KEYSTORE is set
-    String keystoreFilename = System.getenv(Constants.FRDS_BROKER_KEYSTORE);
+    // Get the System Properties
+    String keystoreFilename = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE);
     boolean isSecureConnection = keystoreFilename != null && !keystoreFilename.equals("");
     // If so, then tell sparkjava to switch to a secure connection
     if (isSecureConnection) {
-      String keystorePassword = System.getenv(Constants.FRDS_BROKER_KEYSTORE_PASSWORD);
+      String keystorePassword = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE_PASSWORD);
       secure(keystoreFilename, keystorePassword, null, null);
     }
 
