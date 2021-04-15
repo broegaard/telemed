@@ -57,7 +57,7 @@ public class LocalMethodCallClientRequestHandler implements ClientRequestHandler
   }
 
   @Override
-  public void setServer(String hostname, int port) {
+  public void setServer(String hostname, int port, boolean useTLS) {
     // not used
   }
 

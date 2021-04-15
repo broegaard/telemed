@@ -87,7 +87,7 @@ public class TestIPCFailureMode {
     }
 
     @Override
-    public void setServer(String hostname, int port) {
+    public void setServer(String hostname, int port, boolean useTLS) {
       // not used
     }
 

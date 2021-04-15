@@ -65,7 +65,7 @@ public class RESTServerRequestHandlerInvoker
   }
 
   @Override
-  public void setPortAndInvoker(int port, Invoker invoker) {
+  public void setPortAndInvoker(int port, Invoker invoker, boolean useTLS) {
     this.port = port;
     // invoker not relevant.
   }

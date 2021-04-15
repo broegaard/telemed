@@ -48,11 +48,11 @@ public class UriTunnelClientRequestHandler
    * @param pathForPost the path for the POST messages
    */
   public UriTunnelClientRequestHandler(String hostname, int port, boolean useTLS, String pathForPost) {
-    protocol = useTLS == true ? "HTTPS" : "HTTP";
-    baseURL = protocol + "://" + hostname + ":" + port + "/";
+    setServer(hostname, port, useTLS);
     path = pathForPost;
     gson = new Gson();
   }
+
 
   /** Construct a URI Tunnel based CRH. Will communicate
    * using POST messages over http://(hostname):(port)/(pathForPost),
@@ -74,11 +74,13 @@ public class UriTunnelClientRequestHandler
    */
 
   public UriTunnelClientRequestHandler() {
-    this("localhost", 4567, false, "tunnel");
+    this("localhost", 4567, false,
+            UriTunnelServerRequestHandler.DEFAULT_URI_TUNNEL_PATH);
   }
 
   @Override
-  public void setServer(String hostname, int port) {
+  public void setServer(String hostname, int port, boolean useTLS) {
+    protocol = useTLS == true ? "HTTPS" : "HTTP";
     baseURL = protocol + "://" + hostname + ":" + port + "/";
 }
 

@@ -52,7 +52,11 @@ public class SocketClientRequestHandler
   }
 
   @Override
-  public void setServer(String hostname, int port) {
+  public void setServer(String hostname, int port, boolean useTLS) {
+    if (useTLS) {
+      throw new RuntimeException("TLS is not implemented for the SocketClientRequestHandler."
+              + "If you need secure communication, use the URITunnel variant instead.");
+    }
     this.hostname = hostname;
     this.port = port;
   }

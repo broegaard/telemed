@@ -41,11 +41,24 @@ public interface ClientRequestHandler {
   /**
    * Set the hostname/port of the server that holds the
    * corresponding server request handler.
+   * Default method for backward compatibility.
    *
    * @param hostname ip/dns of the server
    * @param port the port to communicate on
    */
-  void setServer(String hostname, int port);
+  default void setServer(String hostname, int port) {
+    setServer(hostname, port, false);
+  }
+
+  /**
+   * Set the hostname/port of the server that holds the
+   * corresponding server request handler.
+   *
+   * @param hostname ip/dns of the server
+   * @param port the port to communicate on
+   * @param useTLS if true then set to secure communication using TLS
+   */
+  void setServer(String hostname, int port, boolean useTLS);
 
   /**
    * Close the connection to server.

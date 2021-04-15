@@ -46,7 +46,7 @@ import telemed.marshall.json.TeleMedJSONInvoker;
  * @author Henrik Baerbak Christensen, Aarhus University.
  *
  */
-//@Ignore // This test case must be run manually
+@Ignore // This test case must be run manually
 public class TestUriTunnel {
 
   TeleMedProxy teleMed;

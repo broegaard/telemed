@@ -56,8 +56,12 @@ public class SocketServerRequestHandler
     this.invoker = invoker;
   }
 
-  public SocketServerRequestHandler(int port, Invoker invoker) {
-    this();
+  @Override
+  public void setPortAndInvoker(int port, Invoker invoker, boolean useTLS) {
+    if (useTLS) {
+      throw new RuntimeException("TLS is not implemented for the SocketServerRequestHandler."
+              + "If you need secure communication, use the URITunnel variant instead.");
+    }
     setPortAndInvoker(port, invoker);
   }
 

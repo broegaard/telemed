@@ -42,7 +42,7 @@ public class UriTunnelServerRequestHandler
   public static final String DEFAULT_URI_TUNNEL_PATH = "tunnel";
 
   protected final Gson gson;
-  private boolean useTls;
+  private boolean useTLS;
   protected Invoker invoker;
   protected int port;
   protected String lastVerb;
@@ -57,12 +57,14 @@ public class UriTunnelServerRequestHandler
     gson = new Gson();
     logger = LoggerFactory.getLogger(UriTunnelServerRequestHandler.class);
     tunnelRoute = DEFAULT_URI_TUNNEL_PATH;
+    useTLS = false;
   }
 
   @Override
-  public void setPortAndInvoker(int port, Invoker invoker) {
-    logger.info("method=setPortAndInvoker, port={}", port);
-    this.port = port; this.invoker = invoker;
+  public void setPortAndInvoker(int port, Invoker invoker, boolean useTLS) {
+    logger.info("method=setPortAndInvoker, port={}, useTLS={}", port, useTLS);
+    this.port = port; this.invoker = invoker; this.useTLS = useTLS;
+
   }
 
   /**
@@ -71,16 +73,16 @@ public class UriTunnelServerRequestHandler
    * requires keystore to be defined.)
    * @param invoker the Broker invoker to forward incoming messages to
    * @param port the port for listening to incoming messages
-   * @param useTls if true, switch to HTTPS communication (see additional
+   * @param useTLS if true, switch to HTTPS communication (see additional
    *               README for some info on how this works.)
    * @param tunnelRoute the route/path to listen to
    */
-  public UriTunnelServerRequestHandler(Invoker invoker, int port, boolean useTls, String tunnelRoute) {
+  public UriTunnelServerRequestHandler(Invoker invoker, int port, boolean useTLS, String tunnelRoute) {
     this();
     setPortAndInvoker(port, invoker);
     this.tunnelRoute = tunnelRoute;
-    this.useTls = useTls;
-    logger.info("method=constructur, port={}, uri_tunnel_path={}, tls={}", port, this.tunnelRoute, useTls);
+    this.useTLS = useTLS;
+    logger.info("method=constructur, port={}, uri_tunnel_path={}, tls={}", port, this.tunnelRoute, useTLS);
   }
 
   /**
@@ -102,7 +104,7 @@ public class UriTunnelServerRequestHandler
 
     // if required to use TLS then get the system properties and secure the connection
     String keystoreFilename = "undefined";
-    if (useTls) {
+    if (useTLS) {
       // Get the System Properties
       keystoreFilename = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE);
       String keystorePassword = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE_PASSWORD);
@@ -110,7 +112,7 @@ public class UriTunnelServerRequestHandler
     }
 
     logger.info("method=start, port={}, tls={}, keystore='{}'",
-            port, useTls, keystoreFilename);
+            port, useTLS, keystoreFilename);
 
     // POST is for all incoming requests, and they are plain text
     // format as we cannot know the marshalling format in advance

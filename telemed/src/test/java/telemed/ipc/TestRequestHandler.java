@@ -69,7 +69,7 @@ public class TestRequestHandler implements Invoker {
     final int portToUse = 37111;
     Invoker invoker = this; // A self-shunt spy (http://xunitpatterns.com/Test%20Spy.html)
     ServerRequestHandler srh = new SocketServerRequestHandler();
-    srh.setPortAndInvoker(portToUse, invoker);
+    srh.setPortAndInvoker(portToUse, invoker, false);
     srh.start();
     // Wait for OS to open the port
     Thread.sleep(500);
@@ -106,7 +106,7 @@ public class TestRequestHandler implements Invoker {
     final int portToUse = 32117;
     Invoker invoker = this; // A self-shunt spy
     ServerRequestHandler srh = new UriTunnelServerRequestHandler();
-    srh.setPortAndInvoker(portToUse, invoker);
+    srh.setPortAndInvoker(portToUse, invoker, false);
     srh.start();
 
     Thread.sleep(500);

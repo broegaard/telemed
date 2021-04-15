@@ -28,7 +28,7 @@ The Broker library is available in JCenter.
 Get it using Gradle:
 
     dependencies {
-      compile group: 'com.baerbak.maven', name: 'broker', version: '2.0'
+      compile group: 'com.baerbak.maven', name: 'broker', version: '2.2'
     }
 
 ### Which IPC implementation shall I use?

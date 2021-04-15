@@ -3,7 +3,7 @@ Enabling HTTPS/secure connections in FRDS.Broker
 
 The **FRDS.Broker** is a teaching-oriented framework, emphasizing
 fundamental concepts rather than a production quality
-focus. One aspect of this focus is ignoring security.
+focus. Therefore, security does not play a significant role.
 
 However, the broker *can* be configured to support TLS/HTTPS
 connections for the HTTP based requesthandlers (URI Tunnel Client- and
@@ -26,16 +26,30 @@ password `my-password`.
 
 The default way for the FRDS.Broker to get information about the
 keyStore is also the official Java way - through the two system
-properties
+properties:
 
   * javax.net.ssl.keyStore
   * javax.net.ssl.keyStorePassword
+
+Finally, you have to use the overloaded constructor of the
+UriTunnelServerRequestHandler:
+
+    public UriTunnelServerRequestHandler(Invoker invoker, int port, 
+      boolean useTLS, String tunnelRoute) {
+
+and provide boolean value 'true' for the 'useTls' parameter.
+
+**OR** use the
+
+    void setPortAndInvoker(int port, Invoker invoker, boolean useTLS);
+
+method, after the default constructor has been called.
 
 Remember that when using the Gradle build system, running an
 application is done in *another thread* so assigning system properties
 for the gradle build file as a whole will not work; you will have to
 include as systemProperty() call inside the gradle task, like this one
-below:
+below for the TeleMed system:
 
     task serverHttp(type: JavaExec) {
       group 'demo'
@@ -56,29 +70,26 @@ terminate immediately with an exception.
 
 ### Testing server-side connection
 
-Start the Telemed HTTP server
+Start the Telemed HTTP server, setting the parameter 'tls' to 'true':
 
-    gradle :telemed:serverHTTP
+    gradle :telemed:serverHTTP -Ptls=true
     
 And browse to (https://localhost:4567/bp/pid01) (the 'https' is
 important!) using your web browser.
 
+*Again remember:* You have to manually change the serverHttp task
+to set the system properties (or set them globally for your OS).
+
 If your certificate is self-signed, your browser will issue a warning,
 and allow you to review and trust the certificate before proceeding.
-
-### Note about the automated JUnit tests
-
-Unset the environment variable FRDS_BROKER_KEYSTORE before running the
-automated tests, as they unfortunately influence them in a way that
-some fail.
 
 Securing client-side connection / ClientRequestHandler
 ------------------------------------------------------
 
-The class 'UriTunnelClientRequestHandler' has an overloaded
-constructor with a parameter 'protocol', which must be set to the
-string constant 'https' for secure communication with the server. You
-may set this for the telemed server by
+The class 'UriTunnelClientRequestHandler' has also overloaded
+constructor with a parameter 'useTLS', which must be set to 'true' for
+secure communication with the server. You may set this for the telemed
+server by
 
   gradle :telemed:homeHttp -Ptls=true
   
@@ -119,9 +130,9 @@ task, as outlined in this modified task to execute homeHttp:
             "my-password")
     }
 
-Note that the task above reuses the keystore file and password of the
-server. Thus you need to copy and manage that keystore file, and make
-it accessible in all client applications.
+Note that the task above reuses the example keystore file and password
+of the server. Thus you need to copy and manage that keystore file,
+and make it accessible in all client applications.
 
 Also, this *only works* if your application does not contact other web
 services using HTTPS. This is the case for the TeleMed 'homeHttp'

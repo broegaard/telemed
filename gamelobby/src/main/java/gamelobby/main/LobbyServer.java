@@ -43,7 +43,8 @@ public class LobbyServer {
 
     // Configure a socket based server request handler
     SocketServerRequestHandler ssrh =
-            new SocketServerRequestHandler(port, invoker);
+            new SocketServerRequestHandler();
+    ssrh.setPortAndInvoker(port, invoker);
 
     // Welcome
     System.out.println("=== GameLobby Socket based Server Request Handler (port:"
