@@ -80,7 +80,7 @@ constructor with a parameter 'protocol', which must be set to the
 string constant 'https' for secure communication with the server. You
 may set this for the telemed server by
 
-  gradle :telemed:homeHttp -Pprotocol=https
+  gradle :telemed:homeHttp -Ptls=true
   
 Iff the server's certificate is issued by a Certificate Authority,
 this should work right away, and the FRDS.Broker connection is secured

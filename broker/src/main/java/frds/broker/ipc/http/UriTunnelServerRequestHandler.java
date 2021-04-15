@@ -42,6 +42,7 @@ public class UriTunnelServerRequestHandler
   public static final String DEFAULT_URI_TUNNEL_PATH = "tunnel";
 
   protected final Gson gson;
+  private boolean useTls;
   protected Invoker invoker;
   protected int port;
   protected String lastVerb;
@@ -57,16 +58,41 @@ public class UriTunnelServerRequestHandler
     logger = LoggerFactory.getLogger(UriTunnelServerRequestHandler.class);
     tunnelRoute = DEFAULT_URI_TUNNEL_PATH;
   }
+
   @Override
   public void setPortAndInvoker(int port, Invoker invoker) {
+    logger.info("method=setPortAndInvoker, port={}", port);
     this.port = port; this.invoker = invoker;
   }
 
-  public UriTunnelServerRequestHandler(Invoker invoker,
-                                       int port, String tunnelRoute) {
+  /**
+   * Construct a full URI Tunnel SRH with given invoker, port, and
+   * tunnel route. Optionally allow TLS/HTTPS communication (which
+   * requires keystore to be defined.)
+   * @param invoker the Broker invoker to forward incoming messages to
+   * @param port the port for listening to incoming messages
+   * @param useTls if true, switch to HTTPS communication (see additional
+   *               README for some info on how this works.)
+   * @param tunnelRoute the route/path to listen to
+   */
+  public UriTunnelServerRequestHandler(Invoker invoker, int port, boolean useTls, String tunnelRoute) {
     this();
     setPortAndInvoker(port, invoker);
     this.tunnelRoute = tunnelRoute;
+    this.useTls = useTls;
+    logger.info("method=constructur, port={}, uri_tunnel_path={}, tls={}", port, this.tunnelRoute, useTls);
+  }
+
+  /**
+   * Construct a full URI Tunnel SRH with given invoker, port, and
+   * tunnel route. O
+   * @param invoker the Broker invoker to forward incoming messages to
+   * @param port the port for listening to incoming messages
+   * @param tunnelRoute the route/path to listen to
+   */
+  public UriTunnelServerRequestHandler(Invoker invoker,
+                                       int port, String tunnelRoute) {
+    this(invoker, port, false, tunnelRoute);
   }
 
   @Override
@@ -74,27 +100,27 @@ public class UriTunnelServerRequestHandler
     // Set the port to listen to
     port(port);
 
-    // Get the System Properties
-    String keystoreFilename = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE);
-    boolean isSecureConnection = keystoreFilename != null && !keystoreFilename.equals("");
-    // If so, then tell sparkjava to switch to a secure connection
-    if (isSecureConnection) {
+    // if required to use TLS then get the system properties and secure the connection
+    String keystoreFilename = "undefined";
+    if (useTls) {
+      // Get the System Properties
+      keystoreFilename = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE);
       String keystorePassword = System.getProperty(SSLPropertyConstants.JAVAX_NET_SSL_KEYSTORE_PASSWORD);
       secure(keystoreFilename, keystorePassword, null, null);
     }
 
-    logger.info("method=start, port={}, secure={}, keystore='{}'",
-            port, isSecureConnection, keystoreFilename);
+    logger.info("method=start, port={}, tls={}, keystore='{}'",
+            port, useTls, keystoreFilename);
 
-    // POST is for all incoming requests
-    post(tunnelRoute, (req,res) -> {
+    // POST is for all incoming requests, and they are plain text
+    // format as we cannot know the marshalling format in advance
+    post(tunnelRoute, MimeMediaType.TEXT_PLAIN, (req, res) -> {
       long startTime = System.currentTimeMillis();
       String marshalledRequest = req.body();
       
-      // The incoming marshalledRequest is the marshalled request to the invoker
-      // Log the request, using a key-value format
       logger.info("method=POST, context=request, request={}", marshalledRequest);
 
+      // The incoming marshalledRequest is the marshalled request to the invoker
       String reply = invoker.handleRequest(marshalledRequest);
 
       // Store the last verb and status code to allow spying during test

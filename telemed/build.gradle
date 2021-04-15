@@ -45,7 +45,7 @@ task serverSocket(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainSocket'
-  args db
+  args db, tls
 }
 
 task homeSocket(type: JavaExec) {
@@ -54,7 +54,7 @@ task homeSocket(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.HomeClientSocket'
-  args op, id, sys, dia, host, protocol
+  args op, id, sys, dia, host, tls
 }
 
 // === Demo of HTTP/URI Tunnel based TeleMed system
@@ -65,7 +65,7 @@ task serverHttp(type: JavaExec) {
     
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.ServerMainHTTP'
-  args db
+  args db, tls
     
   systemProperty("javax.net.ssl.keyStore",
                    "/home/csdev/.keystore")
@@ -79,7 +79,7 @@ task homeHttp(type: JavaExec) {
 
   classpath sourceSets.test.runtimeClasspath
   main = 'telemed.main.HomeClientHTTP'
-  args op, id, sys, dia, host, protocol
+  args op, id, sys, dia, host, tls
 
   systemProperty("javax.net.ssl.trustStore",
                    "/home/csdev/.keystore")

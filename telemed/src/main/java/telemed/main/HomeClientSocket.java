@@ -36,10 +36,13 @@ public class HomeClientSocket extends HomeClientTemplate {
   }
 
   @Override
-  public ClientRequestHandler createClientRequestHandler(String hostname, int port, String protocol) {
+  public ClientRequestHandler createClientRequestHandler(String hostname, int port, boolean useTLS) {
     ClientRequestHandler crh = new SocketClientRequestHandler();
     crh.setServer(hostname, port);
-    // protocol is ignored in the socket variant, no secure communication possible currently
+    // TLS is not supported
+    if (useTLS) {
+      throw new RuntimeException("SocketClientRequestHandler does not support using TLS");
+    }
     return new SocketClientRequestHandler(hostname, port);
   }
 

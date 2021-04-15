@@ -55,9 +55,10 @@ public class TeleMedUriTunnelServerRequestHandler
    * @param port the port that this server will respond on
    * @param xds the delegate that plays the XDSBackend role
    */
-  public TeleMedUriTunnelServerRequestHandler(Invoker invoker,
-                                              int port, XDSBackend xds) {
-    super(invoker, port, Constants.BLOODPRESSURE_PATH);
+  public TeleMedUriTunnelServerRequestHandler(Invoker invoker, int port,
+                                              boolean useTls,
+                                              XDSBackend xds) {
+    super(invoker, port, useTls, Constants.BLOODPRESSURE_PATH);
     this.xds = xds;
   }
 

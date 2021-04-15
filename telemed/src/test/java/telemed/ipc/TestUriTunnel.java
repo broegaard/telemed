@@ -46,7 +46,7 @@ import telemed.marshall.json.TeleMedJSONInvoker;
  * @author Henrik Baerbak Christensen, Aarhus University.
  *
  */
-@Ignore // This test case must be run manually
+//@Ignore // This test case must be run manually
 public class TestUriTunnel {
 
   TeleMedProxy teleMed;
@@ -62,13 +62,14 @@ public class TestUriTunnel {
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
     TeleMed tsServant = new TeleMedServant(xds);
     TeleMedJSONInvoker invoker = new TeleMedJSONInvoker(tsServant);
-    serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER, xds);
+    serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER,
+            false, xds);
     serverRequestHandler.start();
 
     // Given the Client side roles
     ClientRequestHandler restCRH =
             new UriTunnelClientRequestHandler("localhost",
-                    PORT_NUMBER, "http", Constants.BLOODPRESSURE_PATH);
+                    PORT_NUMBER, false, Constants.BLOODPRESSURE_PATH);
 
     Requestor requestor = new StandardJSONRequestor(restCRH);
     teleMed = new TeleMedProxy(requestor);

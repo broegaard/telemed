@@ -40,7 +40,7 @@ public abstract class HomeClientTemplate {
   private double systolic;
   private String patientId;
   private String hostname;
-  private String protocol;
+  private boolean useTls;
 
   public HomeClientTemplate(String[] args, int port) {
     parseCommandlineParameters(args);
@@ -48,7 +48,7 @@ public abstract class HomeClientTemplate {
     System.out.println("HomeClient: Asked to do operation "+operation+" for patient "+patientId);
 
     ClientRequestHandler clientRequestHandler
-            = createClientRequestHandler(hostname, port, protocol);
+            = createClientRequestHandler(hostname, port, useTls);
     Requestor requestor = new StandardJSONRequestor(clientRequestHandler);
     
     TeleMed ts = new TeleMedProxy(requestor);
@@ -65,7 +65,7 @@ public abstract class HomeClientTemplate {
     System.out.println("HomeClient - completed.");
   }
 
-  public abstract ClientRequestHandler createClientRequestHandler(String hostname, int port, String protocol);
+  public abstract ClientRequestHandler createClientRequestHandler(String hostname, int port, boolean useTLS);
 
   private void parseCommandlineParameters(String[] args) {
     if (args.length < 6) {
@@ -77,11 +77,11 @@ public abstract class HomeClientTemplate {
     systolic = Double.parseDouble(args[2]);
     diastolic = Double.parseDouble(args[3]);
     hostname = args[4];
-    protocol = args[5];
+    useTls = args[5].equals("true");
   }
 
   private static void explainAndFail() {
-    System.out.println("Usage: HomeClient <operation> <pttid> <systolic> <diastolic> <host> <protocol>");
+    System.out.println("Usage: HomeClient <operation> <pttid> <systolic> <diastolic> <host> <TLS>");
     System.out.println("    operation := 'store' | 'fetch'");
     System.out.println("      'store' will store bloodpressure on tele med server");
     System.out.println("      'fetch' will fetch last weeks observations");
@@ -89,7 +89,7 @@ public abstract class HomeClientTemplate {
     System.out.println("    <systolic> is systolic blood pressure");
     System.out.println("    <diatolic> is diatolic blood pressure");
     System.out.println("    <host> is name/ip of app server host. Port is hardwired to 37321 (socket) or 4567 (uri tunnel)");
-    System.out.println("    <protocol> is either 'http' or 'https'. Only applicable to the uri tunnel variant.");
+    System.out.println("    <TLS> is either 'false' or 'true'. URL tunnel variant (only) will switch to HTTPS if 'true'.");
     System.exit(-1);
   }
   

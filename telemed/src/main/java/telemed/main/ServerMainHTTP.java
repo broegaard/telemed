@@ -37,37 +37,40 @@ public class ServerMainHTTP {
   
   public static void main(String[] args) throws Exception {
     // Command line argument parsing and validation
-    if (args.length < 1) {
+    if (args.length < 2) {
       explainAndDie();
     }
-    new ServerMainHTTP(args[0]); // No error handling!
+    new ServerMainHTTP(args[0], args[1]); // No error handling!
   }
   
   private static void explainAndDie() {
-    System.out.println("Usage: ServerMainHTTP {db}");
-    System.out.println("       db = 'memory' is the only type DB allowed");
+    System.out.println("Usage: ServerMainHTTP {db} {tls}");
+    System.out.println("       db = 'memory' is the only type DB allowed.");
+    System.out.println("       tls = 'false' is default and communication is unencrypted.");
     System.exit(-1);
   }
 
-  public ServerMainHTTP(String type) {
+  public ServerMainHTTP(String databaseType, String useTlsFlag) {
     int port = 4567;
     // Define the server side delegates
     XDSBackend xds = null;
-    if (type.equals("memory")) {
+    if (databaseType.equals("memory")) {
       xds = new FakeObjectXDSDatabase();
     } else {
       // Open for other implementations, connecting to real
       // databases. Contact Henrik Baerbak if you want to
-      // try other DBs.
+      // try other DBs, or checkout code in the 'saip' branch
       System.out.println("Sorry - only memory based DB supported.");
       System.exit(0);
     }
+
     // Create server side implementation of Broker roles
     TeleMed tsServant = new TeleMedServant(xds);
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
+    boolean useTls = useTlsFlag.equals("true");
 
     UriTunnelServerRequestHandler srh =
-        new TeleMedUriTunnelServerRequestHandler(invoker, port, xds);
+        new TeleMedUriTunnelServerRequestHandler(invoker, port, useTls, xds);
     srh.start();
 
     // Welcome

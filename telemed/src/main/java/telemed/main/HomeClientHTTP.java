@@ -38,8 +38,8 @@ public class HomeClientHTTP extends HomeClientTemplate {
   }
 
   @Override
-  public ClientRequestHandler createClientRequestHandler(String hostname, int port, String protocol) {
-    return new UriTunnelClientRequestHandler(hostname, port, protocol, Constants.BLOODPRESSURE_PATH);
+  public ClientRequestHandler createClientRequestHandler(String hostname, int port, boolean useTLS) {
+    return new UriTunnelClientRequestHandler(hostname, port, useTLS, Constants.BLOODPRESSURE_PATH);
   }
 
   public static void main(String[] args) throws IOException {

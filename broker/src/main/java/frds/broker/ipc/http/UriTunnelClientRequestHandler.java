@@ -33,23 +33,22 @@ import com.google.gson.Gson;
 public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
-  // the protocol - either http or https
-  public String protocol;
-
   private final Gson gson;
   protected String baseURL;
   protected final String path;
+  private boolean useTLS;
+  private String protocol;
 
   /** Construct a URI Tunnel based CRH. Will communicate
    * using POST messages over http(s)://(hostname):(port)/(pathForPost)
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
-   * @param protocol which protocol to use, must be either 'http' or 'https'
+   * @param useTLS if false then use 'http', if true then 'https'
    * @param pathForPost the path for the POST messages
    */
-  public UriTunnelClientRequestHandler(String hostname, int port, String protocol, String pathForPost) {
-    this.protocol = protocol;
+  public UriTunnelClientRequestHandler(String hostname, int port, boolean useTLS, String pathForPost) {
+    protocol = useTLS == true ? "HTTPS" : "HTTP";
     baseURL = protocol + "://" + hostname + ":" + port + "/";
     path = pathForPost;
     gson = new Gson();
@@ -57,16 +56,15 @@ public class UriTunnelClientRequestHandler
 
   /** Construct a URI Tunnel based CRH. Will communicate
    * using POST messages over http://(hostname):(port)/(pathForPost),
-   * that is default to HTTPS communication
+   * that is defaulting to HTTP communication
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
    * @param pathForPost the path for the POST messages
    */
   public UriTunnelClientRequestHandler(String hostname, int port, String pathForPost) {
-    this(hostname, port, "http", pathForPost);
+    this(hostname, port, false, pathForPost);
   }
-
 
   /**
    * Construct a URI Tunnel based CRH. Will communicate
@@ -76,7 +74,7 @@ public class UriTunnelClientRequestHandler
    */
 
   public UriTunnelClientRequestHandler() {
-    this("localhost", 4567, "http", "tunnel");
+    this("localhost", 4567, false, "tunnel");
   }
 
   @Override
@@ -88,7 +86,8 @@ public class UriTunnelClientRequestHandler
   public String sendToServerAndAwaitReply(String request) {
     HttpResponse<String> reply;
 
-    // All calls are URI tunneled through a POST message
+    // All calls are URI tunneled through a POST message and as we do not
+    // know the marshalling format, everything is plain text
     try {
       reply = Unirest.post(baseURL + path)
               .header("Accept", MimeMediaType.TEXT_PLAIN)
