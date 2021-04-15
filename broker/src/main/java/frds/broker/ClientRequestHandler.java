@@ -41,24 +41,25 @@ public interface ClientRequestHandler {
   /**
    * Set the hostname/port of the server that holds the
    * corresponding server request handler.
-   * Default method for backward compatibility.
    *
    * @param hostname ip/dns of the server
    * @param port the port to communicate on
    */
-  default void setServer(String hostname, int port) {
-    setServer(hostname, port, false);
-  }
+  void setServer(String hostname, int port);
 
   /**
    * Set the hostname/port of the server that holds the
-   * corresponding server request handler.
+   * corresponding server request handler and determine
+   * if TLS should be used.
+   * Default method for backward compatibility.
    *
    * @param hostname ip/dns of the server
    * @param port the port to communicate on
    * @param useTLS if true then set to secure communication using TLS
    */
-  void setServer(String hostname, int port, boolean useTLS);
+  default void setServer(String hostname, int port, boolean useTLS) {
+    throw new UnsupportedOperationException("TLS support not available in FRDS.Broker before v 3.0");
+  }
 
   /**
    * Close the connection to server.

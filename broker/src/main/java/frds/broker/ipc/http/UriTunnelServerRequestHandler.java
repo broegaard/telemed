@@ -61,10 +61,14 @@ public class UriTunnelServerRequestHandler
   }
 
   @Override
+  public void setPortAndInvoker(int port, Invoker invoker) {
+    setPortAndInvoker(port, invoker, false);
+  }
+
+  @Override
   public void setPortAndInvoker(int port, Invoker invoker, boolean useTLS) {
     logger.info("method=setPortAndInvoker, port={}, useTLS={}", port, useTLS);
     this.port = port; this.invoker = invoker; this.useTLS = useTLS;
-
   }
 
   /**

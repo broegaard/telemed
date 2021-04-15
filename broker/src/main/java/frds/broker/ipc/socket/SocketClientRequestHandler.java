@@ -52,6 +52,11 @@ public class SocketClientRequestHandler
   }
 
   @Override
+  public void setServer(String hostname, int port) {
+    setServer(hostname, port, false);
+  }
+
+  @Override
   public void setServer(String hostname, int port, boolean useTLS) {
     if (useTLS) {
       throw new RuntimeException("TLS is not implemented for the SocketClientRequestHandler."

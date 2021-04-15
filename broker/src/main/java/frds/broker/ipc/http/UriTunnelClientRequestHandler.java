@@ -79,6 +79,10 @@ public class UriTunnelClientRequestHandler
   }
 
   @Override
+  public void setServer(String hostname, int port) {
+    setServer(hostname, port, false);
+  }
+  @Override
   public void setServer(String hostname, int port, boolean useTLS) {
     protocol = useTLS == true ? "HTTPS" : "HTTP";
     baseURL = protocol + "://" + hostname + ":" + port + "/";

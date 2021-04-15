@@ -44,20 +44,21 @@ public interface ServerRequestHandler {
 
   /** Set the port that the request handler should listen
    * to; and define invoker to do the upcall to.
-   * Default method to support backward compatibility.
    * @param port the TPC/IP port number to listen to.
    * @param invoker the Invoker to delegate to.
    */
-  default void setPortAndInvoker(int port, Invoker invoker) {
-    setPortAndInvoker(port, invoker, false);
-  }
+   void setPortAndInvoker(int port, Invoker invoker);
 
 
   /** Set the port that the request handler should listen
    * to; and define invoker to do the upcall to.
+   * Since v 3.0 of Broker, default method for backward
+   * compatibility.
    * @param port the TPC/IP port number to listen to.
    * @param invoker the Invoker to delegate to.
    * @param useTLS if 'true' then TLS communication is requested
    */
-  void setPortAndInvoker(int port, Invoker invoker, boolean useTLS);
+  default void setPortAndInvoker(int port, Invoker invoker, boolean useTLS) {
+    throw new UnsupportedOperationException("TLS support not available in FRDS.Broker before v 3.0");
+  }
 }
