@@ -33,6 +33,8 @@ FRDS.Broker Library Version History
   
   * Version 2.1: Wrong mavenCentral() upload, is empty :(
   
-  * Version 2.2: Introduced TLS/HTTPS handling in the URI Tunnel
+  * Version 3.0: Introduced TLS/HTTPS handling in the URI Tunnel
                  request handlers, for secure network communication,
-                 as well as a short introduction.
+                 as well as a short introduction. Updates to
+                 client request 'set' methods, default methods introduced
+                 to allow backward compatibility.
