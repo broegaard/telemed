@@ -35,6 +35,6 @@ FRDS.Broker Library Version History
   
   * Version 3.0: Introduced TLS/HTTPS handling in the URI Tunnel
                  request handlers, for secure network communication,
-                 as well as a short introduction. Updates to
-                 client request 'set' methods, default methods introduced
-                 to allow backward compatibility.
+                 as well writtena a short introduction. Updates to
+                 RequestHandlers's 'set' methods, while default
+                 methods introduced to allow backward compatibility.
