@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2018 Henrik Bærbak Christensen, baerbak.com
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
  * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
 
@@ -22,12 +21,10 @@ import frds.broker.ClientRequestHandler;
 import frds.broker.Requestor;
 import org.junit.*;
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import javax.servlet.http.HttpServletResponse;
 
 import frds.broker.marshall.json.StandardJSONRequestor;
 import frds.broker.ipc.http.UriTunnelClientRequestHandler;
@@ -65,13 +62,14 @@ public class TestUriTunnel {
     FakeObjectXDSDatabase xds = new FakeObjectXDSDatabase();
     TeleMed tsServant = new TeleMedServant(xds);
     TeleMedJSONInvoker invoker = new TeleMedJSONInvoker(tsServant);
-    serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER, xds);
+    serverRequestHandler = new TeleMedUriTunnelServerRequestHandler(invoker, PORT_NUMBER,
+            false, xds);
     serverRequestHandler.start();
 
     // Given the Client side roles
     ClientRequestHandler restCRH =
             new UriTunnelClientRequestHandler("localhost",
-                    PORT_NUMBER, Constants.BLOODPRESSURE_PATH);
+                    PORT_NUMBER, false, Constants.BLOODPRESSURE_PATH);
 
     Requestor requestor = new StandardJSONRequestor(restCRH);
     teleMed = new TeleMedProxy(requestor);

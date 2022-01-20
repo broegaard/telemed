@@ -15,22 +15,4 @@
  *
  */
 
-/*
- * Build file for REST based GameLobby.
- */
-
-plugins {
-    id 'java-library'
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-  // Get marker interfaces from Broker
-  implementation project(':broker')
-
-  testImplementation 'junit:junit:4.13.1'
-}
-
+rootProject.name = 'pastebin'

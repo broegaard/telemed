@@ -27,3 +27,14 @@ FRDS.Broker Library Version History
                  Strings only. 
                  THIS VERSION BREAKS THE CRH and INVOKER API. Therefore
                  client code must be rewritten to utilize this version.
+
+  * Version 2.0.1: Stepping stone release, sole purpose is migrating
+                from JCenter() to mavenCentral() repositories.
+  
+  * Version 2.1: Wrong mavenCentral() upload, is empty :(
+  
+  * Version 3.0: Introduced TLS/HTTPS handling in the URI Tunnel
+                 request handlers, for secure network communication,
+                 as well writtena a short introduction. Updates to
+                 RequestHandlers's 'set' methods, while default
+                 methods introduced to allow backward compatibility.

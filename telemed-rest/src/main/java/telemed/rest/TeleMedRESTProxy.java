@@ -1,8 +1,29 @@
+/*
+ * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package telemed.rest;
 
 import frds.broker.ClientProxy;
 import frds.broker.IPCException;
 import frds.broker.ipc.http.MimeMediaType;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
 import telemed.domain.TeleMed;
 
 import java.util.List;
@@ -10,8 +31,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import telemed.domain.TeleObservation;
 import telemed.domain.TimeInterval;
 import telemed.ipc.http.Constants;

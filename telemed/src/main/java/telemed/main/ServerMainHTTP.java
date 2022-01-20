@@ -1,18 +1,17 @@
 /*
- * Copyright (C) 2018 Henrik Bærbak Christensen, baerbak.com
+ * Copyright (C) 2018-2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
  * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
 
@@ -49,21 +48,21 @@ public class ServerMainHTTP {
   }
   
   private static void explainAndDie() {
-    System.out.println("Usage: ServerMainHTTP {db}");
+    System.out.println("Usage: ServerMainHTTP {db} {pehack}");
     System.out.println("       db = 'memory' is the in-memory db");
     System.out.println("       db = {host} is MongoDB on 'host:27017'");
     System.out.println("       pehack = 'true'/'false'; if 'true' then client timestamp is overwritten");
     System.exit(-1);
   }
 
-  public ServerMainHTTP(String type, String PEHackEnabled) {
+  public ServerMainHTTP(String databaseType, String PEHackEnabled) {
     int port = 4567;
     // Define the server side delegates
     XDSBackend xds = null;
-    if (type.equals("memory")) {
+    if (databaseType.equals("memory")) {
       xds = new FakeObjectXDSDatabase();
     } else {
-      xds = new MongoXDSAdapter(type, 27017);
+      xds = new MongoXDSAdapter(databaseType, 27017);
     }
     // Create the TeleMed servant
     TeleMed tsServant = new TeleMedServant(xds);
@@ -78,8 +77,9 @@ public class ServerMainHTTP {
     // Create server side implementation of Broker roles
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
 
+    // SAiP branch code does not use TLS, so flag is false by default
     UriTunnelServerRequestHandler srh =
-        new TeleMedUriTunnelServerRequestHandler(invoker, port, xds);
+        new TeleMedUriTunnelServerRequestHandler(invoker, port, false, xds);
     srh.start();
 
     // Welcome

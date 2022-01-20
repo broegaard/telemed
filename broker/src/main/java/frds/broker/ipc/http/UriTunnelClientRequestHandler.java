@@ -1,31 +1,30 @@
 /*
- * Copyright (C) 2018 Henrik Bærbak Christensen, baerbak.com
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  *
  * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  */
 
 package frds.broker.ipc.http;
 
-import com.google.gson.Gson;
-import com.mashape.unirest.http.*;
-import com.mashape.unirest.http.exceptions.UnirestException;
-
 import frds.broker.ClientRequestHandler;
 import frds.broker.IPCException;
-import frds.broker.ReplyObject;
-import frds.broker.RequestObject;
+
+import kong.unirest.Unirest;
+import kong.unirest.UnirestException;
+import kong.unirest.HttpResponse;
+import com.google.gson.Gson;
+
 
 /**
  * ClientRequestHandler implementation using HTTP as pure IPC
@@ -34,23 +33,37 @@ import frds.broker.RequestObject;
 public class UriTunnelClientRequestHandler
         implements ClientRequestHandler {
 
-  public static final String PROTOCOL = "http";
-
   private final Gson gson;
   protected String baseURL;
   protected final String path;
+  private boolean useTLS;
+  private String protocol;
 
   /** Construct a URI Tunnel based CRH. Will communicate
-   * using POST messages over http://(hostname):(port)/(pathForPost)
+   * using POST messages over http(s)://(hostname):(port)/(pathForPost)
+   *
+   * @param hostname name of the machine that hosts the HTTP server
+   * @param port port number of the HTTP server
+   * @param useTLS if false then use 'http', if true then 'https'
+   * @param pathForPost the path for the POST messages
+   */
+  public UriTunnelClientRequestHandler(String hostname, int port, boolean useTLS, String pathForPost) {
+    setServer(hostname, port, useTLS);
+    path = pathForPost;
+    gson = new Gson();
+  }
+
+
+  /** Construct a URI Tunnel based CRH. Will communicate
+   * using POST messages over http://(hostname):(port)/(pathForPost),
+   * that is defaulting to HTTP communication
    *
    * @param hostname name of the machine that hosts the HTTP server
    * @param port port number of the HTTP server
    * @param pathForPost the path for the POST messages
    */
   public UriTunnelClientRequestHandler(String hostname, int port, String pathForPost) {
-    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
-    path = pathForPost;
-    gson = new Gson();
+    this(hostname, port, false, pathForPost);
   }
 
   /**
@@ -61,21 +74,26 @@ public class UriTunnelClientRequestHandler
    */
 
   public UriTunnelClientRequestHandler() {
-    baseURL = PROTOCOL + "://localhost:4567/";
-    path = "tunnel";
-    gson = new Gson();
+    this("localhost", 4567, false,
+            UriTunnelServerRequestHandler.DEFAULT_URI_TUNNEL_PATH);
   }
 
   @Override
   public void setServer(String hostname, int port) {
-    baseURL = PROTOCOL + "://" + hostname + ":" + port + "/";
+    setServer(hostname, port, false);
+  }
+  @Override
+  public void setServer(String hostname, int port, boolean useTLS) {
+    protocol = useTLS == true ? "HTTPS" : "HTTP";
+    baseURL = protocol + "://" + hostname + ":" + port + "/";
 }
 
   @Override
   public String sendToServerAndAwaitReply(String request) {
     HttpResponse<String> reply;
 
-    // All calls are URI tunneled through a POST message
+    // All calls are URI tunneled through a POST message and as we do not
+    // know the marshalling format, everything is plain text
     try {
       reply = Unirest.post(baseURL + path)
               .header("Accept", MimeMediaType.TEXT_PLAIN)
@@ -98,5 +116,4 @@ public class UriTunnelClientRequestHandler
     return getClass().getCanonicalName() +
         ", " + baseURL + ", root path: '" + path + "'";
   }
-
 }

@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2018 - 2021. Henrik Bærbak Christensen, Aarhus University.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ * You may obtain a copy of the License at
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
 package telemed.ipc;
 
 import com.google.gson.Gson;
@@ -14,7 +31,7 @@ import java.io.Reader;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /** Test that communication crosses the Socket and
  * HTTP based request handlers.
@@ -52,7 +69,7 @@ public class TestRequestHandler implements Invoker {
     final int portToUse = 37111;
     Invoker invoker = this; // A self-shunt spy (http://xunitpatterns.com/Test%20Spy.html)
     ServerRequestHandler srh = new SocketServerRequestHandler();
-    srh.setPortAndInvoker(portToUse, invoker);
+    srh.setPortAndInvoker(portToUse, invoker, false);
     srh.start();
     // Wait for OS to open the port
     Thread.sleep(500);
@@ -86,10 +103,10 @@ public class TestRequestHandler implements Invoker {
   @Test
   public void shouldVerifyHttpIPC() throws InterruptedException {
     // Given SRH and CRH using the UriTunnel variants
-    final int portToUse = 32111;
+    final int portToUse = 32117;
     Invoker invoker = this; // A self-shunt spy
     ServerRequestHandler srh = new UriTunnelServerRequestHandler();
-    srh.setPortAndInvoker(portToUse, invoker);
+    srh.setPortAndInvoker(portToUse, invoker, false);
     srh.start();
 
     Thread.sleep(500);
