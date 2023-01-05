@@ -44,7 +44,7 @@ task lobbyServer(type: JavaExec) {
   description 'Run GameLobby server (Socket)'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'gamelobby.main.LobbyServer'
+  mainClass = 'gamelobby.main.LobbyServer'
 }
 
 task lobbyClient(type: JavaExec) {
@@ -52,6 +52,6 @@ task lobbyClient(type: JavaExec) {
   description 'Run a single GameLobby client operation (Socket)'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'gamelobby.main.LobbyClient'
+  mainClass = 'gamelobby.main.LobbyClient'
   args op, player, id, host
 }
