@@ -41,21 +41,22 @@ public class ServerMainHTTP {
   
   public static void main(String[] args) throws Exception {
     // Command line argument parsing and validation
-    if (args.length < 2) {
+    if (args.length < 3) {
       explainAndDie();
     }
-    new ServerMainHTTP(args[0], args[1]); // No error handling!
+    new ServerMainHTTP(args[0], args[1], args[2]); // No error handling!
   }
   
   private static void explainAndDie() {
-    System.out.println("Usage: ServerMainHTTP {db} {pehack}");
+    System.out.println("Usage: ServerMainHTTP {db} {tls} {pehack}");
     System.out.println("       db = 'memory' is the in-memory db");
     System.out.println("       db = {host} is MongoDB on 'host:27017'");
+    System.out.println("       tls = 'false' is default and communication is unencrypted.");
     System.out.println("       pehack = 'true'/'false'; if 'true' then client timestamp is overwritten");
     System.exit(-1);
   }
 
-  public ServerMainHTTP(String databaseType, String PEHackEnabled) {
+  public ServerMainHTTP(String databaseType, String useTlsFlag, String PEHackEnabled) {
     int port = 4567;
     // Define the server side delegates
     XDSBackend xds = null;
@@ -74,12 +75,12 @@ public class ServerMainHTTP {
       // Performance Enginering hack
       tsServant = new PEHackDecorator(tsServant);
     }
+    boolean useTls = useTlsFlag.equals("true");
+
     // Create server side implementation of Broker roles
     Invoker invoker = new TeleMedJSONInvoker(tsServant);
-
-    // SAiP branch code does not use TLS, so flag is false by default
     UriTunnelServerRequestHandler srh =
-        new TeleMedUriTunnelServerRequestHandler(invoker, port, false, xds);
+        new TeleMedUriTunnelServerRequestHandler(invoker, port, useTls, xds);
     srh.start();
 
     // Welcome

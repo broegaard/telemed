@@ -19,7 +19,7 @@ Please consult resources on the SAiP web page for more detail.
 How to I use it?
 ===
 
-You need Gradle installed and Java8 or later.
+You need Gradle 7+ installed and Java 8 or later.
 
 Start the telemed server in a shell (in-memory database)
 
