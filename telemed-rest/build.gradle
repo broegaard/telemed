@@ -49,7 +49,7 @@ task serverRest(type: JavaExec) {
   description 'Run based TeleMed REST based server'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.ServerMainREST'
+  mainClass = 'telemed.main.ServerMainREST'
   args port
 }
 
@@ -58,6 +58,6 @@ task demoRest(type: JavaExec) {
   description 'Demonstrate a full CRUD cycle of TeleMed using REST'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.RestCRUDClient'
+  mainClass = 'telemed.main.RestCRUDClient'
   args host, port, delete
 }

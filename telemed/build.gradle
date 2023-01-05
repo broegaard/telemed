@@ -28,18 +28,18 @@ repositories {
 }
 
 dependencies {
-  compile project(':broker')
+  implementation project(':broker')
 
   // Bind SLF4J it to the Log4J logging framework
-  compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+  implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
   // Get MongoDB driver
-  compile group: 'org.mongodb', name: 'mongo-java-driver', version: '3.12.7'
+  implementation group: 'org.mongodb', name: 'mongo-java-driver',
+      version: '3.12.7'
 
   testImplementation 'junit:junit:4.13.1'
   testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 }
-
 // === Demo of HTTP/URI Tunnel based TeleMed system
 
 task serverHttp(type: JavaExec) {
@@ -47,8 +47,13 @@ task serverHttp(type: JavaExec) {
   description 'Run Http/URI Tunnel based TeleMed server'
     
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.ServerMainHTTP'
-  args db, pehack
+  mainClass = 'telemed.main.ServerMainHTTP'
+  args db, tls, pehack
+    
+  systemProperty("javax.net.ssl.keyStore",
+                   "/home/csdev/.keystore")
+  systemProperty("javax.net.ssl.keyStorePassword",
+                   "csaucsau")
 }
 
 task homeHttp(type: JavaExec) {
@@ -56,10 +61,10 @@ task homeHttp(type: JavaExec) {
   description 'Run a single TeleMed client operation (Http)'
 
   classpath sourceSets.test.runtimeClasspath
-  main = 'telemed.main.HomeClientHTTP'
+  mainClass = 'telemed.main.HomeClientHTTP'
   args op, id, sys, dia, host, tls
 
-  systemProperty("javax.net.ssl.trustStore",
+systemProperty("javax.net.ssl.trustStore",
                    "/home/csdev/.keystore")
   systemProperty("javax.net.ssl.trustStorePassword",
                    "csaucsau")
