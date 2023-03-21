@@ -1,4 +1,4 @@
-package saip.storage.mongo;
+package telemed.storage;
 
 import java.time.*;
 import java.util.ArrayList;
