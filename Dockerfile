@@ -1,4 +1,4 @@
-FROM henrikbaerbak/jdk17-gradle74
+FROM henrikbaerbak/jdk17-gradle74 AS builder
 
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
@@ -8,12 +8,19 @@ WORKDIR /telemed/
 COPY telemed/ /telemed/telemed/
 COPY broker/ /telemed/broker/
 COPY settings.gradle /telemed/settings.gradle
-# COPY build.gradle /telemed/
-# COPY gradle /telemed/gradle/
+RUN gradle jar
 
-# COPY . /telemed/
+# FROM henrikbaerbak/jdk17-gradle74
+FROM openjdk:17.0.1-jdk-slim
 
-# RUN ls /telemed/
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
 
-CMD gradle serverHttp
+WORKDIR /telemed/
+
+COPY --from=builder /telemed/telemed/build/libs/telemed.jar /telemed/
+
+CMD java -jar /telemed/telemed.jar memory false false
+
+# CMD gradle serverHttp
 
