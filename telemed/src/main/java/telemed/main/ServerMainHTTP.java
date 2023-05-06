@@ -56,14 +56,14 @@ public class ServerMainHTTP {
     System.exit(-1);
   }
 
-  public ServerMainHTTP(String databaseType, String useTlsFlag, String PEHackEnabled) {
+  public ServerMainHTTP(String databaseConnectionString, String useTlsFlag, String PEHackEnabled) {
     int port = 4567;
     // Define the server side delegates
     XDSBackend xds = null;
-    if (databaseType.equals("memory")) {
+    if (databaseConnectionString.equals("memory")) {
       xds = new FakeObjectXDSDatabase();
     } else {
-      xds = new MongoXDSAdapter(databaseType, 27017);
+      xds = new MongoXDSAdapter(databaseConnectionString);
     }
     // Create the TeleMed servant
     TeleMed tsServant = new TeleMedServant(xds);
