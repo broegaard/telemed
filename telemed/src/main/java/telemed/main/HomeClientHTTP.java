@@ -43,6 +43,6 @@ public class HomeClientHTTP extends HomeClientTemplate {
   }
 
   public static void main(String[] args) throws IOException {
-    new HomeClientHTTP(args, 80);
+    new HomeClientHTTP(args, 443);
   }
 }

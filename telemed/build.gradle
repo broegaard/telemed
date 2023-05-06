@@ -64,10 +64,8 @@ task homeHttp(type: JavaExec) {
   mainClass = 'telemed.main.HomeClientHTTP'
   args op, id, sys, dia, host, tls
 
-systemProperty("javax.net.ssl.trustStore",
+  systemProperty("javax.net.ssl.trustStore",
                    "/home/csdev/.keystore")
-  systemProperty("javax.net.ssl.trustStorePassword",
-                   "csaucsau")
 
 }
 // Make a Jar file for telemed,
