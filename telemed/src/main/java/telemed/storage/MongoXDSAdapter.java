@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.mongodb.MongoClientURI;
 import org.bson.types.ObjectId;
 import org.w3c.dom.Document;
 
@@ -39,13 +40,12 @@ public class MongoXDSAdapter implements XDSBackend {
 
   /**
    * Construct an XDS that is based upon a MongoDB
-   * running on the given hostname and port
-   * @param hostname the name of the node on which
+   * running on the given databaseConnectionString
+   * @param databaseConnectionString the name of the node on which
    * MongoDB is running
-   * @param port the port that MongoDB is listening on
    */
-  public MongoXDSAdapter(String hostname, int port) {
-    client = new MongoClient(hostname, port);
+  public MongoXDSAdapter(String databaseConnectionString) {
+    client = new MongoClient(new MongoClientURI(databaseConnectionString));
     // Get database 'xds' and its collection 'tm16'
     db = client.getDatabase("xds");
     collection = db.getCollection("tm16");
