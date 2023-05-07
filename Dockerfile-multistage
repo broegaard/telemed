@@ -31,8 +31,7 @@ RUN gradle jar
 
 # STAGE 2
 # We use a multistage Dockerfile to avoid copying source files into the final image.
-# For stage 2 we use a slim image as base so the final image will be smaller
-FROM openjdk:17.0.1-jdk-slim
+FROM henrikbaerbak/jdk17-gradle74
 
 # Environment variable used to run the system with different database backends
 ENV DATABASE_CONNECTIONSTRING memory
