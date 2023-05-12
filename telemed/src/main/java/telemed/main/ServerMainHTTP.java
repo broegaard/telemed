@@ -28,7 +28,7 @@ import telemed.marshall.json.TeleMedJSONInvoker;
 import telemed.storage.RedisXDSAdapter;
 import telemed.storage.XDSBackend;
 
-import saip.storage.mongo.MongoXDSAdapter;
+import telemed.storage.MongoXDSAdapter;
 
 /** Jetty/Spark-java based server responding to URI Tunneled POST
  * uploads and GET requests. The server is hardwired to port 4567.

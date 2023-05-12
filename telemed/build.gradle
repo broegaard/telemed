@@ -70,3 +70,18 @@ systemProperty("javax.net.ssl.trustStore",
                    "csaucsau")
 
 }
+// Make a Jar file for telemed,
+// To execute: java -jar telemed/build/libs/telemed.jar memory false false
+// (the arguments are those of 'db, tls, pehack' as in the 'serverHttp'
+// task.
+jar {
+    archiveBaseName = "telemed"
+    from {
+      configurations.compileClasspath.collect {
+        it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest {
+      attributes 'Main-Class': 'telemed.main.ServerMainHTTP'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
