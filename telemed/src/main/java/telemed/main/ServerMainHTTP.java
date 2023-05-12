@@ -25,6 +25,7 @@ import telemed.domain.TeleMed;
 import telemed.doubles.*;
 import telemed.ipc.http.TeleMedUriTunnelServerRequestHandler;
 import telemed.marshall.json.TeleMedJSONInvoker;
+import telemed.storage.RedisXDSAdapter;
 import telemed.storage.XDSBackend;
 
 import saip.storage.mongo.MongoXDSAdapter;
@@ -51,6 +52,7 @@ public class ServerMainHTTP {
     System.out.println("Usage: ServerMainHTTP {db} {tls} {pehack}");
     System.out.println("       db = 'memory' is the in-memory db");
     System.out.println("       db = {host} is MongoDB on 'host:27017'");
+    System.out.println("       db = 'redis' is Redis on 'localhost:6379'");
     System.out.println("       tls = 'false' is default and communication is unencrypted.");
     System.out.println("       pehack = 'true'/'false'; if 'true' then client timestamp is overwritten");
     System.exit(-1);
@@ -62,6 +64,8 @@ public class ServerMainHTTP {
     XDSBackend xds = null;
     if (databaseType.equals("memory")) {
       xds = new FakeObjectXDSDatabase();
+    } else if (databaseType.equals("redis")) {
+      xds = new RedisXDSAdapter("localhost", 6379);
     } else {
       xds = new MongoXDSAdapter(databaseType, 27017);
     }
