@@ -28,60 +28,49 @@ repositories {
 }
 
 dependencies {
-  implementation project(':broker')
+    implementation project(':broker')
 
-  // Bind SLF4J it to the Log4J logging framework
-  implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    // Bind SLF4J it to the Log4J logging framework
+    implementation group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
 
-  // Get MongoDB driver
-  implementation group: 'org.mongodb', name: 'mongo-java-driver',
-      version: '3.12.7'
+    // Get MongoDB driver
+    implementation group: 'org.mongodb', name: 'mongo-java-driver',
+            version: '3.12.7'
 
-  testImplementation 'junit:junit:4.13.1'
-  testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
+    // Get the Redis driver / Jedis
+    implementation group: 'redis.clients', name: 'jedis', version: '4.3.1'
+
+
+    testImplementation 'junit:junit:4.13.1'
+    testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
 }
 // === Demo of HTTP/URI Tunnel based TeleMed system
 
 task serverHttp(type: JavaExec) {
-  group 'demo'
-  description 'Run Http/URI Tunnel based TeleMed server'
-    
-  classpath sourceSets.test.runtimeClasspath
-  mainClass = 'telemed.main.ServerMainHTTP'
-  args db, tls, pehack
-    
-  systemProperty("javax.net.ssl.keyStore",
-                   "/home/csdev/.keystore")
-  systemProperty("javax.net.ssl.keyStorePassword",
-                   "csaucsau")
+    group 'demo'
+    description 'Run Http/URI Tunnel based TeleMed server'
+
+    classpath sourceSets.test.runtimeClasspath
+    mainClass = 'telemed.main.ServerMainHTTP'
+    args db, tls, pehack
+
+    systemProperty("javax.net.ssl.keyStore",
+            "/home/csdev/.keystore")
+    systemProperty("javax.net.ssl.keyStorePassword",
+            "csaucsau")
 }
 
 task homeHttp(type: JavaExec) {
-  group 'demo'
-  description 'Run a single TeleMed client operation (Http)'
+    group 'demo'
+    description 'Run a single TeleMed client operation (Http)'
 
-  classpath sourceSets.test.runtimeClasspath
-  mainClass = 'telemed.main.HomeClientHTTP'
-  args op, id, sys, dia, host, tls
+    classpath sourceSets.test.runtimeClasspath
+    mainClass = 'telemed.main.HomeClientHTTP'
+    args op, id, sys, dia, host, tls
 
-systemProperty("javax.net.ssl.trustStore",
-                   "/home/csdev/.keystore")
-  systemProperty("javax.net.ssl.trustStorePassword",
-                   "csaucsau")
+    systemProperty("javax.net.ssl.trustStore",
+            "/home/csdev/.keystore")
+    systemProperty("javax.net.ssl.trustStorePassword",
+            "csaucsau")
 
-}
-// Make a Jar file for telemed,
-// To execute: java -jar telemed/build/libs/telemed.jar memory false false
-// (the arguments are those of 'db, tls, pehack' as in the 'serverHttp'
-// task.
-jar {
-    archiveBaseName = "telemed"
-    from {
-      configurations.compileClasspath.collect {
-        it.isDirectory() ? it : zipTree(it) }
-    }
-    manifest {
-      attributes 'Main-Class': 'telemed.main.ServerMainHTTP'
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
