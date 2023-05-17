@@ -20,7 +20,7 @@ WORKDIR /telemed/
 
 COPY --from=builder /telemed/telemed/build/libs/telemed.jar /telemed/
 
-CMD java -jar /telemed/telemed.jar memory false false
+CMD java -jar /telemed/telemed.jar redis false false
 
 # CMD gradle serverHttp
 
